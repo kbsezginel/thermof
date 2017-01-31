@@ -42,7 +42,7 @@ def change_pair_coeff(input_lines, coefficient_list):
         id1, id2, eps, sig = coefficient
         pair_lines.append('pair_coeff      %i %i %.3f %.3f\n' % (id1, id2, eps, sig))
 
-    new_lines = sample_lines[:pair_indices[0]] + pair_lines + sample_lines[pair_indices[-1]+1:]
+    new_lines = input_lines[:pair_indices[0]] + pair_lines + input_lines[pair_indices[-1]+1:]
     return new_lines
 
 def change_masses(input_lines, masses):
