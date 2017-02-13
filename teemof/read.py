@@ -65,21 +65,21 @@ def get_kt(kt, time, t0=5, t1=10):
     return kt_avg
 
 
-def read_trials(mult_trial_dir, verbose=True):
+def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
     """ Read multiple trials with multiple runs"""
     trial_data = []
     trial_names = []
     for single_trial in os.listdir(mult_trial_dir):
         single_trial_dir = os.path.join(mult_trial_dir, single_trial)
         if os.path.isdir(single_trial_dir):
-            run_data, time, runs_id = read_runs(single_trial_dir, verbose=verbose)
+            run_data, time, runs_id = read_runs(single_trial_dir, t0=t0, t1=t1, verbose=verbose)
             trial_avg_kt = avg_kt(run_data)
             trial_data.append(trial_avg_kt)
-            trial_names.append(single_trial)
+        trial_names.append(single_trial)
     return trial_data, trial_names
 
 
-def read_runs(trial_dir, verbose=True):
+def read_runs(trial_dir, t0=4, t1=8, verbose=True):
     """ Read multiple runs for single trial """
     print('\n------ %s ------' % os.path.split(trial_dir)[-1])
     trial_data = []
@@ -88,18 +88,22 @@ def read_runs(trial_dir, verbose=True):
         run_dir = os.path.join(trial_dir, run)
         if os.path.isdir(run_dir):
             runs_id.append(run)
-            k_data_files = check_kt_directions(run_dir)
-            run_data = []
-            for data_path in k_data_files:
-                kt, time = read_kt(data_path)
-                kt = convert_kt(kt)
-                trial_data.append(kt)
-                run_data.append(kt)
-            run_avg_kt = avg_kt(run_data)
-            run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
-            print(run_message) if verbose else None
+            try:
+                k_data_files = check_kt_directions(run_dir)
+                run_data = []
+                for data_path in k_data_files:
+                    kt, time = read_kt(data_path)
+                    kt = convert_kt(kt)
+                    trial_data.append(kt)
+                    run_data.append(kt)
+                run_avg_kt = avg_kt(run_data)
+                run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
+                print(run_message) if verbose else None
+            except Exception as e:
+                print('%s -> Could not read, error: %s' % (run, e))
     trial_avg_kt = avg_kt(trial_data)
-    print('Average -> %.3f W/mK' % get_kt(trial_avg_kt, time))
+    approx_kt = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
+    print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data)))
     return trial_data, time, runs_id
 
 
