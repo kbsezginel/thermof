@@ -26,7 +26,9 @@ neighbor        2    bin
 pair_style      lj/cut 10.0
 bond_style      morse
 read_data       lammps.data
-pair_coeff      * * 0 3.405
+pair_coeff      1 1 0 3.405
+pair_coeff      2 2 0 3.405
+pair_coeff      1 2 0 3.405
 bond_coeff	    1 10 1.8 ${b_eq}
 bond_coeff	    2 5 0.805 7.4536
 bond_coeff	    3 10 1.8 ${b_eq}
@@ -35,7 +37,7 @@ velocity        all create $T ${seed} mom yes rot yes dist gaussian
 timestep        ${dt}
 thermo          10000
 dump            T1 all cfg 600000 *.cfg id type xs ys zs
-dump 		    T2 all xyz 10000 traj.xyz
+dump            T2 all xyz 10000 traj.xyz
 #dump_modify    1 element Cu
 # −−−−−−−−−−−−− Equilibration and thermalisation −−−−−−−−−−−−−−−−
 fix             NVT all nvt temp $T $T 10

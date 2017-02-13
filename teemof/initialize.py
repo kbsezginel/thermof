@@ -6,8 +6,8 @@ import os
 
 sample_dir = os.path.join(os.getcwd(), 'sample')
 inp_path = os.path.join(sample_dir, 'in.cond.sample')          # Input file with one direction
-inp3_path = os.path.join(sample_dir, 'in3.cond.sample')        # Input file with three directions
-data_path = os.path.join(sample_dir, 'lammps.data.sample')     # Structure file
+inp3_path = os.path.join(sample_dir, 'in3_ipmof.cond.sample')        # Input file with three directions
+data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Structure file
 qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')  # Submission file
 
 sample_files = dict(inp=inp3_path, data=data_path, qsub=qsub_path)
