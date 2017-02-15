@@ -3,10 +3,10 @@
 # Author: Kutay B. Sezginel
 import os
 import subprocess
-from teemof.initialize import change_seed, lammps_qsub, export_lines
+from teemof.initialize import change_seed, lammps_qsub, export_lines, add_run_info
 
 
-def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines, seed=None, verbose=True):
+def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines, seed=None, verbose=True, info=None):
     """ Create directories and input files for a trial with multiple runs """
     trial_name = os.path.split(trial_dir)[1]
     print('Initializing %s...' % trial_name) if verbose else None
@@ -36,6 +36,10 @@ def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines
         export_lines(input_lines, inp_dest)
         export_lines(data_lines, dt_dest)
         export_lines(qsub_lines, qs_dest)
+        if info is not None:
+            info['name'] = job_name
+            info['seed'] = seed[i - 1]
+            add_run_info(info, run_dir)
 
 
 def submit_job(qsub_path, verbose=True):

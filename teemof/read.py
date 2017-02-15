@@ -115,3 +115,43 @@ def check_kt_directions(run_dir):
         if 'J0Jt_t' in f:
             k_list.append(os.path.join(run_dir, f))
     return k_list
+
+
+def read_log(log_path):
+    """ Read log.lammps file """
+    with open(log_path, 'r') as log:
+        log_lines = log.readlines()
+
+    for line_index, line in enumerate(log_lines):
+        if 'thermo' in line:
+            thermo_step = int(line.split()[1])
+        if 'Equilibration and thermalisation' in line:
+            nvt_start = line_index + 7
+            nvt_steps = int(log_lines[line_index + 4].split()[1])
+            nvt_end = int(nvt_steps / thermo_step) + nvt_start + 1
+        elif 'Equilibration in nve' in line:
+            nve_start = line_index + 5
+            nve_steps = int(log_lines[line_index + 2].split()[1])
+            nve_end = int(nve_steps / thermo_step) + nve_start + 1
+
+    nvt_lines = log_lines[nvt_start:nvt_end]
+    nve_lines = log_lines[nve_start:nve_end]
+
+    nvt_data = read_thermo_data(nvt_lines)
+    nve_data = read_thermo_data(nve_lines)
+
+    return nvt_data, nve_data
+
+
+def read_thermo_data(thermo_data_lines):
+    """ Read simulation output data for given lines """
+    log_data = dict(step=[], temp=[], pair_eng=[], mol_eng=[], tot_eng=[], press=[])
+    for data_line in thermo_data_lines:
+        data = data_line.split()
+        log_data['step'].append(float(data[0]))
+        log_data['temp'].append(float(data[1]))
+        log_data['pair_eng'].append(float(data[2]))
+        log_data['mol_eng'].append(float(data[3]))
+        log_data['tot_eng'].append(float(data[4]))
+        log_data['press'].append(float(data[5]))
+    return log_data

@@ -2,6 +2,7 @@
 # Date: Februay 2017
 # Author: Kutay B. Sezginel
 import os
+import yaml
 
 
 sample_dir = os.path.join(os.getcwd(), 'sample')
@@ -97,3 +98,9 @@ def lammps_qsub(qsub_lines, name='Lammps', walltime='12:00:00', nodes=1, ppn=4, 
     new_lines += qsub_lines[7:]
 
     return new_lines
+
+
+def add_run_info(run_info, run_dir):
+    """ Add yaml file to run directory that contains simulation information """
+    run_info_path = os.path.join(run_dir, 'run_info.yaml')
+    yaml.dump(run_info, open(run_info_path, 'w'))
