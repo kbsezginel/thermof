@@ -29,10 +29,10 @@ read_data       lammps.data
 pair_coeff      1 1 0 3.405
 pair_coeff      2 2 0 3.405
 pair_coeff      1 2 0 3.405
-bond_coeff	    1 10 1.8 ${b_eq}
-bond_coeff	    2 5 0.805 7.4536
-bond_coeff	    3 10 1.8 ${b_eq}
-bond_coeff	    4 5 0.805 7.4536
+bond_coeff      1 10 1.8 ${b_eq}
+bond_coeff      2 5 0.805 7.4536
+bond_coeff      3 10 1.8 ${b_eq}
+bond_coeff      4 5 0.805 7.4536
 velocity        all create $T ${seed} mom yes rot yes dist gaussian
 timestep        ${dt}
 thermo          10000
@@ -78,10 +78,10 @@ variable        Jy equal (c_Jcy+c_Jvy)/vol
 fix             JJTx all ave/correlate $s $p $d &
                 v_Jx type auto file J0Jt_tx.dat ave running
 
-fix	            JJTz all ave/correlate $s $p $d &
+fix             JJTz all ave/correlate $s $p $d &
                 v_Jz type auto file J0Jt_tz.dat ave running
 
-fix	            JJTy all ave/correlate $s $p $d &
+fix             JJTy all ave/correlate $s $p $d &
                 v_Jy type auto file J0Jt_ty.dat ave running
 
 run             1000000

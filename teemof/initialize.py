@@ -6,12 +6,18 @@ import yaml
 
 
 sample_dir = os.path.join(os.getcwd(), 'sample')
-inp_path = os.path.join(sample_dir, 'in.cond.sample')          # Input file with one direction
-inp3_path = os.path.join(sample_dir, 'in3_ipmof.cond.sample')        # Input file with three directions
-data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Structure file
-qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')  # Submission file
+# Lammps input file with thermal flux measured in single direction
+single_inp_path = os.path.join(sample_dir, 'in_single.cond.sample')        # Single MOF
+# Lammps input file with thermal flux measured in three directions
+single_inp3_path = os.path.join(sample_dir, 'in3_single.cond.sample')      # Single MOF
+ipmof_inp3_path = os.path.join(sample_dir, 'in3_ipmof.cond.sample')        # Interpenetrated MOF
+# Lammps structure files
+single_data_path = os.path.join(sample_dir, 'lammps_single.data.sample')   # Single MOF
+ipmof_data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Interpenetrated MOF
+# Job submission file for Frank
+qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')
 
-sample_files = dict(inp=inp3_path, data=data_path, qsub=qsub_path)
+sample_files = dict(inp=ipmof_inp3_path, data=ipmof_data_path, qsub=qsub_path)
 
 
 def get_files(sample_files):
