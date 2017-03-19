@@ -3,6 +3,7 @@
 # Author: Kutay B. Sezginel
 import os
 import math
+import yaml
 
 
 parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300)
@@ -81,7 +82,7 @@ def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
 
 def read_runs(trial_dir, t0=4, t1=8, verbose=True):
     """ Read multiple runs for single trial """
-    print('\n------ %s ------' % os.path.split(trial_dir)[-1])
+    print('\n------ %s ------' % os.path.split(trial_dir)[-1]) if verbose else None
     trial_data = []
     runs_id = []
     for run_index, run in enumerate(os.listdir(trial_dir)):
@@ -103,7 +104,7 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True):
                 print('%s -> Could not read, error: %s' % (run, e))
     trial_avg_kt = avg_kt(trial_data)
     approx_kt = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
-    print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data)))
+    print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data))) if verbose else None
     return trial_data, time, runs_id
 
 
@@ -155,3 +156,17 @@ def read_thermo_data(thermo_data_lines):
         log_data['tot_eng'].append(float(data[4]))
         log_data['press'].append(float(data[5]))
     return log_data
+
+
+def read_run_info(run_dir):
+    """ Read run info yaml file """
+    run_info_path = os.path.join(run_dir, 'run_info.yaml')
+    run_info = yaml.load(open(run_info_path, 'r'))
+    return run_info
+
+
+def read_legend(trial_dir, key='name', run='Run1'):
+    """ Read legend name from given trial """
+    run_dir = os.path.join(trial_dir, run)
+    run_info = read_run_info(run_dir)
+    return run_info[key]
