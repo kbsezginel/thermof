@@ -9,7 +9,7 @@ import yaml
 parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300)
 
 
-def read_kt(file_path, dt=parameters['dt']):
+def read_kt(file_path, dt=parameters['dt'], kt_index=3):
     """ Read kt vs time data from Lammps simulation output file """
     with open(file_path, 'r') as j:
         kt = []
@@ -18,7 +18,7 @@ def read_kt(file_path, dt=parameters['dt']):
             if line_index >= 200015:
                 l = line.split()
                 t = (float(l[0]) - 1) * dt / 1000.0
-                kt.append(float(l[3]))
+                kt.append(float(l[kt_index]))
                 time.append(t)
     return kt, time
 
