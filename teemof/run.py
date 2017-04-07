@@ -27,7 +27,9 @@ def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines
         input_lines = change_seed(input_lines, seed=seed[i - 1])
         # Change job name
         job_name = '%s-Run%i' % (trial_name, i)
-        qsub_lines = lammps_qsub(qsub_lines, name=job_name)
+        new_qsub_lines = qsub_lines[:3]
+        new_qsub_lines += ['#PBS -N %s\n' % job_name]
+        new_qsub_lines += qsub_lines[4:]
         # Determine file paths
         inp_dest = os.path.join(run_dir, 'in.cond')
         qs_dest = os.path.join(run_dir, 'lammps_qsub.sh')
@@ -35,7 +37,7 @@ def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines
         # Export files
         export_lines(input_lines, inp_dest)
         export_lines(data_lines, dt_dest)
-        export_lines(qsub_lines, qs_dest)
+        export_lines(new_qsub_lines, qs_dest)
         if info is not None:
             info['name'] = job_name
             info['seed'] = seed[i - 1]

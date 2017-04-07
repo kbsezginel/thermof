@@ -78,7 +78,7 @@ def change_pair_coeff(input_lines, coefficient_list):
 def change_masses(data_lines, masses):
     """ Change atoms masses of Lammps.data file
         Masses list format:
-            - [atom1, mass1, atom2, mass2] """
+            - [[atom1, mass1], [atom2, mass2], ...] """
     mass_indices = []
     for i, line in enumerate(data_lines):
         if 'Masses' in line:
