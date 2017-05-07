@@ -1,7 +1,7 @@
 import os
 
 
-def interpenetrate_lampps_data(data_path, output_dir=os.getcwd()):
+def interpenetrate_lammps_data(data_path, output_dir=os.getcwd()):
     """ Create interpenetrated strcuture from lammps data file """
     ipmof_path = os.path.join(output_dir, 'lammps_ipmof.data')
 
@@ -88,17 +88,23 @@ def lammps_data2xyz(data_path, output_dir=os.getcwd()):
             end = line_index - 1
 
     coordinates = data_lines[start:end]
-
+    atom_names = dict()
+    atom_names['1'] = 'C'
+    atom_names['2'] = 'Cu'
+    atom_names['3'] = 'O'
+    atom_names['4'] = 'Zn'
     num_of_atoms = len(coordinates)
     new_coordinates = []
     for c in coordinates:
+        atom_type = c.split()[1]
+        atom = atom_names[atom_type]
         x = c.split()[4]
         y = c.split()[5]
         z = c.split()[6]
-        new_coordinates.append([x, y, z])
+        new_coordinates.append([atom, x, y, z])
 
     with open(xyz_path, 'w') as xyz:
         xyz.write('%i\n' % num_of_atoms)
         xyz.write('lammps_mof\n')
         for c in new_coordinates:
-            xyz.write('C %s %s %s\n' % (c[0], c[1], c[2]))
+            xyz.write('%s %s %s %s\n' % (c[0], c[1], c[2], c[3]))
