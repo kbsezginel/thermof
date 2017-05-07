@@ -22,11 +22,11 @@ def change_xyz_atom_names(traj_path, atoms=['C', 'O'], targets=['1', '2']):
             nt.write(t)
 
 
-def change_xyz_trajectories(trial_dir, name='traj.xyz'):
-    """ Change trajectory files for multiple runs and multiple trials """
+def change_xyz_trajectories(trial_dir, name='traj.xyz', atoms=['C', 'O'], targets=['1', '2'], verbose=True):
+    """ Change trajectory files for multiple runs of a single trial """
     run_list = os.listdir(trial_dir)
     for run in run_list:
         if os.path.isdir(os.path.join(trial_dir, run)):
-            print('Trajectory: %s' % run)
+            print('Trajectory: %s' % run) if verbose else None
             xyz_traj_path = os.path.join(trial_dir, run, name)
-            change_xyz_atom_names(xyz_traj_path)
+            change_xyz_atom_names(xyz_traj_path, atoms=atoms, targets=targets)
