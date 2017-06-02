@@ -88,15 +88,15 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True):
     for run_index, run in enumerate(os.listdir(trial_dir)):
         run_dir = os.path.join(trial_dir, run)
         if os.path.isdir(run_dir):
-            runs_id.append(run)
             try:
-                k_data_files = check_kt_directions(run_dir)
+                k_data_files, directions = check_kt_directions(run_dir)
                 run_data = []
-                for data_path in k_data_files:
+                for direc, data_path in zip(directions, k_data_files):
                     kt, time = read_kt(data_path)
                     kt = convert_kt(kt)
                     trial_data.append(kt)
                     run_data.append(kt)
+                    runs_id.append('%s-%s' % (run, direc))
                 run_avg_kt = avg_kt(run_data)
                 run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
                 print(run_message) if verbose else None
@@ -112,10 +112,12 @@ def check_kt_directions(run_dir):
     """ Return thermal data for each direction as list """
     run_list = os.listdir(run_dir)
     k_list = []
+    directions = []
     for f in run_list:
         if 'J0Jt_t' in f:
             k_list.append(os.path.join(run_dir, f))
-    return k_list
+            directions.append(f.split('.')[0].split('J0Jt_t')[1])
+    return k_list, directions
 
 
 def read_log(log_path):
