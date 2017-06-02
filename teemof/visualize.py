@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from teemof.read import avg_kt
 
 
-def plot_runs(runs_data, time, runs_id, limit=2000, title=None, size=(20, 10), fontsize=14, dpi=300, avg=True, cmap=None, save=None):
+def plot_runs(runs_data, time, runs_id, limit=2000, title=None, size=(20, 10), fontsize=14, dpi=300, avg=True, cmap=None, save=None, ncol=1):
     """ Plot kt vs time for a list of runs """
     plt.figure(figsize=size, dpi=dpi)
     lgnd = runs_id
@@ -29,7 +29,7 @@ def plot_runs(runs_data, time, runs_id, limit=2000, title=None, size=(20, 10), f
     plt.yticks(fontsize=fontsize)
     plt.ylabel('kt', fontsize=fontsize + 2)
     plt.xlabel('Time', fontsize=fontsize + 2)
-    plt.legend(lgnd, loc=(1.05, 0), fontsize=fontsize)
+    plt.legend(lgnd, loc=(1.05, 0), ncol=ncol, fontsize=fontsize)
     if save is not None:
         plt.savefig(save, dpi=dpi, transparent=True, bbox_inches='tight')
     plt.show()
