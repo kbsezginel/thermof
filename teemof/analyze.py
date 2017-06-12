@@ -42,3 +42,20 @@ def analyze_trial_set(trial_set_dir, xkey='mass2', sort=True, t0=10, t1=20):
         x, y = x_data, y_data
 
     return dict(x=x, y=y, err=trial_error, std=trial_std)
+
+
+def get_r2(y_obs, y_fit):
+    """
+    Calculate r-squared using r2 = 1 - (ss_res / ss_tot)
+        ss_res: sum of squares of residuals
+        ss_tot: total sum of squares
+    """
+    ss_res = 0
+    ss_tot = 0
+    y_mean = sum(y_obs) / len(y_obs)
+    for y_o, y_f in zip(y_obs, y_fit):
+        ss_tot += (y_o - y_mean) ** 2
+        ss_res += (y_o - y_f) ** 2
+
+    r2 = 1 - (ss_res / ss_tot)
+    return r2
