@@ -1,6 +1,8 @@
 # Visualize Lammps output files of thermal conductivity measurements
 # Date: Februay 2017
 # Author: Kutay B. Sezginel
+import os
+import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from teemof.read import avg_kt
@@ -62,6 +64,45 @@ def plot_directions(runs_data, time, runs_id, limit=(0, 2000), title=None, size=
     plt.ylabel('kt', fontsize=fontsize + 2)
     plt.xlabel('Time', fontsize=fontsize + 2)
     plt.legend(lgnd, loc=(1.05, 0), ncol=ncol, fontsize=fontsize)
+    if save is not None:
+        plt.savefig(save, dpi=dpi, transparent=True, bbox_inches='tight')
+    plt.show()
+
+
+def plot_distance_hist(hist_data, subplot=(2, 5), size=(14, 6), space=(0.2, 0.1), grid_size=10,
+                       bin_size=1, vmax=25, vmin=0.01, colormap='YlOrRd', grid_limit=10,
+                       ticks=False, cbar=[0.92, 0.135, 0.02, 0.755], save=None, dpi=500):
+    """ Plots distance histogram for each run of a given trial """
+    fig = plt.figure(figsize=size)
+    fig.subplots_adjust(hspace=space[0], wspace=space[1])
+
+    lim = (1 - grid_size / grid_limit) / 2
+    dx = (1 - 2 * lim) * 10
+    dy = (1 - 2 * lim) * 10
+    n_bins = int(grid_limit / bin_size)
+
+    for i, trial in enumerate(hist_data, start=1):
+        x, y, z, title, sort_par = trial
+        heatmap, xedges, yedges = np.histogram2d(x, y, bins=n_bins)
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        H = heatmap.T
+
+        ax = fig.add_subplot(subplot[0], subplot[1], i, title=title)
+        ax.set_xlim(0 + lim, 1 - lim)
+        ax.set_ylim(0 + lim, 1 - lim)
+        if not ticks:
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+
+        cmap = plt.get_cmap(colormap)
+        cmap.set_under(color='white')
+
+        # Show histogram
+        plt.imshow(H, interpolation='nearest', extent=extent, cmap=cmap, vmin=vmin, vmax=vmax)
+
+    if cbar is not None:
+        cbar_ax = fig.add_axes(cbar)
+        plt.colorbar(cax=cbar_ax)
     if save is not None:
         plt.savefig(save, dpi=dpi, transparent=True, bbox_inches='tight')
     plt.show()
