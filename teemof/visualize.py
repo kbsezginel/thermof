@@ -71,7 +71,8 @@ def plot_directions(runs_data, time, runs_id, limit=(0, 2000), title=None, size=
 
 def plot_distance_hist(hist_data, subplot=(2, 5), size=(14, 6), space=(0.2, 0.1), grid_size=10,
                        bin_size=1, vmax=25, vmin=0.01, colormap='YlOrRd', grid_limit=10,
-                       ticks=False, cbar=[0.92, 0.135, 0.02, 0.755], save=None, dpi=500):
+                       ticks=False, cbar=[0.92, 0.135, 0.02, 0.755], save=None, dpi=500,
+                       selections=None):
     """ Plots distance histogram for each run of a given trial """
     fig = plt.figure(figsize=size)
     fig.subplots_adjust(hspace=space[0], wspace=space[1])
@@ -80,6 +81,14 @@ def plot_distance_hist(hist_data, subplot=(2, 5), size=(14, 6), space=(0.2, 0.1)
     dx = (1 - 2 * lim) * 10
     dy = (1 - 2 * lim) * 10
     n_bins = int(grid_limit / bin_size)
+
+    # Selecting part of the data by the third element which corresponds to title
+    if selections is not None:
+        new_dist_data = []
+        for d in hist_data:
+            if d[3] in selections:
+                new_dist_data.append(d)
+        hist_data = sorted(new_dist_data, key=lambda x: x[3])
 
     for i, trial in enumerate(hist_data, start=1):
         x, y, z, title, sort_par = trial
