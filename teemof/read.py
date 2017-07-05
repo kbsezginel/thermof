@@ -148,44 +148,37 @@ def check_kt_directions(run_dir):
     return k_list, directions
 
 
-def read_log(log_path):
-    """ Read log.lammps file """
+def read_log(log_path, headers='Step Temp Press PotEng TotEng Volume'):
+    """ Read log.lammps file and return lines for multiple thermo data """
     with open(log_path, 'r') as log:
         log_lines = log.readlines()
 
+    thermo_start = []
+    thermo_end = []
     for line_index, line in enumerate(log_lines):
-        if 'thermo' in line:
-            thermo_step = int(line.split()[1])
-        if 'Equilibration and thermalisation' in line:
-            nvt_start = line_index + 7
-            nvt_steps = int(log_lines[line_index + 4].split()[1])
-            nvt_end = int(nvt_steps / thermo_step) + nvt_start + 1
-        elif 'Equilibration in nve' in line:
-            nve_start = line_index + 5
-            nve_steps = int(log_lines[line_index + 2].split()[1])
-            nve_end = int(nve_steps / thermo_step) + nve_start + 1
+        if headers in line:
+            start = line_index + 1
+            thermo_start.append(start)
+        if 'Loop time' in line:
+            end = line_index
+            thermo_end.append(end)
 
-    nvt_lines = log_lines[nvt_start:nvt_end]
-    nve_lines = log_lines[nve_start:nve_end]
+    thermo_data = []
+    for s, e in zip(thermo_start, thermo_end):
+        thermo_data.append(log_lines[s:e])
 
-    nvt_data = read_thermo_data(nvt_lines)
-    nve_data = read_thermo_data(nve_lines)
-
-    return nvt_data, nve_data
+    return thermo_data
 
 
-def read_thermo_data(thermo_data_lines):
-    """ Read simulation output data for given lines """
-    log_data = dict(step=[], temp=[], pair_eng=[], mol_eng=[], tot_eng=[], press=[])
-    for data_line in thermo_data_lines:
-        data = data_line.split()
-        log_data['step'].append(float(data[0]))
-        log_data['temp'].append(float(data[1]))
-        log_data['pair_eng'].append(float(data[2]))
-        log_data['mol_eng'].append(float(data[3]))
-        log_data['tot_eng'].append(float(data[4]))
-        log_data['press'].append(float(data[5]))
-    return log_data
+def read_thermo(thermo_data, headers=['step', 'temp', 'press', 'tot_eng', 'volume']):
+    """ Read thermo data from given thermo log lines """
+    thermo = {key: [] for key in headers}
+    for data in thermo_data:
+        line = data.strip().split()
+        for i, h in enumerate(headers):
+            thermo[h].append(float(line[i]))
+
+    return thermo
 
 
 def read_run_info(run_dir):
