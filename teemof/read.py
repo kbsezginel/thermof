@@ -109,6 +109,33 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True):
     return trial_data, time, runs_id
 
 
+def read_single_run(run_dir, t0=4, t1=8, verbose=True):
+    """ Read multiple runs for single trial """
+    run = os.path.basename(run_dir)
+    print('\n------ %s ------' % run) if verbose else None
+    trial_data = []
+    runs_id = []
+    if os.path.isdir(run_dir):
+        try:
+            k_data_files, directions = check_kt_directions(run_dir)
+            run_data = []
+            for direc, data_path in zip(directions, k_data_files):
+                kt, time = read_kt(data_path)
+                kt = convert_kt(kt)
+                trial_data.append(kt)
+                run_data.append(kt)
+                runs_id.append('%s-%s' % (run, direc))
+            run_avg_kt = avg_kt(run_data)
+            run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
+            print(run_message) if verbose else None
+        except Exception as e:
+            print('%s -> Could not read, error: %s' % (run, e))
+    trial_avg_kt = avg_kt(trial_data)
+    approx_kt = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
+    print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data))) if verbose else None
+    return trial_data, time, runs_id
+
+
 def check_kt_directions(run_dir):
     """ Return thermal data for each direction as list """
     run_list = os.listdir(run_dir)
