@@ -2,6 +2,7 @@
 # Date: Februay 2017
 # Author: Kutay B. Sezginel
 import os
+import periodictable
 
 
 def change_xyz_atom_names(traj_path, atoms=['C', 'O'], targets=['1', '2']):
@@ -50,3 +51,15 @@ def read_trajectory(traj_path):
         trajectory['coordinates'].append([[float(i) for i in line.split()[1:4]] for line in traj[start + 2:end]])
 
     return trajectory
+
+
+def center_of_mass(atoms, coordinates):
+    """ Calculate center of mass for given coordinates and atom names """
+    xsum, ysum, zsum = 0, 0, 0
+    for atom, coor in zip(atoms, coordinates):
+        mass = periodictable.elements.symbol(atom).mass
+        wx, wy, wz = [mass * i for i in coor]
+        xsum += wx
+        ysum += wy
+        zsum += wz
+    return [xsum, ysum, zsum]
