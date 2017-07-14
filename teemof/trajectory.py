@@ -63,3 +63,16 @@ def center_of_mass(atoms, coordinates):
         ysum += wy
         zsum += wz
     return [xsum, ysum, zsum]
+
+
+def get_com(trajectory):
+    """ Analyze center of mass coordinate change """
+    trajectory['com'] = []
+    for atoms, coors in zip(trajectory['atoms'], trajectory['coordinates']):
+        com = center_of_mass(atoms, coors)
+        trajectory['com'].append(com)
+    x_avg = sum([i[0] for i in trajectory['com']]) / len(trajectory['com'])
+    y_avg = sum([i[1] for i in trajectory['com']]) / len(trajectory['com'])
+    z_avg = sum([i[2] for i in trajectory['com']]) / len(trajectory['com'])
+    trajectory['com_avg'] = [x_avg, y_avg, z_avg]
+    return trajectory
