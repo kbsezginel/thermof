@@ -76,3 +76,21 @@ def get_com(trajectory):
     z_avg = sum([i[2] for i in trajectory['com']]) / len(trajectory['com'])
     trajectory['com_avg'] = [x_avg, y_avg, z_avg]
     return trajectory
+
+
+def mean_squared_displacement(pos_data, dt=1):
+    """ Calculate MSD for single dimension """
+    msd_sum = 0
+    n_points = len(pos_data) - dt
+    for i in range(n_points):
+        msd_sum += (pos_data[i + dt] - pos_data[i]) ** 2
+    return (msd_sum / n_points)
+
+
+def get_msd(trajectory, dt=1):
+    """ Calculate MSD for given trajectory """
+    msd = []
+    for direction in range(3):
+        pos_data = [i[direction] for i in trajectory['com']]
+        msd.append(mean_squared_displacement(pos_data, dt))
+    return msd
