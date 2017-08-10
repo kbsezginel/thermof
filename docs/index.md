@@ -8,8 +8,6 @@ Investigating effect of interpenetration on the thermal conductivity of metal-or
 
 <p align="center"> <img src="img/Fig1.png"> </p>
 
-![alt text][Fig1]
-
 - a) Idealized porous crystal (8 × 8 × 8 cubic unit cells), single unit cell highlighted in red
 - b) Bonding arrangement for single unit cell using Morse potential (red bonds are modeled stronger than blue bonds)
 - c) Doubly interpenetrated unit cells with framework depicted as red and blue (initial frameworks in each simulation are 5 Å apart in each dimension
