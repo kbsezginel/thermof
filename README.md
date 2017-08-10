@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/kbsezginel/tee_mof.svg?branch=master)](https://travis-ci.org/kbsezginel/tee_mof)
 # Thermoelectrically Entangled MOFs (tee_mof)
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
 
@@ -12,13 +13,15 @@ Investigating effect of interpenetration on the thermal conductivity of metal-or
 
 Clone the repository, enter the main repository directory and run:
 
-`python setup.py install`
+```
+python setup.py install
+```
 
 ## Usage
 teemof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
 
 ### Sample
-Sample [Lammps] input files for thermal conductivity calculations can be found in *~/sample*
+Sample [Lammps] input files for thermal conductivity calculations can be found in `/sample`
 
 - in3_ipmof.cond.sample: Interpenetrated MOF simulation parameters with 3D thermal flux
 - in3_single.cond.sample: Single MOF simulation parameters with 3D thermal flux
@@ -30,7 +33,7 @@ Sample [Lammps] input files for thermal conductivity calculations can be found i
 - lammps_qsub.sh.sample: Job submission script for lammps simulations on [Frank]
 
 ### Notebooks
-Example jupyter notebooks can be found in *~/notebooks*
+Example jupyter notebooks can be found in `/notebooks`
 
 - change_trajectory: Change xyz trajectory atoms names
 - initialize: Initialize lammps simulation files according to selected simulation parameters
@@ -38,7 +41,7 @@ Example jupyter notebooks can be found in *~/notebooks*
 - read_kt: Read thermal conductivity from simulation results
 - read_thermo: Read thermodynamic data from simulation results
 
-
+-------------------------------------------------------------------------
 [Fig1]: https://github.com/kbsezginel/tee_mof/blob/master/docs/img/Fig1.png "Structures"
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"
 [Frank]: http://core.sam.pitt.edu/frank "Frank home page"
