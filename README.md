@@ -27,7 +27,7 @@ Sample [Lammps] input files for thermal conductivity calculations can be found i
 - lammps_ipmof_metal.data.sample: Interpenetrated MOF with differemt corner atoms structure file
 - lammps_single.data.sample: Single MOF structure file
 - lammps_single_metal.data.sample: Single MOF with differemt corner atoms structure file
-- lammps_qsub.sh.sample: Job submission script for lammps simulations on [Frank] 
+- lammps_qsub.sh.sample: Job submission script for lammps simulations on [Frank]
 
 ### Notebooks
 Example jupyter notebooks can be found in *~/notebooks*
@@ -39,6 +39,6 @@ Example jupyter notebooks can be found in *~/notebooks*
 - read_thermo: Read thermodynamic data from simulation results
 
 
-[Fig1]: https://github.com/kbsezginel/tee_mof/blob/master/docs/Fig1.png "Structures"
+[Fig1]: https://github.com/kbsezginel/tee_mof/blob/master/docs/img/Fig1.png "Structures"
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"
 [Frank]: http://core.sam.pitt.edu/frank "Frank home page"
