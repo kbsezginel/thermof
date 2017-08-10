@@ -1,3 +1,8 @@
+---
+layout: default
+title:  "TEE-MOF"
+date:   2017-08-10
+---
 # Thermoelectrically Entangled MOFs (tee_mof)
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
 
