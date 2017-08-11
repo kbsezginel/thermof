@@ -3,7 +3,10 @@ layout: default
 title:  "Results"
 date:   2017-08-11
 ---
-Premliminary results for thermal conductivity calculations of Metal-Organic Frameworks.
+Results
+=======
+
+Preliminary results for thermal conductivity calculations of Metal-Organic Frameworks.
 
 ### [IRMOF-1](https://kbsezginel.github.io/tee_mof/irmof1)
 

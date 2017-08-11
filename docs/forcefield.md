@@ -20,7 +20,7 @@ Following charges are used in [Smit and co-workers].
 
 3 different carbon types were defined for both HKUST-1 and IRMOF-1 and 2 oxygen types were defined for IRMOF-1 as follows. Here *O1* refers to *O_3_f* and *O2* refers to *O_2* atom type in UFF4MOF. For carbon atoms same atom type (*C_R*) have been used, however, different charges were assigned.
 
-<p align="center"> <img src="img/atom_types.png"> </p>
+<p align="center"> <img src="img/atom-types.png"> </p>
 
 The charges for different carbon atoms were defined as follows:
 
