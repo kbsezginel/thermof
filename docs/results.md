@@ -10,3 +10,5 @@ Premliminary results for thermal conductivity calculations of Metal-Organic Fram
 ### [CuBTC](https://kbsezginel.github.io/tee_mof/cubtc)
 
 ### [IRMOF-10](https://kbsezginel.github.io/tee_mof/irmof10)
+
+### [Force field parameters and charges](https://kbsezginel.github.io/tee_mof/forcefield)
