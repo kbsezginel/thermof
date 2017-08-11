@@ -7,10 +7,10 @@ import yaml
 from teemof.reldist import reldist
 
 
-parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300)
+kt_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300)
 
 
-def read_kt(file_path, dt=parameters['dt'], kt_index=3):
+def read_kt(file_path, dt=kt_parameters['dt'], kt_index=3):
     """ Read kt vs time data from Lammps simulation output file """
     with open(file_path, 'r') as j:
         kt = []
@@ -24,13 +24,13 @@ def read_kt(file_path, dt=parameters['dt'], kt_index=3):
     return kt, time
 
 
-def convert_kt(k_data, param=parameters):
+def convert_kt(k_data, kt_par=kt_parameters):
     """ Convert Lammps output data to W/mK thermal conductivity """
-    volume = param['volume']
-    dt = param['dt']
-    k_b = param['kb']
-    temp = param['temp']
-    conversion = param['conv']
+    volume = kt_par['volume']
+    dt = kt_par['dt']
+    k_b = kt_par['kb']
+    temp = kt_par['temp']
+    conversion = kt_par['conv']
     new_kt = []
     for data_index, data in enumerate(k_data):
         if data_index == 0:
@@ -81,7 +81,7 @@ def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
     return trial_data, trial_names
 
 
-def read_runs(trial_dir, t0=4, t1=8, verbose=True):
+def read_runs(trial_dir, t0=4, t1=8, verbose=True, kt_par=kt_parameters):
     """ Read multiple runs for single trial """
     print('\n------ %s ------' % os.path.split(trial_dir)[-1]) if verbose else None
     trial_data = []
@@ -94,7 +94,7 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True):
                 run_data = []
                 for direc, data_path in zip(directions, k_data_files):
                     kt, time = read_kt(data_path)
-                    kt = convert_kt(kt)
+                    kt = convert_kt(kt, kt_par=kt_par)
                     trial_data.append(kt)
                     run_data.append(kt)
                     runs_id.append('%s-%s' % (run, direc))
@@ -109,7 +109,7 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True):
     return trial_data, time, runs_id
 
 
-def read_single_run(run_dir, t0=4, t1=8, verbose=True):
+def read_single_run(run_dir, t0=4, t1=8, kt_par=kt_parameters, verbose=True):
     """ Read multiple runs for single trial """
     run = os.path.basename(run_dir)
     print('\n------ %s ------' % run) if verbose else None
@@ -121,7 +121,7 @@ def read_single_run(run_dir, t0=4, t1=8, verbose=True):
             run_data = []
             for direc, data_path in zip(directions, k_data_files):
                 kt, time = read_kt(data_path)
-                kt = convert_kt(kt)
+                kt = convert_kt(kt, kt_par=kt_par)
                 trial_data.append(kt)
                 run_data.append(kt)
                 runs_id.append('%s-%s' % (run, direc))
@@ -190,7 +190,10 @@ def read_run_info(run_dir):
 
 def read_legend(trial_dir, key='name', run='Run1'):
     """ Read legend name from given trial """
-    run_dir = os.path.join(trial_dir, run)
+    if run is not None:
+        run_dir = os.path.join(trial_dir, run)
+    else:
+        run_dir = trial_dir
     run_info = read_run_info(run_dir)
     return run_info[key]
 
