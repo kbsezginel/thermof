@@ -4,7 +4,9 @@ title:  "TEE-MOF"
 date:   2017-08-10
 ---
 [![Build Status](https://travis-ci.org/kbsezginel/tee_mof.svg?branch=master)](https://travis-ci.org/kbsezginel/tee_mof)
-# Thermoelectrically Entangled MOFs (tee_mof)
+
+Thermoelectrically Entangled MOFs (tee_mof)
+=============================================
 
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
 
@@ -15,7 +17,8 @@ Investigating effect of interpenetration on the thermal conductivity of metal-or
 - c) Doubly interpenetrated unit cells with framework depicted as red and blue (initial frameworks in each simulation are 5 Å apart in each dimension
 - d) Interpenetrated idealized porous crystal (8 × 8 × 8 cubic unit cells).
 
-## Installation
+Installation
+------------
 
 Clone the repository, enter the main repository directory and run:
 
@@ -23,7 +26,8 @@ Clone the repository, enter the main repository directory and run:
 python setup.py install
 ```
 
-## Usage
+Usage
+-----
 teemof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
 
 ### Sample
@@ -46,6 +50,8 @@ Example jupyter notebooks can be found in `/notebooks`
 - interpenetrate: Create interpenetrated structure
 - read_kt: Read thermal conductivity from simulation results
 - read_thermo: Read thermodynamic data from simulation results
+
+### [Results](https://kbsezginel.github.io/tee_mof/results)
 
 ----------------------------------------------------------------------------------------------------
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"
