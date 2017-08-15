@@ -86,6 +86,7 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True, kt_par=kt_parameters):
     print('\n------ %s ------' % os.path.split(trial_dir)[-1]) if verbose else None
     trial_data = []
     runs_id = []
+    k_runs = []
     for run_index, run in enumerate(os.listdir(trial_dir)):
         run_dir = os.path.join(trial_dir, run)
         if os.path.isdir(run_dir):
@@ -99,14 +100,18 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True, kt_par=kt_parameters):
                     run_data.append(kt)
                     runs_id.append('%s-%s' % (run, direc))
                 run_avg_kt = avg_kt(run_data)
-                run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
+                k_run = get_kt(run_avg_kt, time, t0=t0, t1=t1)
+                k_runs.append(k_run)
+                run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, k_run, len(k_data_files))
                 print(run_message) if verbose else None
             except Exception as e:
                 print('%s -> Could not read, error: %s' % (run, e))
     trial_avg_kt = avg_kt(trial_data)
-    approx_kt = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
-    print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data))) if verbose else None
-    return trial_data, time, runs_id
+    k_trial = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
+    print('Average -> %.3f W/mK from %i runs' % (k_trial, len(trial_data))) if verbose else None
+    trial_results = dict(time=time, id=runs_id, k_runs=k_runs, k_trial=k_trial)
+    # return trial_data, time, runs_id
+    return trial_results
 
 
 def read_single_run(run_dir, t0=4, t1=8, kt_par=kt_parameters, verbose=True):
