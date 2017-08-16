@@ -2,6 +2,7 @@
 # Date: Februay 2017
 # Author: Kutay B. Sezginel
 import os
+import math
 import periodictable
 
 
@@ -94,3 +95,22 @@ def get_msd(trajectory, dt=1):
         pos_data = [i[direction] for i in trajectory['com']]
         msd.append(mean_squared_displacement(pos_data, dt))
     return msd
+
+
+def msd_distance(coordinates, frames='all', atom=0):
+    """ Calculate MSD for single atom using a reference frame and given frames
+        - coordinates: list of coordinates for each frame
+        - frames: frames to use for calculation ('all' or tuple -> (start, end))
+        - atom: atom index to use for calculation
+    """
+    if frames == 'all':
+        frames = (0, len(coordinates))
+    d_sum = 0
+    n_frames = len(coordinates[frames[0]:frames[1]])
+    for frame in range(1, n_frames):
+        coor_ref = coordinates[frame - 1][atom]         # Atom position at t -> r(t)
+        coor = coordinates[frame][atom]                 # Atom position at t + 1 => r(t + 1)
+        d_sum += math.sqrt(((coor[0] - coor_ref[0]) ** 2 +
+                            (coor[1] - coor_ref[1]) ** 2 +
+                            (coor[2] - coor_ref[2]) ** 2))
+    return (d_sum / n_frames)
