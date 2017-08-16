@@ -38,7 +38,7 @@ Example jupyter notebooks can be found in `/notebooks`
 - change_trajectory: Change xyz trajectory atoms names
 - initialize: Initialize lammps simulation files according to selected simulation parameters
 - interpenetrate: Create interpenetrated structure
-- read_kt: Read thermal conductivity from simulation results
+- read_thermal_flux: Read thermal conductivity from simulation results
 - read_thermo: Read thermodynamic data from simulation results
 
 -------------------------------------------------------------------------
