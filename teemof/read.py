@@ -42,7 +42,7 @@ def calculate_k(flux, k_par=k_parameters):
         - k_par (dict): Dictionary of calculation parameters
 
     Returns:
-        - list: thermal conductivity autocorrelation function
+        - list: Thermal conductivity autocorrelation function
     """
     k = flux[0] / 2 * k_par['volume'] * k_par['dt'] / (k_par['kb'] * math.pow(k_par['temp'], 2)) * k_par['conv']
     k_data = [k]
@@ -50,6 +50,23 @@ def calculate_k(flux, k_par=k_parameters):
         k = k + J * k_par['volume'] * k_par['dt'] / (k_par['kb'] * math.pow(k_par['temp'], 2)) * k_par['conv']
         k_data.append(k)
     return k_data
+
+
+def estimate_k(k_data, time, t0=5, t1=10):
+    """ Get approximate thermal conductivity value for a single simulation.
+    The arithmetic average of k values are taken between given timesteps.
+
+    Args:
+        - k_data (list): Thermal conductivity autocorrelation function
+        - time (list): Simulation timestep
+        - t0: Timestep to start taking average of k values
+        - t1: Timestep to end taking average of k values
+
+    Returns:
+        - float: Estimate thermal conductivity
+    """
+    start, end = time.index(t0), time.index(t1)
+    return (sum(k_data[start:end]) / len(k_data[start:end]))
 
 
 def avg_kt(k_data_list):
@@ -64,17 +81,6 @@ def avg_kt(k_data_list):
         data = sum([i[data_index] for i in k_data_list]) / len(k_data_list)
         avg_data.append(data)
     return avg_data
-
-
-def get_kt(kt, time, t0=5, t1=10):
-    """ Get approximate thermal conductivity value for a single run """
-    start = time.index(t0)
-    end = time.index(t1)
-    kt_data = []
-    for i in range(start, end):
-        kt_data.append(kt[i])
-    kt_avg = sum(kt[start:end]) / len(kt[start:end])
-    return kt_avg
 
 
 def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
@@ -110,14 +116,14 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True, k_par=k_parameters):
                     run_data.append(kt)
                     runs_id.append('%s-%s' % (run, direc))
                 run_avg_kt = avg_kt(run_data)
-                k_run = get_kt(run_avg_kt, time, t0=t0, t1=t1)
+                k_run = estimate_k(run_avg_kt, time, t0=t0, t1=t1)
                 k_runs.append(k_run)
                 run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, k_run, len(k_data_files))
                 print(run_message) if verbose else None
             except Exception as e:
                 print('%s -> Could not read, error: %s' % (run, e))
     trial_avg_kt = avg_kt(trial_data)
-    k_trial = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
+    k_trial = estimate_k(trial_avg_kt, time, t0=t0, t1=t1)
     print('Average -> %.3f W/mK from %i runs' % (k_trial, len(trial_data))) if verbose else None
     trial_results = dict(time=time, id=runs_id, k_runs=k_runs, k_trial=k_trial)
     # return trial_data, time, runs_id
@@ -141,12 +147,12 @@ def read_single_run(run_dir, t0=4, t1=8, k_par=k_parameters, verbose=True):
                 run_data.append(kt)
                 runs_id.append('%s-%s' % (run, direc))
             run_avg_kt = avg_kt(run_data)
-            run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, get_kt(run_avg_kt, time), len(k_data_files))
+            run_message = '%s -> kt: %.3f W/mK -> %i direction(s)' % (run, estimate_k(run_avg_kt, time), len(k_data_files))
             print(run_message) if verbose else None
         except Exception as e:
             print('%s -> Could not read, error: %s' % (run, e))
     trial_avg_kt = avg_kt(trial_data)
-    approx_kt = get_kt(trial_avg_kt, time, t0=t0, t1=t1)
+    approx_kt = estimate_k(trial_avg_kt, time, t0=t0, t1=t1)
     print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data))) if verbose else None
     return trial_data, time, runs_id
 
