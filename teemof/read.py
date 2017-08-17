@@ -81,7 +81,7 @@ def average_k(k_runs):
     n_frames = len(k_runs[0])
     for run_index, k in enumerate(k_runs):
         run_frames = len(k)
-        if run_ != n_frames:
+        if run_frames != n_frames:
             raise InputError('Number of timesteps for inital run not equal to run %i (%i != %i)'
                              % (run_index, n_frames, run_frames))
     avg_k_data = []

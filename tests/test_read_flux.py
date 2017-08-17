@@ -4,7 +4,7 @@ Tests reading thermal flux and calculating thermal conductivity
 import os
 import yaml
 import numpy as np
-from teemof.read import read_thermal_flux, calculate_k, estimate_k
+from teemof.read import read_thermal_flux, calculate_k, estimate_k, average_k
 
 
 flux_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-flux.dat')
@@ -29,6 +29,13 @@ def test_thermal_conductivity_calculation():
     flux, time = read_thermal_flux(flux_file)
     k = calculate_k(flux)
     assert np.allclose(k, k_ref)
+
+
+def test_thermal_conductivity_average():
+    with open(k_ref_file, 'r') as kref:
+        k_ref = yaml.load(kref)
+    flux, time = read_thermal_flux(flux_file)
+    assert np.allclose(average_k([flux, flux, flux, flux]), flux)
 
 
 def test_thermal_conductivity_estimation():
