@@ -13,14 +13,14 @@ before_install:
   - ulimit -a
 
 install:
-  - pip install codecov
+  - pip install pytest pytest-cov codecov
 
 before_script:
   - python -V
 
 script:
   - python setup.py install
-  - py.test -v --cov=./
+  - py.test --cov=./
 
 after_success:
   - codecov
