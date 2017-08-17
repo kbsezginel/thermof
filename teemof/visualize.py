@@ -5,7 +5,7 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from teemof.read import avg_kt
+from teemof.read import average_k
 
 
 def plot_runs(runs_data, time, runs_id, limit=(0, 2000), title=None, size=(20, 10), fontsize=14, dpi=300, avg=True, cmap=None, save=None, ncol=1):
@@ -22,7 +22,7 @@ def plot_runs(runs_data, time, runs_id, limit=(0, 2000), title=None, size=(20, 1
             plt.plot(time[limit[0]:limit[1]], rd[limit[0]:limit[1]])
 
     if avg:
-        runs_avg_kt = avg_kt(runs_data)
+        runs_avg_kt = average_k(runs_data)
         plt.plot(time[limit[0]:limit[1]], runs_avg_kt[limit[0]:limit[1]], '--k', linewidth=2)
         lgnd.append('Average')
     if title is not None:
@@ -53,7 +53,7 @@ def plot_directions(runs_data, time, runs_id, limit=(0, 2000), title=None, size=
             lgnd.append('%s-%s' % (drc, runs_id[i]))
 
     if avg:
-        runs_avg_kt = avg_kt(runs_data)
+        runs_avg_kt = average_k(runs_data)
         plt.plot(time[limit[0]:limit[1]], runs_avg_kt[limit[0]:limit[1]], '--k', linewidth=2)
         lgnd.append('Average')
 
