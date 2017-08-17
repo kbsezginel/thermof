@@ -39,7 +39,6 @@ def test_thermal_conductivity_average():
 
 
 def test_thermal_conductivity_estimation():
-    flux_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-flux.dat')
     flux, time = read_thermal_flux(flux_file)
     k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300)
     J = calculate_k(flux, k_par=k_parameters)
