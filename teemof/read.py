@@ -90,6 +90,49 @@ def average_k(k_runs):
     return avg_k_data
 
 
+def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=True):
+    """Read single Lammps simulation run
+    Args:
+        - run_dir (str): Lammps simulation directory for single run
+        - k_par (dict): Dictionary of calculation parameters
+        - t0 (int): Timestep to start taking average of k values
+        - t1 (int): Timestep to end taking average of k values
+        - isotropic (bool): Isotropy of thermal flux, if True aveage is taken for each direction
+        - verbose (bool): Print information about the run
+
+    Returns:
+        - dict: Run data containing thermal conductivity, estimate, timesteps, run name
+    """
+    run_data = dict(name=os.path.basename(run_dir), k={}, k_est={}, time=[])
+    print('\n------ %s ------' % run_data['name']) if verbose else None
+    trial_data = []
+    runs_id = []
+    if os.path.isdir(run_dir):
+        try:
+            flux_files, directions = get_flux_directions(run_dir)
+            run_message = '%s -> ' % run_data['name']
+            for direction, flux_file in zip(directions, flux_files):
+                flux, time = read_thermal_flux(flux_file)
+                k = calculate_k(flux, k_par=k_par)
+                run_data['k'][direction] = k
+                run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
+                run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
+            run_data['time'] = time
+            print(run_message) if verbose else None
+        except Exception as e:
+            print('%s -> Could not read, error: %s' % (run_data['name'], e))
+    if isotropic:
+        run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
+        run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
+        print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
+    return run_data
+
+
+def read_trial(trial_dir, t0=5, t1=10, verbose=True):
+    """Read Lammps simulation trial with any number of runs"""
+    pass
+
+
 def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
     """ Read multiple trials with multiple runs"""
     trial_data = []
@@ -114,7 +157,7 @@ def read_runs(trial_dir, t0=4, t1=8, verbose=True, k_par=k_parameters):
         run_dir = os.path.join(trial_dir, run)
         if os.path.isdir(run_dir):
             try:
-                k_data_files, directions = check_kt_directions(run_dir)
+                k_data_files, directions = get_flux_directions(run_dir)
                 run_data = []
                 for direc, data_path in zip(directions, k_data_files):
                     kt, time = read_thermal_flux(data_path)
@@ -145,7 +188,7 @@ def read_single_run(run_dir, t0=4, t1=8, k_par=k_parameters, verbose=True):
     runs_id = []
     if os.path.isdir(run_dir):
         try:
-            k_data_files, directions = check_kt_directions(run_dir)
+            k_data_files, directions = get_flux_directions(run_dir)
             run_data = []
             for direc, data_path in zip(directions, k_data_files):
                 kt, time = read_thermal_flux(data_path)
@@ -164,16 +207,26 @@ def read_single_run(run_dir, t0=4, t1=8, k_par=k_parameters, verbose=True):
     return trial_data, time, runs_id
 
 
-def check_kt_directions(run_dir):
-    """ Return thermal data for each direction as list """
-    run_list = os.listdir(run_dir)
-    k_list = []
-    directions = []
-    for f in run_list:
-        if 'J0Jt_t' in f:
-            k_list.append(os.path.join(run_dir, f))
+def get_flux_directions(run_dir, prefix='J0Jt_t'):
+    """Return thermal flux data file and direction name for each direction as lists.
+    Each file with the given prefix is selected as thermal flux file and direction is read as the
+    character between prefix and file extension.
+
+    Example: J0Jt_tx.dat -> prefix should be 'J0Jt_t' and direction would be read as 'x'.
+
+    Args:
+        - run_dir (str): Lammps simulation directory with thermal flux files
+
+    Returns:
+        - list: List of thermal flux files found with given prefix
+        - list: List of thermal flux directions
+    """
+    flux_files, directions = [], []
+    for f in os.listdir(run_dir):
+        if prefix in f:
+            flux_files.append(os.path.join(run_dir, f))
             directions.append(f.split('.')[0].split('J0Jt_t')[1])
-    return k_list, directions
+    return flux_files, directions
 
 
 def read_log(log_path, headers='Step Temp Press PotEng TotEng Volume'):
