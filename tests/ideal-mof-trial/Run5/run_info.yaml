@@ -1,0 +1,10 @@
+epsilon: 0
+files: {data: /home/kutay/Documents/git/tee_mof/sample/lammps_single.data.sample,
+  inp: /home/kutay/Documents/git/tee_mof/sample/in3_single.cond.sample, qsub: /home/kutay/Documents/git/tee_mof/sample/lammps_qsub.sh.sample}
+info: Single MOF - mass sweep
+legend: 39.948 (Ar)
+mass: 39.948
+name: Trial14-5-Run5
+seed: 123460
+sigma: 4.75
+thermo: 100
