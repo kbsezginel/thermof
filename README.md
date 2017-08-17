@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kbsezginel/tee_mof.svg?branch=master)](https://travis-ci.org/kbsezginel/tee_mof)
+[![codecov](https://codecov.io/gh/kbsezginel/tee_mof/branch/master/graph/badge.svg)](https://codecov.io/gh/kbsezginel/tee_mof)
 # Thermoelectrically Entangled MOFs (tee_mof)
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
 
