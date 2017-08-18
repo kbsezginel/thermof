@@ -103,14 +103,13 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
     Returns:
         - dict: Run data containing thermal conductivity, estimate, timesteps, run name
     """
-    run_data = dict(name=os.path.basename(run_dir), k={}, k_est={}, time=[])
-    print('\n------ %s ------' % run_data['name']) if verbose else None
+    run_data = dict(name=os.path.basename(run_dir), k={}, k_est={}, time=[], directions=[])
     trial_data = []
     runs_id = []
     if os.path.isdir(run_dir):
         try:
             flux_files, directions = get_flux_directions(run_dir)
-            run_message = '%s -> ' % run_data['name']
+            run_message = '%-9s ->' % run_data['name']
             for direction, flux_file in zip(directions, flux_files):
                 flux, time = read_thermal_flux(flux_file)
                 k = calculate_k(flux, k_par=k_par)
@@ -118,6 +117,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
                 run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
                 run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
             run_data['time'] = time
+            run_data['directions'] = directions
             print(run_message) if verbose else None
         except Exception as e:
             print('%s -> Could not read, error: %s' % (run_data['name'], e))
@@ -128,9 +128,55 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
     return run_data
 
 
-def read_trial(trial_dir, t0=5, t1=10, verbose=True):
-    """Read Lammps simulation trial with any number of runs"""
-    pass
+def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, average=True, verbose=True):
+    """Read Lammps simulation trial with any number of runs
+
+    Args:
+        - trial_dir (str): Lammps simulation directory including directories for multiple runs
+        - k_par (dict): Dictionary of calculation parameters
+        - t0 (int): Timestep to start taking average of k values
+        - t1 (int): Timestep to end taking average of k values
+        - isotropic (bool): Isotropy of thermal flux, if True aveage is taken for each direction
+        - average (bool): Get average of each run data
+        - verbose (bool): Print information about the run
+
+    Returns:
+        - dict: Trial data containing thermal conductivity, estimate, timesteps, run name for each run
+    """
+    trial = dict(runs=[], data={}, name=os.path.basename(trial_dir))
+    print('\n------ %s ------' % trial['name']) if verbose else None
+    run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir) if os.path.isdir(os.path.join(trial_dir, run))]
+    for run in run_list:
+        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, isotropic=isotropic, verbose=verbose)
+        trial['data'][run_data['name']] = run_data
+        trial['runs'].append(run_data['name'])
+    if average:
+        trial['avg'] = average_trial(trial, isotropic=isotropic)
+    return trial
+
+
+def average_trial(trial, isotropic=False):
+    """Take average of thermal conductivities for multiple runs.
+    Assumes all runs have the same number of directions.
+
+    Args:
+        - isotropic (bool): Isotropy of thermal flux, if True aveage is taken for each direction
+
+    Returns:
+        - dict: Trial data average for thermal conductivity and estimate
+    """
+    trial_avg = dict(k={}, k_est={})
+    for direction in trial['data'][trial['runs'][0]]['directions']:
+        # Take average of k for each direction
+        trial_avg['k'][direction] = average_k([trial['data'][run]['k'][direction] for run in trial['runs']])
+        k_est_runs = [trial['data'][run]['k_est'][direction] for run in trial['runs']]
+        trial_avg['k_est'][direction] = sum(k_est_runs) / len(trial['runs'])
+    if isotropic:
+        # Take average of isotropic k and k_estimate
+        trial_avg['k']['iso'] = average_k([trial['data'][run]['k']['iso'] for run in trial['runs']])
+        k_est_iso_runs = [trial['data'][run]['k_est']['iso'] for run in trial['runs']]
+        trial_avg['k_est']['iso'] = sum(k_est_iso_runs) / len(trial['runs'])
+    return trial_avg
 
 
 def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
