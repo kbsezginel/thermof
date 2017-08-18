@@ -141,6 +141,10 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_data['k'][direction] = k
             run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
+        if k_par['read_info']:
+            run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
+        if k_par['read_thermo']:
+            run_data['thermo'] = read_thermo(read_log(os.path.join(run_dir, 'log.lammps')))
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -150,6 +154,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
         run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
         print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
+
     return run_data
 
 
@@ -259,9 +264,9 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'press', 'tot_eng', 'volum
     return thermo
 
 
-def read_run_info(run_dir):
+def read_run_info(run_dir, filename='run_info.yaml'):
     """ Read run info yaml file """
-    run_info_path = os.path.join(run_dir, 'run_info.yaml')
+    run_info_path = os.path.join(run_dir, filename)
     run_info = yaml.load(open(run_info_path, 'r'))
     return run_info
 
