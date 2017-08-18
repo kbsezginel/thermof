@@ -17,6 +17,7 @@ k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
 
 
 def test_read_trial():
+    """Test method for reading a trial with multiple runs"""
     with open(k_ref_file, 'r') as kref:
         k_ref = yaml.load(kref)
     with open(time_ref_file, 'r') as tref:

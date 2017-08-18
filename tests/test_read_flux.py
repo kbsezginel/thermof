@@ -18,7 +18,8 @@ k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
                     temp=300, prefix='J0Jt_t', isotropic=False, average=True)
 
 
-def test_thermal_flux_calculation():
+def test_read_thermal_flux():
+    """Tests reading thermal flux data"""
     with open(flux_ref_file, 'r') as jref:
         flux_ref = yaml.load(jref)
     with open(time_ref_file, 'r') as tref:
@@ -29,6 +30,7 @@ def test_thermal_flux_calculation():
 
 
 def test_thermal_conductivity_calculation():
+    """Tests thermal conductivity calculation from thermal flux data"""
     with open(k_ref_file, 'r') as kref:
         k_ref = yaml.load(kref)
     flux, time = read_thermal_flux(flux_file)
@@ -37,6 +39,7 @@ def test_thermal_conductivity_calculation():
 
 
 def test_thermal_conductivity_average():
+    """Tests thermal conductivity average for multiple runs data"""
     with open(k_ref_file, 'r') as kref:
         k_ref = yaml.load(kref)
     flux, time = read_thermal_flux(flux_file)
@@ -44,6 +47,7 @@ def test_thermal_conductivity_average():
 
 
 def test_thermal_conductivity_estimation():
+    """Tests thermal conductivity estimation for given time range"""
     flux, time = read_thermal_flux(flux_file)
     J = calculate_k(flux, k_par=k_parameters)
     k = estimate_k(J, time, t0=5, t1=10)

@@ -28,6 +28,7 @@ def test_simulation_read_run():
 
 
 def test_simulation_read_trial():
+    """Test Simulation class read method for reading a trial"""
     k_parameters['isotropic'] = True
     k_parameters['average'] = True
     trial = read_trial(trial_dir, k_par=k_parameters)
@@ -36,6 +37,7 @@ def test_simulation_read_trial():
 
 
 def test_simulation_read_trial_set():
+    """Test Simulation class read method for reading a trial set"""
     k_parameters['isotropic'] = True
     k_parameters['average'] = True
     trial_set = read_trial_set(trial_set_dir, k_par=k_parameters)
