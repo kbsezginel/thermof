@@ -94,7 +94,7 @@ def average_k(k_runs):
     return avg_k_data
 
 
-def get_flux_directions(run_dir, prefix=k_parameters['prefix'], verbose=True):
+def get_flux_directions(run_dir, k_par=k_parameters, verbose=True):
     """Return thermal flux data file and direction name for each direction as lists.
     Each file with the given prefix is selected as thermal flux file and direction is read as the
     character between prefix and file extension.
@@ -110,7 +110,7 @@ def get_flux_directions(run_dir, prefix=k_parameters['prefix'], verbose=True):
     """
     flux_files, directions = [], []
     for f in os.listdir(run_dir):
-        if prefix in f:
+        if k_par['prefix'] in f:
             flux_files.append(os.path.join(run_dir, f))
             directions.append(f.split('.')[0].split('J0Jt_t')[1])
     if len(directions) == 0:
@@ -120,7 +120,7 @@ def get_flux_directions(run_dir, prefix=k_parameters['prefix'], verbose=True):
     return flux_files, directions
 
 
-def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=True):
+def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     """Read single Lammps simulation run
     Args:
         - run_dir (str): Lammps simulation directory for single run
@@ -137,7 +137,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
     trial_data = []
     runs_id = []
     if os.path.isdir(run_dir):
-        flux_files, directions = get_flux_directions(run_dir, prefix=k_par['prefix'])
+        flux_files, directions = get_flux_directions(run_dir, k_par=k_par)
         run_message = '%-9s ->' % run_data['name']
         for direction, flux_file in zip(directions, flux_files):
             flux, time = read_thermal_flux(flux_file, k_par=k_par)
@@ -155,7 +155,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
     return run_data
 
 
-def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, average=True, verbose=True):
+def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     """Read Lammps simulation trial with any number of runs
 
     Args:
@@ -174,7 +174,7 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, aver
     print('\n------ %s ------' % trial['name']) if verbose else None
     run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir) if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
-        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, isotropic=k_par['isotropic'], verbose=verbose)
+        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1)
         trial['data'][run_data['name']] = run_data
         trial['runs'].append(run_data['name'])
     if k_par['average']:

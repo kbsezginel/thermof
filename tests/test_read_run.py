@@ -18,7 +18,7 @@ k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
 
 def test_read_run():
     """Test reading a single run with read_run"""
-    run_data = read_run(os.path.join(trial_dir, 'Run1'))
+    run_data = read_run(os.path.join(trial_dir, 'Run1'), k_par=k_parameters)
     with open(k_ref_file, 'r') as kref:
         k_ref = yaml.load(kref)
     with open(time_ref_file, 'r') as tref:
@@ -67,4 +67,4 @@ def test_read_run_input_error():
     run_dir = os.path.join(trial_dir, 'Run1')
     k_parameters['prefix'] = 'wrong-name'
     with pytest.raises(Exception):
-        read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=True)
+        read_run(run_dir, k_par=k_parameters, t0=5, t1=10)

@@ -24,7 +24,7 @@ def test_read_trial():
         time_ref = yaml.load(tref)
     k_parameters['isotropic'] = True
     k_parameters['average'] = True
-    trial = read_trial(trial_dir, k_par=k_parameters, isotropic=True, average=True)
+    trial = read_trial(trial_dir, k_par=k_parameters)
     assert np.allclose(trial['data']['Run5']['time'], time_ref)
     assert np.allclose(trial['data']['Run1']['k']['x'], k_ref)
     assert np.isclose(trial['data']['Run1']['k_est']['x'], 0.8778570946468635)
