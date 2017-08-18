@@ -7,6 +7,7 @@ import yaml
 import numpy as np
 from teemof.read import read_thermal_flux, calculate_k, estimate_k, average_k, get_flux_directions
 from teemof.read import FluxFileNotFoundError, TimestepsMismatchError
+from teemof.parameters import k_parameters
 
 
 flux_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-flux.dat')
@@ -14,8 +15,6 @@ flux_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'flux.y
 time_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'time.yaml')
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')
 trial_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'ideal-mof-trial')
-k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
-                    temp=300, prefix='J0Jt_t', isotropic=False, average=True)
 
 
 def test_read_thermal_flux():
@@ -49,16 +48,18 @@ def test_thermal_conductivity_average():
 def test_thermal_conductivity_estimation():
     """Tests thermal conductivity estimation for given time range"""
     flux, time = read_thermal_flux(flux_file)
-    J = calculate_k(flux, k_par=k_parameters)
+    k_par = k_parameters.copy()
+    J = calculate_k(flux, k_par=k_par)
     k = estimate_k(J, time, t0=5, t1=10)
     assert np.isclose(k, 0.8778570946468635)
 
 
 def test_get_flux_directions_exception():
     """Tests whether thermal flux files note found exception is raised correctly"""
-    k_parameters['prefix'] = 'wrong-name'
+    k_par = k_parameters.copy()
+    k_par['prefix'] = 'wrong-name'
     with pytest.raises(FluxFileNotFoundError):
-        get_flux_directions(os.path.join(trial_dir, 'Run1'), k_par=k_parameters)
+        get_flux_directions(os.path.join(trial_dir, 'Run1'), k_par=k_par)
 
 
 def test_average_k_exception():

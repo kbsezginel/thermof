@@ -7,10 +7,7 @@ import os
 import math
 import yaml
 from teemof.reldist import reldist
-
-
-k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
-                    temp=300, prefix='J0Jt_t', isotropic=False, average=True)
+from teemof.parameters import k_parameters
 
 
 def read_thermal_flux(file_path, k_par=k_parameters, start=200014, j_index=3):
@@ -114,7 +111,7 @@ def get_flux_directions(run_dir, k_par=k_parameters, verbose=True):
             flux_files.append(os.path.join(run_dir, f))
             directions.append(f.split('.')[0].split('J0Jt_t')[1])
     if len(directions) == 0:
-        raise FluxFileNotFoundError('No flux file with found with prefix %s' % k_par['prefix'])
+        raise FluxFileNotFoundError('No flux file found with prefix: %s' % k_par['prefix'])
     else:
         print('%i directions found.' % (len(directions)))
     return flux_files, directions
@@ -147,6 +144,8 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
+    else:
+        raise RunDirectoryNotFoundError('Run directory not found: %s' % run_dir)
     if k_par['isotropic']:
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
         run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
@@ -320,4 +319,8 @@ class FluxFileNotFoundError(Exception):
 
 
 class TimestepsMismatchError(Exception):
+    pass
+
+
+class RunDirectoryNotFoundError(Exception):
     pass
