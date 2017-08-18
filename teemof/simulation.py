@@ -3,6 +3,7 @@
 """
 Simulation class for reading and initializing Lammps simulations
 """
+import pprint
 from teemof.read import read_run, read_trial
 
 
@@ -27,7 +28,10 @@ class Simulation:
         elif setup == 'trial_set':
             self.trial_set = read_trial_set(sim_dir, k_par=self.parameters)
         else:
-            print('Select setup: "run" "trial" "trial_set"')
+            print('Select setup: "run" | "trial" | "trial_set"')
+
+    def show_parameters(self):
+        pprint.pprint(self.parameters)
 
     def initialize(self):
         pass

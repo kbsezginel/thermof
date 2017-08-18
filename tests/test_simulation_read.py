@@ -6,7 +6,7 @@ import yaml
 import numpy as np
 from teemof.read import read_thermal_flux, calculate_k, estimate_k, average_k
 from teemof.read import read_run, read_trial
-from teemof.simulation import Simulation
+from teemof import Simulation
 
 
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')
