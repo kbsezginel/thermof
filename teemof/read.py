@@ -86,8 +86,8 @@ def average_k(k_runs):
     for run_index, k in enumerate(k_runs):
         run_frames = len(k)
         if run_frames != n_frames:
-            raise Exception('Number of timesteps for inital run not equal to run %i (%i != %i)'
-                            % (run_index, n_frames, run_frames))
+            raise TimestepsMismatchError('Number of timesteps for inital run not equal to run %i (%i != %i)'
+                                         % (run_index, n_frames, run_frames))
     avg_k_data = []
     for timestep in range(n_frames):
         avg_k_data.append(sum([k[timestep] for k in k_runs]) / len(k_runs))
@@ -114,7 +114,7 @@ def get_flux_directions(run_dir, k_par=k_parameters, verbose=True):
             flux_files.append(os.path.join(run_dir, f))
             directions.append(f.split('.')[0].split('J0Jt_t')[1])
     if len(directions) == 0:
-        raise Exception('No flux file with found with prefix %s' % prefix)
+        raise FluxFileNotFoundError('No flux file with found with prefix %s' % k_par['prefix'])
     else:
         print('%i directions found.' % (len(directions)))
     return flux_files, directions
@@ -377,3 +377,11 @@ def read_distance_trials(trial_set_dir, run='Run1', start=0, end=300000, xkey='s
         hist_data.append((x_coords[start:], y_coords[start:], z_coords[start:], title, sort_param))
 
     return sorted(hist_data, key=lambda x: x[4])
+
+
+class FluxFileNotFoundError(Exception):
+    pass
+
+
+class TimestepsMismatchError(Exception):
+    pass
