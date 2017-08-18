@@ -1,6 +1,8 @@
-# Run simulations for thermal conductivity measurements
-# Date: Februay 2017
+# Date: February 2017
 # Author: Kutay B. Sezginel
+"""
+Create Lammps simulation files for thermal conductivity calculations
+"""
 import os
 import subprocess
 from teemof.initialize import change_seed, lammps_qsub, export_lines, add_run_info

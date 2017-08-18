@@ -1,6 +1,8 @@
-# Initialize Lammps input files of thermal conductivity measurements
-# Date: Februay 2017
+# Date: February 2017
 # Author: Kutay B. Sezginel
+"""
+Initialize Lammps input files of thermal conductivity measurements
+"""
 import os
 import yaml
 

@@ -1,3 +1,8 @@
+# Date: February 2017
+# Author: Kutay B. Sezginel
+"""
+Lamms data file for interpenetrated crystals
+"""
 import os
 
 

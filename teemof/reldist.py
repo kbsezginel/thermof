@@ -1,3 +1,8 @@
+# Date: February 2017
+# Author: Patrick Asinger and Kutay B. Sezginel
+"""
+Calculate relative distance between interpenetrated frameworks
+"""
 import os
 import math
 

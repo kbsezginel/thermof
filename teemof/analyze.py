@@ -1,6 +1,8 @@
-# Analyze thermal conductivity results
 # Date: June 2017
 # Author: Kutay B. Sezginel
+"""
+Analyze thermal conductivity results
+"""
 import os
 import numpy as np
 from teemof.read import average_k, estimate_k, read_runs, read_legend
