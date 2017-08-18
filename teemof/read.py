@@ -9,10 +9,11 @@ import yaml
 from teemof.reldist import reldist
 
 
-k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300, prefix='J0Jt_t')
+k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
+                    temp=300, prefix='J0Jt_t', isotropic=False, average=True)
 
 
-def read_thermal_flux(file_path, dt=k_parameters['dt'], start=200014, j_index=3):
+def read_thermal_flux(file_path, k_par=k_parameters, start=200014, j_index=3):
     """Read thermal flux autocorellation vs time data from Lammps simulation output file
 
     Args:
@@ -25,6 +26,7 @@ def read_thermal_flux(file_path, dt=k_parameters['dt'], start=200014, j_index=3)
         - list: thermal flux autocorrelation function
         - list: time
     """
+    dt = k_par['dt']
     with open(file_path, 'r') as f:
         flux_lines = f.readlines()
     flux, time = [], []
@@ -138,7 +140,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
         flux_files, directions = get_flux_directions(run_dir, prefix=k_par['prefix'])
         run_message = '%-9s ->' % run_data['name']
         for direction, flux_file in zip(directions, flux_files):
-            flux, time = read_thermal_flux(flux_file)
+            flux, time = read_thermal_flux(flux_file, k_par=k_par)
             k = calculate_k(flux, k_par=k_par)
             run_data['k'][direction] = k
             run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
@@ -146,7 +148,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
-    if isotropic:
+    if k_par['isotropic']:
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
         run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
         print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
@@ -172,11 +174,11 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, aver
     print('\n------ %s ------' % trial['name']) if verbose else None
     run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir) if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
-        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, isotropic=isotropic, verbose=verbose)
+        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, isotropic=k_par['isotropic'], verbose=verbose)
         trial['data'][run_data['name']] = run_data
         trial['runs'].append(run_data['name'])
-    if average:
-        trial['avg'] = average_trial(trial, isotropic=isotropic)
+    if k_par['average']:
+        trial['avg'] = average_trial(trial, isotropic=k_par['isotropic'])
     return trial
 
 

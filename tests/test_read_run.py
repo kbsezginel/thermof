@@ -12,7 +12,8 @@ from teemof.read import read_run
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')
 time_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'time.yaml')
 trial_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'ideal-mof-trial')
-k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80, temp=300, prefix='J0Jt_t')
+k_parameters = dict(kb=0.001987, conv=69443.84, dt=5, volume=80 * 80 * 80,
+                    temp=300, prefix='J0Jt_t', isotropic=False, average=True)
 
 
 def test_read_run():
@@ -30,7 +31,8 @@ def test_read_run():
 
 def test_isotropic_read_run():
     """Test reading a single run and averaging directions"""
-    run_data = read_run(os.path.join(trial_dir, 'Run2'), isotropic=True)
+    k_parameters['isotropic'] = True
+    run_data = read_run(os.path.join(trial_dir, 'Run2'), k_par=k_parameters)
 
     flux_file_x = os.path.join(trial_dir, 'Run2', 'J0Jt_tx.dat')
     flux_x, time = read_thermal_flux(flux_file_x)
