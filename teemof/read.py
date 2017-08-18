@@ -127,7 +127,6 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         - k_par (dict): Dictionary of calculation parameters
         - t0 (int): Timestep to start taking average of k values
         - t1 (int): Timestep to end taking average of k values
-        - isotropic (bool): Isotropy of thermal flux, if True aveage is taken for each direction
         - verbose (bool): Print information about the run
 
     Returns:
@@ -163,8 +162,6 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         - k_par (dict): Dictionary of calculation parameters
         - t0 (int): Timestep to start taking average of k values
         - t1 (int): Timestep to end taking average of k values
-        - isotropic (bool): Isotropy of thermal flux, if True aveage is taken for each direction
-        - average (bool): Get average of each run data
         - verbose (bool): Print information about the run
 
     Returns:
@@ -172,7 +169,8 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     """
     trial = dict(runs=[], data={}, name=os.path.basename(trial_dir))
     print('\n------ %s ------' % trial['name']) if verbose else None
-    run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir) if os.path.isdir(os.path.join(trial_dir, run))]
+    run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir)
+                if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
         run_data = read_run(run, k_par=k_par, t0=t0, t1=t1)
         trial['data'][run_data['name']] = run_data
@@ -204,6 +202,19 @@ def average_trial(trial, isotropic=False):
         k_est_iso_runs = [trial['data'][run]['k_est']['iso'] for run in trial['runs']]
         trial_avg['k_est']['iso'] = sum(k_est_iso_runs) / len(trial['runs'])
     return trial_avg
+
+
+def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
+    """ Read multiple trials with multiple runs"""
+
+    trial_set = dict(trials=[], data={}, name=os.path.basename(trial_set_dir))
+    trial_list = [os.path.join(trial_set_dir, t) for t in os.listdir(trial_set_dir)
+                  if os.path.isdir(os.path.join(trial_set_dir, t))]
+    for trial_dir in trial_list:
+        trial = read_trial(trial_dir, k_par=k_par, t0=5, t1=10, verbose=verbose)
+        trial_set['trials'].append(os.path.basename(trial_dir))
+        trial_set['data'][trial['name']] = trial
+    return trial_set
 
 
 def read_trials(mult_trial_dir, t0=4, t1=8, verbose=True):
