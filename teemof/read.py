@@ -84,12 +84,38 @@ def average_k(k_runs):
     for run_index, k in enumerate(k_runs):
         run_frames = len(k)
         if run_frames != n_frames:
-            raise InputError('Number of timesteps for inital run not equal to run %i (%i != %i)'
-                             % (run_index, n_frames, run_frames))
+            raise Exception('Number of timesteps for inital run not equal to run %i (%i != %i)'
+                            % (run_index, n_frames, run_frames))
     avg_k_data = []
     for timestep in range(n_frames):
         avg_k_data.append(sum([k[timestep] for k in k_runs]) / len(k_runs))
     return avg_k_data
+
+
+def get_flux_directions(run_dir, prefix='J0Jt_t', verbose=True):
+    """Return thermal flux data file and direction name for each direction as lists.
+    Each file with the given prefix is selected as thermal flux file and direction is read as the
+    character between prefix and file extension.
+
+    Example: J0Jt_tx.dat -> prefix should be 'J0Jt_t' and direction would be read as 'x'.
+
+    Args:
+        - run_dir (str): Lammps simulation directory with thermal flux files
+
+    Returns:
+        - list: List of thermal flux files found with given prefix
+        - list: List of thermal flux directions
+    """
+    flux_files, directions = [], []
+    for f in os.listdir(run_dir):
+        if prefix in f:
+            flux_files.append(os.path.join(run_dir, f))
+            directions.append(f.split('.')[0].split('J0Jt_t')[1])
+    if len(directions) == 0:
+        raise Exception('No flux file with found with prefix %s' % prefix)
+    else:
+        print('%i directions found.' % (len(directions)))
+    return flux_files, directions
 
 
 def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, isotropic=False, verbose=True):
@@ -253,28 +279,6 @@ def read_single_run(run_dir, t0=4, t1=8, k_par=k_parameters, verbose=True):
     approx_kt = estimate_k(trial_avg_kt, time, t0=t0, t1=t1)
     print('Average -> %.3f W/mK from %i runs' % (approx_kt, len(trial_data))) if verbose else None
     return trial_data, time, runs_id
-
-
-def get_flux_directions(run_dir, prefix='J0Jt_t'):
-    """Return thermal flux data file and direction name for each direction as lists.
-    Each file with the given prefix is selected as thermal flux file and direction is read as the
-    character between prefix and file extension.
-
-    Example: J0Jt_tx.dat -> prefix should be 'J0Jt_t' and direction would be read as 'x'.
-
-    Args:
-        - run_dir (str): Lammps simulation directory with thermal flux files
-
-    Returns:
-        - list: List of thermal flux files found with given prefix
-        - list: List of thermal flux directions
-    """
-    flux_files, directions = [], []
-    for f in os.listdir(run_dir):
-        if prefix in f:
-            flux_files.append(os.path.join(run_dir, f))
-            directions.append(f.split('.')[0].split('J0Jt_t')[1])
-    return flux_files, directions
 
 
 def read_log(log_path, headers='Step Temp Press PotEng TotEng Volume'):
