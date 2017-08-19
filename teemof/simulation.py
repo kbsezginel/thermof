@@ -5,7 +5,7 @@ Simulation class for reading and initializing Lammps simulations
 """
 import pprint
 from teemof.read import read_run, read_trial, read_trial_set
-from teemof.parameters import k_parameters
+from teemof.parameters import k_parameters, plot_parameters
 
 
 class Simulation:
@@ -14,6 +14,7 @@ class Simulation:
     """
     def __init__(self, read=None, setup=None, parameters=k_parameters):
         self.parameters = parameters
+        self.plot_parameters = plot_parameters.copy()
         if read is not None and setup is not None:
             self.read(read, setup)
 
@@ -27,11 +28,14 @@ class Simulation:
         else:
             print('Select setup: "run" | "trial" | "trial_set"')
 
-    def show_parameters(self):
-        pprint.pprint(self.parameters)
-
     def initialize(self):
         pass
 
-    def plot(self):
+    def plot(self, option):
         pass
+
+    def show_parameters(self):
+        pprint.pprint(self.parameters)
+
+    def show_plot_parameters(self):
+        pprint.pprint(self.plot_parameters)
