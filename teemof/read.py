@@ -231,7 +231,7 @@ def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True)
     return trial_set
 
 
-def read_log(log_path, headers='Step Temp Press PotEng TotEng Volume'):
+def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
     """ Read log.lammps file and return lines for multiple thermo data """
     with open(log_path, 'r') as log:
         log_lines = log.readlines()
@@ -253,14 +253,19 @@ def read_log(log_path, headers='Step Temp Press PotEng TotEng Volume'):
     return thermo_data
 
 
-def read_thermo(thermo_data, headers=['step', 'temp', 'press', 'tot_eng', 'volume']):
+def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
     """ Read thermo data from given thermo log lines """
-    thermo = {key: [] for key in headers}
-    for data in thermo_data:
-        line = data.strip().split()
-        for i, h in enumerate(headers):
-            thermo[h].append(float(line[i]))
-
+    thermo = {}
+    if len(fix) != len(thermo_data):
+        raise ThermoFixDataMatchError('Fixes: %s do not match fixes read in log file' % ' | '.join(fix))
+    else:
+        for t, thermo_fix in enumerate(thermo_data):
+            ther = {key: [] for key in headers}
+            for data in thermo_fix:
+                line = data.strip().split()
+                for i, h in enumerate(headers):
+                    ther[h].append(float(line[i]))
+            thermo[fix[t]] = ther
     return thermo
 
 
@@ -328,4 +333,8 @@ class TimestepsMismatchError(Exception):
 
 
 class RunDirectoryNotFoundError(Exception):
+    pass
+
+
+class ThermoFixDataMatchError(Exception):
     pass

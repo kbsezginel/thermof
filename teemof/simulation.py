@@ -32,3 +32,6 @@ class Simulation:
 
     def initialize(self):
         pass
+
+    def plot(self):
+        pass
