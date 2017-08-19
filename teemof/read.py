@@ -232,7 +232,15 @@ def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True)
 
 
 def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
-    """ Read log.lammps file and return lines for multiple thermo data """
+    """Read log.lammps file and return lines for multiple thermo data
+
+    Args:
+        - log_path (str): Lammps simulation log file path
+        - headers (str): The headers for thermo data ('Step Temp E_pair E_mol TotEng Press')
+
+    Returns:
+        - list: 2D list of thermo lines for all fixes
+    """
     with open(log_path, 'r') as log:
         log_lines = log.readlines()
 
@@ -254,7 +262,16 @@ def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
 
 
 def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
-    """ Read thermo data from given thermo log lines """
+    """Read thermo data from given thermo log lines
+
+    Args:
+        - thermo_data (list): 2D list of thermo lines for all fixes
+        - headers (list): The headers for thermo data
+        - fix (list): Name of the separate fixes in thermo
+
+    Returns:
+        - dict: Thermo data for all fixes separated as: thermo['fix1']['header1'] = ...
+    """
     thermo = {}
     if len(fix) != len(thermo_data):
         raise ThermoFixDataMatchError('Fixes: %s do not match fixes read in log file' % ' | '.join(fix))
@@ -270,7 +287,14 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_en
 
 
 def read_run_info(run_dir, filename='run_info.yaml'):
-    """ Read run info yaml file """
+    """ Read run info yaml file
+
+    Args:
+        - run_dir (str): Lammps simulation directory with run info file
+        - headers (str): Name of the run info file
+    Returns:
+        - dict: Run info data for Lammps run
+    """
     with open(os.path.join(run_dir, filename), 'r') as ri:
         run_info = yaml.load(ri)
     return run_info
