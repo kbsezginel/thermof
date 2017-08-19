@@ -266,8 +266,8 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'press', 'tot_eng', 'volum
 
 def read_run_info(run_dir, filename='run_info.yaml'):
     """ Read run info yaml file """
-    run_info_path = os.path.join(run_dir, filename)
-    run_info = yaml.load(open(run_info_path, 'r'))
+    with open(os.path.join(run_dir, filename), 'r') as ri:
+        run_info = yaml.load(ri)
     return run_info
 
 
