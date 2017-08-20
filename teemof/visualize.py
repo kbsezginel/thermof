@@ -8,6 +8,43 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from teemof.read import average_k
+from teemof.parameters import plot_parameters
+
+
+def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
+    """Plot thermal conductivity vs time
+
+    Args:
+        - plot_data (dict): Plot data as dictionary with x, y, legend keys
+        - parameters (dict): Plot parameters (see parameters.py)
+
+    Returns:
+        - None
+    """
+    plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
+    if parameters['cmap'] is not None:
+        colormap = matplotlib.cm.get_cmap(parameters['cmap'])
+    lim = parameters['limit']
+    for i, y in enumerate(plot_data['y'], start=1):
+        if parameters['cmap'] is not None:
+            color = colormap(i / len(plot_data['y']))
+            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]], c=color)
+        else:
+            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]])
+    if parameters['avg']:
+        y_avg = average_k(plot_data['y'])
+        plt.plot(plot_data['x'][lim[0]:lim[1]], y_avg[lim[0]:lim[1]], '--k', linewidth=2)
+        plot_data['legend'].append('Average')
+    if parameters['title'] is not None:
+        plt.title(parameters['title'], fontsize=parameters['fontsize'] + 4)
+    plt.xticks(fontsize=parameters['fontsize'])
+    plt.yticks(fontsize=parameters['fontsize'])
+    plt.ylabel(parameters['ylabel'], fontsize=parameters['fontsize'] + 2)
+    plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
+    plt.legend(plot_data['legend'], loc=(1.05, 0), ncol=parameters['ncol'], fontsize=parameters['fontsize'])
+    if parameters['save'] is not None:
+        plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
+    plt.show()
 
 
 def plot_runs(runs_data, time, runs_id, limit=(0, 2000), title=None, size=(20, 10), fontsize=14, dpi=300, avg=True, cmap=None, save=None, ncol=1):
