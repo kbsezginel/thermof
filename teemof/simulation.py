@@ -14,6 +14,9 @@ class Simulation:
     Reading and initializing Lammps simulations
     """
     def __init__(self, read=None, setup=None, parameters=k_parameters.copy()):
+        """
+        Create a Lammps simulation object.
+        """
         self.parameters = parameters
         self.plot_parameters = plot_parameters.copy()
         if read is not None and setup is not None:
@@ -21,6 +24,9 @@ class Simulation:
             self.setup = setup
 
     def read(self, sim_dir, setup='run'):
+        """
+        Read Lammps simulation results from given directory.
+        """
         self.setup = setup
         if setup == 'run':
             self.run = read_run(sim_dir, k_par=self.parameters)
@@ -32,9 +38,15 @@ class Simulation:
             print('Select setup: "run" | "trial" | "trial_set"')
 
     def initialize(self):
+        """
+        Initialize input files for a Lammps simulation.
+        """
         pass
 
     def plot(self, selection):
+        """
+        Plot Lammps simulation results.
+        """
         if selection == 'k':
             plot_data = {}
             plot_data['x'] = self.trial['data']['Run1']['time']
@@ -48,7 +60,13 @@ class Simulation:
             print('Select plot: "k" | "k_est" | "hist"')
 
     def show_parameters(self):
+        """
+        Show thermal conductivity parameters.
+        """
         pprint.pprint(self.parameters)
 
     def show_plot_parameters(self):
+        """
+        Show plot parameters.
+        """
         pprint.pprint(self.plot_parameters)
