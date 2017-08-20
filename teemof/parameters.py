@@ -21,6 +21,7 @@ plot_parameters = {
               avg=True,
               cmap='Spectral_r',
               save=None,
+              legendloc=(1.02, 0),
               ncol=1,
               title=None,
               xlabel='Time',

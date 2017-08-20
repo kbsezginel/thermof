@@ -18,8 +18,10 @@ class Simulation:
         self.plot_parameters = plot_parameters.copy()
         if read is not None and setup is not None:
             self.read(read, setup)
+            self.setup = setup
 
     def read(self, sim_dir, setup='run'):
+        self.setup = setup
         if setup == 'run':
             self.run = read_run(sim_dir, k_par=self.parameters)
         elif setup == 'trial':

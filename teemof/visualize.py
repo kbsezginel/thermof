@@ -22,6 +22,7 @@ def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
         - None
     """
     plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
+    legend = plot_data['legend']
     if parameters['cmap'] is not None:
         colormap = matplotlib.cm.get_cmap(parameters['cmap'])
     lim = parameters['limit']
@@ -34,14 +35,14 @@ def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
     if parameters['avg']:
         y_avg = average_k(plot_data['y'])
         plt.plot(plot_data['x'][lim[0]:lim[1]], y_avg[lim[0]:lim[1]], '--k', linewidth=2)
-        plot_data['legend'].append('Average')
+        legend.append('Average')
     if parameters['title'] is not None:
         plt.title(parameters['title'], fontsize=parameters['fontsize'] + 4)
     plt.xticks(fontsize=parameters['fontsize'])
     plt.yticks(fontsize=parameters['fontsize'])
     plt.ylabel(parameters['ylabel'], fontsize=parameters['fontsize'] + 2)
     plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
-    plt.legend(plot_data['legend'], loc=(1.05, 0), ncol=parameters['ncol'], fontsize=parameters['fontsize'])
+    plt.legend(legend, loc=parameters['legendloc'], ncol=parameters['ncol'], fontsize=parameters['fontsize'])
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
     plt.show()
