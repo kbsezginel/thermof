@@ -17,7 +17,7 @@ plot_parameters = {
     'k': dict(limit=(0, 2000),
               size=(20, 10),
               fontsize=14,
-              dpi=300,
+              dpi=200,
               avg=True,
               cmap='Spectral_r',
               save=None,
@@ -28,5 +28,18 @@ plot_parameters = {
               ylabel='k (W/mK)'),
     'thermo': dict(),
     'runs': dict(),
-    'hist': dict()
+    'hist': dict(subplot=(2, 5),
+                 size=(14, 6),
+                 dpi=200,
+                 space=(0.2, 0.1),
+                 grid_size=10,
+                 bin_size=1,
+                 vmax=25,
+                 vmin=0.01,
+                 cmap='YlOrRd',
+                 grid_limit=10,
+                 ticks=False,
+                 cbar=[0.92, 0.135, 0.02, 0.755],
+                 save=None,
+                 selections=None)
 }
