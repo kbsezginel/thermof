@@ -7,6 +7,7 @@ import pprint
 from teemof.read import read_run, read_trial, read_trial_set
 from teemof.parameters import k_parameters, plot_parameters
 from teemof.visualize import plot_thermal_conductivity, plot_distance_histogram, plot_thermo
+from teemof.visualize import subplot_thermal_conductivity
 
 
 class Simulation:
@@ -58,8 +59,14 @@ class Simulation:
             plot_distance_histogram(plot_data, self.plot_parameters['hist'])
         elif selection == 'thermo':
             plot_thermo(self.run['thermo'], self.plot_parameters['thermo'])
+        elif selection == 'k_sub':
+            plot_data = {}
+            plot_data['x'] = self.trial['data']['Run1']['time']
+            plot_data['y'] = [self.trial['data'][run]['k']['iso'] for run in self.trial['runs']]
+            plot_data['legend'] = self.trial['runs']
+            subplot_thermal_conductivity(plot_data, self.plot_parameters['k_sub'])
         else:
-            print('Select plot: "k" | "k_est" | "hist"')
+            print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
 
     def show_parameters(self):
         """
