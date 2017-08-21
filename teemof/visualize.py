@@ -102,6 +102,35 @@ def plot_distance_histogram(hist_data, parameters=plot_parameters['hist']):
     plt.show()
 
 
+def plot_thermo(thermo_data, parameters):
+    """Plots thermo data for single run
+
+    Args:
+        - thermo_data (dict): Thermo data as read by read_thermo
+        - parameters (dict): Thermo parameters (see parameters.py)
+
+    Returns:
+        - None (shows the plot)
+    """
+    n_var = len(parameters['variable'])
+    fig_width = n_var * 4 + 2
+    fig = plt.figure(figsize=(fig_width, parameters['fig_height']), dpi=parameters['dpi'])
+    fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
+
+    for i, y_axis in enumerate(parameters['variable'], start=1):
+        ax = fig.add_subplot(1, n_var, i)
+        for fix in parameters['fix']:
+            plt.plot(thermo[fix]['step'], thermo[fix][y_axis], c=parameters['colors'][fix])
+            plt.ticklabel_format(style='sci', axis='both', scilimits=parameters['scilimits'], fontsize=parameters['fontsize'])
+            plt.tick_params(axis='both', labelsize=parameters['fontsize'])
+            plt.ylabel(y_axis, fontsize=parameters['fontsize'] + 2)
+            plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
+        if parameters['save'] is not None:
+            plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
+    plt.legend(parameters['fix'], frameon=False)
+    plt.show()
+
+
 def plot_runs(runs_data, time, runs_id, limit=(0, 2000), title=None, size=(20, 10), fontsize=14, dpi=300, avg=True, cmap=None, save=None, ncol=1):
     """ Plot kt vs time for a list of runs """
     plt.figure(figsize=size, dpi=dpi)
