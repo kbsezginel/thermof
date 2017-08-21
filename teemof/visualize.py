@@ -7,7 +7,7 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from teemof.read import average_k
+from teemof.read import average_k, estimate_k
 from teemof.parameters import plot_parameters
 
 
@@ -128,6 +128,30 @@ def plot_thermo(thermo, parameters):
         if parameters['save'] is not None:
             plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
     plt.legend(parameters['fix'], frameon=False)
+    plt.show()
+
+
+def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub']):
+    fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
+    fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
+    lim = parameters['limit']
+    for i, pd in enumerate(plot_data['y'], start=1):
+        ax = fig.add_subplot(parameters['subplot'][0], parameters['subplot'][1], i)
+        plt.plot(plot_data['x'][lim[0]:lim[1]], pd[lim[0]:lim[1]], lw=parameters['lw'])
+        if parameters['ylim'] is not None:
+            plt.ylim(parameters['ylim'])
+        plt.title(plot_data['legend'][i - 1], fontsize=parameters['fontsize'] + 4)
+        if parameters['k_est']:
+            kt = estimate_k(pd, plot_data['x'], t0=parameters['k_est_t0'], t1=parameters['k_est_t1'])
+            sta, end = parameters['k_est_t0'] * 200, parameters['k_est_t1'] * 200
+            plt.plot(plot_data['x'][sta:end], pd[sta:end], parameters['k_est_color'], lw=parameters['lw'])
+            plt.text(parameters['k_est_loc'][0], parameters['k_est_loc'][1], 'k: %.3f W/m.K' % kt,
+                     color=parameters['k_est_color'], bbox=dict(facecolor='white', alpha=0.7),
+                     fontsize=parameters['fontsize'] + 2)
+        plt.xticks(fontsize=parameters['fontsize'])
+        plt.yticks(fontsize=parameters['fontsize'])
+        plt.ylabel(parameters['ylabel'], fontsize=parameters['fontsize'] + 2)
+        plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
     plt.show()
 
 
