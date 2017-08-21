@@ -102,7 +102,7 @@ def plot_distance_histogram(hist_data, parameters=plot_parameters['hist']):
     plt.show()
 
 
-def plot_thermo(thermo_data, parameters):
+def plot_thermo(thermo, parameters):
     """Plots thermo data for single run
 
     Args:

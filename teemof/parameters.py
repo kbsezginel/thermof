@@ -35,7 +35,7 @@ plot_parameters = {
                    xlabel='Timesteps',
                    fix=['NVT', 'NVE1'],
                    colors=dict(NVT='r', NVE1='g', NVE2='b'),
-                   variable=['temp', 'e_pair', 'tot_eng', 'e_mol', 'press']
+                   variable=['temp', 'e_pair', 'tot_eng', 'e_mol', 'press'],
                    fig_height=3),
     'runs': dict(),
     'hist': dict(subplot=(2, 5),

@@ -6,7 +6,7 @@ Simulation class for reading and initializing Lammps simulations
 import pprint
 from teemof.read import read_run, read_trial, read_trial_set
 from teemof.parameters import k_parameters, plot_parameters
-from teemof.visualize import plot_thermal_conductivity, plot_distance_histogram
+from teemof.visualize import plot_thermal_conductivity, plot_distance_histogram, plot_thermo
 
 
 class Simulation:
@@ -56,6 +56,8 @@ class Simulation:
         elif selection == 'hist':
             plot_data = {}
             plot_distance_histogram(plot_data, self.plot_parameters['hist'])
+        elif selection == 'thermo':
+            plot_thermo(self.run['thermo'], self.plot_parameters['thermo'])
         else:
             print('Select plot: "k" | "k_est" | "hist"')
 
