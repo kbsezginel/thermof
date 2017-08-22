@@ -132,6 +132,15 @@ def plot_thermo(thermo, parameters):
 
 
 def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub']):
+    """Generate subplots of thermal conductivity
+
+    Args:
+        - plot_data (dict): Plot data as dictionary with x, y, legend keys
+        - parameters (dict): Subplot parameters (see parameters.py)
+
+    Returns:
+        - None (shows the plot)
+    """
     fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
     fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
     lim = parameters['limit']
