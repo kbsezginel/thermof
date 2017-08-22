@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -j oe
-#PBS -N tee_mof
+#PBS -N thermof
 #PBS -q shared
 #PBS -l nodes=1:ppn=4
 #PBS -l walltime=12:00:00

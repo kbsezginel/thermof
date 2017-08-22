@@ -1,11 +1,11 @@
 ---
 layout: default
-title:  "TEE-MOF"
+title:  "thermof"
 date:   2017-08-10
 ---
-[![Build Status](https://travis-ci.org/kbsezginel/tee_mof.svg?branch=master)](https://travis-ci.org/kbsezginel/tee_mof)
+[![Build Status](https://travis-ci.org/kbsezginel/thermof.svg?branch=master)](https://travis-ci.org/kbsezginel/thermof)
 
-Thermoelectrically Entangled MOFs (tee_mof)
+Thermoelectrically Entangled MOFs (thermof)
 =============================================
 
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
@@ -51,7 +51,7 @@ Example jupyter notebooks can be found in `/notebooks`
 - read_thermal_flux: Read thermal conductivity from simulation results
 - read_thermo: Read thermodynamic data from simulation results
 
-### [Results](https://kbsezginel.github.io/tee_mof/results)
+### [Results](https://kbsezginel.github.io/thermof/results)
 
 ----------------------------------------------------------------------------------------------------
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"

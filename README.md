@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/kbsezginel/tee_mof.svg?branch=master)](https://travis-ci.org/kbsezginel/tee_mof)
-[![codecov](https://codecov.io/gh/kbsezginel/tee_mof/branch/master/graph/badge.svg)](https://codecov.io/gh/kbsezginel/tee_mof)
-# Thermoelectrically Entangled MOFs (tee_mof)
+[![Build Status](https://travis-ci.org/kbsezginel/thermof.svg?branch=master)](https://travis-ci.org/kbsezginel/thermof)
+[![codecov](https://codecov.io/gh/kbsezginel/thermof/branch/master/graph/badge.svg)](https://codecov.io/gh/kbsezginel/thermof)
+# Thermoelectrically Entangled MOFs (thermof)
 Investigating effect of interpenetration on the thermal conductivity of metal-organic frameworks
 
 ![alt text][Fig1]
@@ -43,6 +43,6 @@ Example jupyter notebooks can be found in `/notebooks`
 - read_thermo: Read thermodynamic data from simulation results
 
 -------------------------------------------------------------------------
-[Fig1]: https://github.com/kbsezginel/tee_mof/blob/master/docs/img/Fig1.png "Structures"
+[Fig1]: https://github.com/kbsezginel/thermof/blob/master/docs/img/Fig1.png "Structures"
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"
 [Frank]: http://core.sam.pitt.edu/frank "Frank home page"

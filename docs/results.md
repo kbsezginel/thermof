@@ -8,10 +8,10 @@ Results
 
 Preliminary results for thermal conductivity calculations of Metal-Organic Frameworks.
 
-### [IRMOF-1](https://kbsezginel.github.io/tee_mof/irmof1)
+### [IRMOF-1](https://kbsezginel.github.io/thermof/irmof1)
 
-### [CuBTC](https://kbsezginel.github.io/tee_mof/cubtc)
+### [CuBTC](https://kbsezginel.github.io/thermof/cubtc)
 
-### [IRMOF-10](https://kbsezginel.github.io/tee_mof/irmof10)
+### [IRMOF-10](https://kbsezginel.github.io/thermof/irmof10)
 
-### [Force field parameters and charges](https://kbsezginel.github.io/tee_mof/forcefield)
+### [Force field parameters and charges](https://kbsezginel.github.io/thermof/forcefield)
