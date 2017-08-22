@@ -48,16 +48,17 @@ class Simulation:
         """
         Plot Lammps simulation results.
         """
-        if selection == 'k':
+        if data is None:
             plot_data = self.get_plot_data(plot=selection)
+        else:
+            plot_data = data
+        if selection == 'k':
             plot_thermal_conductivity(plot_data, self.plot_parameters['k'])
         elif selection == 'hist':
-            plot_data = self.get_plot_data(plot=selection)
             plot_distance_histogram(plot_data, self.plot_parameters['hist'])
         elif selection == 'thermo':
-            plot_thermo(self.run['thermo'], self.plot_parameters['thermo'])
+            plot_thermo(plot_data, self.plot_parameters['thermo'])
         elif selection == 'k_sub':
-            plot_data = self.get_plot_data(plot=selection)
             subplot_thermal_conductivity(plot_data, self.plot_parameters['k_sub'])
         else:
             print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
@@ -95,6 +96,20 @@ class Simulation:
                 plot_data['x'] = self.trial_set['data'][ref_trial]['data'][ref_run]['time']
                 plot_data['y'] = [self.trial_set['data'][trial]['avg']['k']['iso'] for trial in self.trial_set['trials']]
                 plot_data['legend'] = self.trial_set['trials']
+        elif plot == 'thermo':
+            if setup == 'run':
+                self.plot_parameters['thermo']['title'] = self.run['name']
+                plot_data = self.run['thermo']
+            elif setup == 'trial':
+                self.plot_parameters['thermo']['title'] = '%s' % (self.trial['runs'][0])
+                plot_data = self.trial['data'][self.trial['runs'][0]]['thermo']
+            elif setup == 'trial_set':
+                ref_run = self.trial_set['data'][self.trial_set['trials'][0]]['runs'][0]
+                ref_trial = self.trial_set['trials'][0]
+                self.plot_parameters['thermo']['title'] = '%s - %s' % (ref_trial, ref_run)
+                plot_data = self.trial_set['data'][ref_trial]['data'][ref_run]['thermo']
+        elif plot == 'hist':
+            pass
         else:
             print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
         return plot_data

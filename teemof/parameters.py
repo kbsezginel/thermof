@@ -30,6 +30,7 @@ plot_parameters = {
     'thermo': dict(size=(20, 10),
                    dpi=200,
                    save=None,
+                   title=None,
                    fontsize=8,
                    scilimits=(-4, 4),
                    subplots_adjust=(0.3, 0.25),
