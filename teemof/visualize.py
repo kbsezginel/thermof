@@ -48,7 +48,7 @@ def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
     plt.show()
 
 
-def plot_distance_histogram(hist_data, parameters=plot_parameters['hist']):
+def plot_framework_distance(dist_data, parameters=plot_parameters['f_dist']):
     """Plots distance histogram
 
     Args:
@@ -66,21 +66,12 @@ def plot_distance_histogram(hist_data, parameters=plot_parameters['hist']):
     dy = (1 - 2 * lim) * 10
     n_bins = int(parameters['grid_limit'] / parameters['bin_size'])
 
-    # Selecting part of the data by the third element which corresponds to title
-    if parameters['selections'] is not None:
-        new_dist_data = []
-        for d in hist_data:
-            if d[3] in parameters['selections']:
-                new_dist_data.append(d)
-        hist_data = sorted(new_dist_data, key=lambda x: x[3])
-
-    for i, trial in enumerate(hist_data, start=1):
-        x, y, z, title, sort_par = trial
-        heatmap, xedges, yedges = np.histogram2d(x, y, bins=n_bins)
+    for i, reldist in enumerate(dist_data, start=1):
+        heatmap, xedges, yedges = np.histogram2d(reldist['x'], reldist['y'], bins=n_bins)
         extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
         H = heatmap.T
 
-        ax = fig.add_subplot(subplot[0], subplot[1], i, title=title)
+        ax = fig.add_subplot(parameters['subplot'][0], parameters['subplot'][1], i, title=reldist['title'])
         ax.set_xlim(0 + lim, 1 - lim)
         ax.set_ylim(0 + lim, 1 - lim)
         if not parameters['ticks']:
@@ -95,7 +86,7 @@ def plot_distance_histogram(hist_data, parameters=plot_parameters['hist']):
                    vmin=parameters['vmin'], vmax=parameters['vmax'])
 
     if parameters['cbar'] is not None:
-        cbar_ax = fig.add_axes(cbar)
+        cbar_ax = fig.add_axes(parameters['cbar'])
         plt.colorbar(cax=cbar_ax)
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')

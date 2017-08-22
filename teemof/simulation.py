@@ -3,10 +3,11 @@
 """
 Simulation class for reading and initializing Lammps simulations
 """
+import os
 import pprint
-from teemof.read import read_run, read_trial, read_trial_set
+from teemof.read import read_run, read_trial, read_trial_set, read_framework_distance
 from teemof.parameters import k_parameters, plot_parameters
-from teemof.visualize import plot_thermal_conductivity, plot_distance_histogram, plot_thermo
+from teemof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
 from teemof.visualize import subplot_thermal_conductivity
 
 
@@ -29,6 +30,7 @@ class Simulation:
         Read Lammps simulation results from given directory.
         """
         self.setup = setup
+        self.sim_dir = sim_dir
         if setup == 'run':
             self.run = read_run(sim_dir, k_par=self.parameters)
         elif setup == 'trial':
@@ -54,14 +56,14 @@ class Simulation:
             plot_data = data
         if selection == 'k':
             plot_thermal_conductivity(plot_data, self.plot_parameters['k'])
-        elif selection == 'hist':
-            plot_distance_histogram(plot_data, self.plot_parameters['hist'])
         elif selection == 'thermo':
             plot_thermo(plot_data, self.plot_parameters['thermo'])
         elif selection == 'k_sub':
             subplot_thermal_conductivity(plot_data, self.plot_parameters['k_sub'])
+        elif selection == 'f_dist':
+            plot_framework_distance(plot_data, self.plot_parameters['f_dist'])
         else:
-            print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
+            print('Select plot: "k" | "k_sub" | "f_dist" | "thermo"')
 
     def get_plot_data(self, plot='k', setup=None):
         """
@@ -108,8 +110,14 @@ class Simulation:
                 ref_trial = self.trial_set['trials'][0]
                 self.plot_parameters['thermo']['title'] = '%s - %s' % (ref_trial, ref_run)
                 plot_data = self.trial_set['data'][ref_trial]['data'][ref_run]['thermo']
-        elif plot == 'hist':
-            pass
+        elif plot == 'f_dist':
+            if setup == 'run':
+                run_list = [self.sim_dir]
+            elif setup == 'trial':
+                run_list = [os.path.join(self.sim_dir, run) for run in self.trial['runs']]
+            elif setup == 'trial_set':
+                run_list = [os.path.join(self.sim_dir, trial, ref_run) for trial in self.trial_set['trials']]
+            plot_data = read_framework_distance(run_list, self.plot_parameters['f_dist'])
         else:
             print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
         return plot_data
