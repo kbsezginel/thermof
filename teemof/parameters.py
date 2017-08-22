@@ -69,7 +69,6 @@ plot_parameters = {
                    ticks=False,
                    cbar=[0.92, 0.135, 0.02, 0.755],
                    save=None,
-                   selections=None,
                    traj='traj.xyz',
                    traj_start=0,
                    traj_end=1e6)
