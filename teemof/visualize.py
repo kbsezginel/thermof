@@ -22,19 +22,19 @@ def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
         - None
     """
     plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
-    legend = plot_data['legend']
+    legend = plot_data['legend'].copy()
     if parameters['cmap'] is not None:
         colormap = matplotlib.cm.get_cmap(parameters['cmap'])
     lim = parameters['limit']
     for i, y in enumerate(plot_data['y'], start=1):
         if parameters['cmap'] is not None:
             color = colormap(i / len(plot_data['y']))
-            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]], c=color)
+            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]], c=color, lw=parameters['lw'])
         else:
-            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]])
+            plt.plot(plot_data['x'][lim[0]:lim[1]], y[lim[0]:lim[1]], lw=parameters['lw'])
     if parameters['avg']:
         y_avg = average_k(plot_data['y'])
-        plt.plot(plot_data['x'][lim[0]:lim[1]], y_avg[lim[0]:lim[1]], '--k', linewidth=2)
+        plt.plot(plot_data['x'][lim[0]:lim[1]], y_avg[lim[0]:lim[1]], '--k', lw=parameters['lw'])
         legend.append('Average')
     if parameters['title'] is not None:
         plt.title(parameters['title'], fontsize=parameters['fontsize'] + 4)
