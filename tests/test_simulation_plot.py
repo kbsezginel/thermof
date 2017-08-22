@@ -35,3 +35,14 @@ def test_simulation_get_plot_data_for_run():
     assert k_plot_data['x'] == time_ref
     assert k_plot_data['y'][sim.run['directions'].index('x')] == k_ref
     assert k_plot_data['legend'] == sim.run['directions']
+
+
+def test_simulation_get_plot_data_for_trial():
+    """Test Simulation class get_plot_data method for pulling correct data for different plots of a trial"""
+    k_par = k_parameters.copy()
+    sim = Simulation(read=trial_dir, parameters=k_par, setup='trial')
+    with open(time_ref_file, 'r') as tiref:
+        time_ref = yaml.load(tiref)
+    assert sim.get_plot_data('k')['x'] == time_ref
+    assert sim.get_plot_data('k_sub')['x'] == time_ref
+    assert sim.get_plot_data('k')['legend'] == sim.trial['runs']
