@@ -5,7 +5,7 @@ Analyze thermal conductivity results
 """
 import os
 import numpy as np
-from teemof.read import average_k, estimate_k, read_runs, read_legend
+from thermof.read import average_k, estimate_k, read_runs, read_legend
 
 
 def analyze_trial_set(trial_set_dir, xkey='mass2', sort=True, t0=10, t1=20):

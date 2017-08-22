@@ -4,9 +4,9 @@ Tests Simulation class read method
 import os
 import yaml
 import numpy as np
-from teemof.read import read_run, read_trial, read_trial_set
-from teemof import Simulation
-from teemof.parameters import k_parameters
+from thermof.read import read_run, read_trial, read_trial_set
+from thermof import Simulation
+from thermof.parameters import k_parameters
 
 
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')

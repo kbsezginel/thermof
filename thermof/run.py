@@ -5,7 +5,7 @@ Create Lammps simulation files for thermal conductivity calculations
 """
 import os
 import subprocess
-from teemof.initialize import change_seed, lammps_qsub, export_lines, add_run_info
+from thermof.initialize import change_seed, lammps_qsub, export_lines, add_run_info
 
 
 def initialize_trial(trial_dir, num_of_runs, input_lines, data_lines, qsub_lines, seed=None, verbose=True, info=None):

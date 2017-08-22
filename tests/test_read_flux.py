@@ -5,9 +5,9 @@ import os
 import pytest
 import yaml
 import numpy as np
-from teemof.read import read_thermal_flux, calculate_k, estimate_k, average_k, get_flux_directions
-from teemof.read import FluxFileNotFoundError, TimestepsMismatchError
-from teemof.parameters import k_parameters
+from thermof.read import read_thermal_flux, calculate_k, estimate_k, average_k, get_flux_directions
+from thermof.read import FluxFileNotFoundError, TimestepsMismatchError
+from thermof.parameters import k_parameters
 
 
 flux_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-flux.dat')

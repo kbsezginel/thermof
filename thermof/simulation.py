@@ -5,10 +5,10 @@ Simulation class for reading and initializing Lammps simulations
 """
 import os
 import pprint
-from teemof.read import read_run, read_trial, read_trial_set, read_framework_distance
-from teemof.parameters import k_parameters, plot_parameters
-from teemof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
-from teemof.visualize import subplot_thermal_conductivity
+from thermof.read import read_run, read_trial, read_trial_set, read_framework_distance
+from thermof.parameters import k_parameters, plot_parameters
+from thermof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
+from thermof.visualize import subplot_thermal_conductivity
 
 
 class Simulation:

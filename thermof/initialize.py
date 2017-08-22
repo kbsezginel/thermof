@@ -5,7 +5,7 @@ Initialize Lammps input files of thermal conductivity measurements
 """
 import os
 import yaml
-from teemof.sample import samples
+from thermof.sample import samples
 
 
 def get_files(sample_files=samples['ideal_interpenetrated_mof']):
