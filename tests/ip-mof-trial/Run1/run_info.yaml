@@ -1,0 +1,12 @@
+epsilon: 0.105
+files: {data: /home/kutay/Documents/git/tee_mof/sample/lammps_ipmof.data.sample, inp: /home/kutay/Documents/git/tee_mof/sample/in3_ipmof.cond.sample,
+  qsub: /home/kutay/Documents/git/tee_mof/sample/lammps_qsub.sh.sample}
+info: 'IPMOF sigma sweep (eps: 0.105)'
+legend: '3.50'
+mass1: 39.948
+mass2: 39.948
+name: Trial17-3-Run1
+seed: 123456
+sigma: 3.5
+sort: 3.5
+thermo: 100
