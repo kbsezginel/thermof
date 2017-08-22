@@ -300,6 +300,29 @@ def read_run_info(run_dir, filename='run_info.yaml'):
     return run_info
 
 
+def read_framework_distance(run_list, fdist_par):
+    """Read trajectory for multiple runs and calculate framework distance
+    Args:
+        - run_list (list): List of absolute path of run directories
+        - k_par (dict): Dictionary of calculation parameters
+
+    Returns:
+        - list: List of dictionaries containing framework distance data
+    """
+    start, end = fdist_par['traj_start'], fdist_par['traj_end']
+    dist_data = []
+    for run in run_list:
+        traj_path = os.path.join(run, fdist_par['traj'])
+        x_coords, y_coords, z_coords = reldist(traj_path, end=end)
+        x_coords.append(0)
+        x_coords.append(1)
+        y_coords.append(0)
+        y_coords.append(1)
+        title = '%s/%s' % (os.path.split(os.path.split(run)[0])[1], os.path.split(run)[1])
+        dist_data.append(dict(x=x_coords[start:], y=y_coords[start:], z=z_coords[start:], title=title))
+    return dist_data
+
+
 def read_legend(trial_dir, key='name', run='Run1'):
     """ Read legend name from given trial """
     if run is not None:
