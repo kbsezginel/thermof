@@ -323,54 +323,6 @@ def read_framework_distance(run_list, fdist_par):
     return dist_data
 
 
-def read_legend(trial_dir, key='name', run='Run1'):
-    """ Read legend name from given trial """
-    if run is not None:
-        run_dir = os.path.join(trial_dir, run)
-    else:
-        run_dir = trial_dir
-    run_info = read_run_info(run_dir)
-    return run_info[key]
-
-
-def read_distance_runs(trial_dir, start=0, end=300000):
-    """ Read relative distance data for given trial with multiple runs """
-    hist_data = []
-    for run in os.listdir(trial_dir):
-        traj_path = os.path.join(trial_dir, run, 'traj.xyz')
-        x_coords, y_coords, z_coords = reldist(traj_path, end=end)
-        x_coords.append(0)
-        x_coords.append(1)
-        y_coords.append(0)
-        y_coords.append(1)
-
-        title = '%s' % run
-        sort_param = int(run.split('Run')[1])
-        hist_data.append((x_coords[start:], y_coords[start:], z_coords[start:], title, sort_param))
-
-    return sorted(hist_data, key=lambda x: x[4])
-
-
-def read_distance_trials(trial_set_dir, run='Run1', start=0, end=300000, xkey='sigma'):
-    """ Read relative distance data for given trial set """
-    hist_data = []
-    for i, trial in enumerate(os.listdir(trial_set_dir), start=1):
-        trial_dir = os.path.join(trial_set_dir, trial)
-        traj_path = os.path.join(trial_dir, run, 'traj.xyz')
-        x_coords, y_coords, z_coords = reldist(traj_path, end=end)
-        x_coords.append(0)
-        x_coords.append(1)
-        y_coords.append(0)
-        y_coords.append(1)
-
-        leg = read_legend(trial_dir, key='legend')
-        sort_param = read_legend(trial_dir, key=xkey)
-        title = '%s' % leg
-        hist_data.append((x_coords[start:], y_coords[start:], z_coords[start:], title, sort_param))
-
-    return sorted(hist_data, key=lambda x: x[4])
-
-
 class FluxFileNotFoundError(Exception):
     pass
 
