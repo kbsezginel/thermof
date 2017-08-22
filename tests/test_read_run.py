@@ -5,9 +5,9 @@ import os
 import pytest
 import yaml
 import numpy as np
-from teemof.read import read_thermal_flux, calculate_k, estimate_k, average_k
-from teemof.read import read_run, FluxFileNotFoundError, RunDirectoryNotFoundError
-from teemof.parameters import k_parameters
+from thermof.read import read_thermal_flux, calculate_k, estimate_k, average_k
+from thermof.read import read_run, FluxFileNotFoundError, RunDirectoryNotFoundError
+from thermof.parameters import k_parameters
 
 
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')

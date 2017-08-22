@@ -7,8 +7,8 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-from teemof.read import average_k, estimate_k
-from teemof.parameters import plot_parameters
+from thermof.read import average_k, estimate_k
+from thermof.parameters import plot_parameters
 
 
 def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):

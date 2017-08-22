@@ -6,8 +6,8 @@ Read Lammps output files for thermal conductivity calculations
 import os
 import math
 import yaml
-from teemof.reldist import reldist
-from teemof.parameters import k_parameters
+from thermof.reldist import reldist
+from thermof.parameters import k_parameters
 
 
 def read_thermal_flux(file_path, k_par=k_parameters, start=200014, j_index=3):

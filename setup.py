@@ -4,7 +4,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name="teemof",
+    name="thermof",
     version="0.1",
     description="Thermoelectrically entangled MOFs",
     author="Kutay B. Sezginel",

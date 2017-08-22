@@ -19,7 +19,7 @@ python setup.py install
 ```
 
 ## Usage
-teemof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
+thermof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
 
 ### Sample
 Sample [Lammps] input files for thermal conductivity calculations can be found in `/sample`
