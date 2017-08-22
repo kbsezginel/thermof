@@ -24,6 +24,33 @@ class Simulation:
         if read is not None and setup is not None:
             self.read(read, setup)
             self.setup = setup
+            self.sim_dir = read
+
+    def __repr__(self):
+        """
+        Returns basic simulation info
+        """
+        return "<Simulation | setup: %s | total runs: %i>" % (self.setup, len(self))
+
+    def __str__(self):
+        """
+        Returns name of directory the results were read from
+        """
+        return self.name
+
+    def __len__(self):
+        """
+        Returns number of total runs in simulation
+        """
+        if self.setup == 'run':
+            n_runs = 1
+        elif self.setup == 'trial':
+            n_runs = len(self.trial['runs'])
+        elif self.setup == 'trial_set':
+            n_runs = 0
+            for trial in self.trial_set['trials']:
+                n_runs += len(self.trial_set['data'][trial]['runs'])
+        return n_runs
 
     def read(self, sim_dir, setup='run'):
         """
@@ -31,6 +58,7 @@ class Simulation:
         """
         self.setup = setup
         self.sim_dir = sim_dir
+        self.name = os.path.basename(sim_dir)
         if setup == 'run':
             self.run = read_run(sim_dir, k_par=self.parameters)
         elif setup == 'trial':

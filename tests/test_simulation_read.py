@@ -35,6 +35,8 @@ def test_simulation_read_run():
     assert sim.run == run_data
     assert sim.run['info'] == run_info_ref
     assert sim.run['thermo'] == thermo_ref
+    assert len(sim) == 1
+    assert str(sim) == 'Run1'
 
 
 def test_simulation_read_trial():
@@ -45,6 +47,8 @@ def test_simulation_read_trial():
     trial = read_trial(trial_dir, k_par=k_par)
     sim = Simulation(read=trial_dir, setup='trial', parameters=k_par)
     assert trial == sim.trial
+    assert len(sim) == 10
+    assert str(sim) == 'ideal-mof-trial'
 
 
 def test_simulation_read_trial_set():
@@ -55,3 +59,5 @@ def test_simulation_read_trial_set():
     trial_set = read_trial_set(trial_set_dir, k_par=k_par)
     sim = Simulation(read=trial_set_dir, setup='trial_set', parameters=k_par)
     assert trial_set == sim.trial_set
+    assert len(sim) == 4
+    assert str(sim) == 'ideal-mof-trial-set'
