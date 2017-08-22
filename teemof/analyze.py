@@ -1,9 +1,11 @@
-# Analyze thermal conductivity results
 # Date: June 2017
 # Author: Kutay B. Sezginel
+"""
+Analyze thermal conductivity results
+"""
 import os
 import numpy as np
-from teemof.read import avg_kt, get_kt, read_runs, read_legend
+from teemof.read import average_k, estimate_k, read_runs, read_legend
 
 
 def analyze_trial_set(trial_set_dir, xkey='mass2', sort=True, t0=10, t1=20):
@@ -17,7 +19,7 @@ def analyze_trial_set(trial_set_dir, xkey='mass2', sort=True, t0=10, t1=20):
         # Get avg kt for each direction and each run
         run_kt = []
         for d in run_data:
-            run_avg = get_kt(d, time, t0=10, t1=20)
+            run_avg = estimate_k(d, time, t0=10, t1=20)
             run_kt.append(run_avg)
 
         # Calculate standard deviation and error
@@ -28,8 +30,8 @@ def analyze_trial_set(trial_set_dir, xkey='mass2', sort=True, t0=10, t1=20):
         trial_error.append([min_kt, max_kt])
 
         # Get average thermal conductivity for trial
-        avg_data = avg_kt(run_data)
-        trial_kt = get_kt(avg_data, time, t0=t0, t1=t1)
+        avg_data = average_k(run_data)
+        trial_kt = estimate_k(avg_data, time, t0=t0, t1=t1)
         y_data.append(trial_kt)
 
         x_value = read_legend(trial_dir, key=xkey)

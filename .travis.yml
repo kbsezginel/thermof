@@ -12,11 +12,18 @@ before_install:
   - df -h
   - ulimit -a
 
+install:
+  - pip install pytest pytest-cov codecov
+
 before_script:
   - python -V
 
 script:
   - python setup.py install
+  - py.test --cov=./
+
+after_success:
+  - codecov
 
 notifications:
   email: false
