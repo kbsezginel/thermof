@@ -117,7 +117,7 @@ def plot_thermo(thermo, parameters):
             plt.ylabel(y_axis, fontsize=parameters['fontsize'] + 2)
             plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
     if parameters['title'] is not None:
-        plt.title(parameters['title'], fontsize=parameters['fontsize'] + 4)
+        plt.suptitle(parameters['title'], fontsize=parameters['fontsize'] + 4)
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
     plt.legend(parameters['fix'], frameon=False)
