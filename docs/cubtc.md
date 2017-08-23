@@ -9,7 +9,7 @@ Thermal flux autocorrelation functions for CuBTC (HKUST-1) with different charge
 
 [Force-Field Prediction of Materials Properties in Metal-Organic Frameworks](http://pubs.acs.org/doi/abs/10.1021/acs.jpclett.6b02532)
 
-Packing coefficients are varied between 1x1x1 - 4x4x4. Different charge assignments were tried designated by *DDEC* and *QEQ*. More about the force field parameters and charges can be found [here](https://kbsezginel.github.io/tee_mof/irmof10). In some cases thermal flux in each direction are shown separately as *x*, *y*, and *z*. Often, the average thermal flux is reported since the structure is symmetric.
+Packing coefficients are varied between 1x1x1 - 4x4x4. Different charge assignments were tried designated by *DDEC* and *QEQ*. More about the force field parameters and charges can be found [here](https://kbsezginel.github.io/thermof/irmof10). In some cases thermal flux in each direction are shown separately as *x*, *y*, and *z*. Often, the average thermal flux is reported since the structure is symmetric.
 
 ### 1x1x1
 
