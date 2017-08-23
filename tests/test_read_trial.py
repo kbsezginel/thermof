@@ -31,3 +31,6 @@ def test_read_trial():
     for i, k_ref in enumerate(k_est_iso_ref, start=1):
         assert np.isclose(trial['data']['Run%i' % i]['k_est']['iso'], k_ref)
     assert np.isclose(trial['avg']['k_est']['iso'], 0.817262775736688)
+    assert np.isclose(trial['avg']['k_est']['stats']['iso']['std'], np.std(k_est_iso_ref))
+    assert np.isclose(trial['avg']['k_est']['stats']['iso']['max'], max(k_est_iso_ref))
+    assert np.isclose(trial['avg']['k_est']['stats']['iso']['min'], min(k_est_iso_ref))

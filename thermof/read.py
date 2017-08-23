@@ -6,6 +6,7 @@ Read Lammps output files for thermal conductivity calculations
 import os
 import math
 import yaml
+import numpy as np
 from thermof.reldist import reldist
 from thermof.parameters import k_parameters
 
@@ -194,17 +195,23 @@ def average_trial(trial, isotropic=False):
     Returns:
         - dict: Trial data average for thermal conductivity and estimate
     """
-    trial_avg = dict(k={}, k_est={})
+    trial_avg = dict(k={}, k_est={'stats':{}})
     for direction in trial['data'][trial['runs'][0]]['directions']:
         # Take average of k for each direction
         trial_avg['k'][direction] = average_k([trial['data'][run]['k'][direction] for run in trial['runs']])
         k_est_runs = [trial['data'][run]['k_est'][direction] for run in trial['runs']]
         trial_avg['k_est'][direction] = sum(k_est_runs) / len(trial['runs'])
+        trial_avg['k_est']['stats'][direction] = dict(std=np.std(k_est_runs),
+                                                      max=max(k_est_runs),
+                                                      min=min(k_est_runs))
     if isotropic:
         # Take average of isotropic k and k_estimate
         trial_avg['k']['iso'] = average_k([trial['data'][run]['k']['iso'] for run in trial['runs']])
         k_est_iso_runs = [trial['data'][run]['k_est']['iso'] for run in trial['runs']]
         trial_avg['k_est']['iso'] = sum(k_est_iso_runs) / len(trial['runs'])
+        trial_avg['k_est']['stats']['iso'] = dict(std=np.std(k_est_iso_runs),
+                                                  max=max(k_est_iso_runs),
+                                                  min=min(k_est_iso_runs))
     return trial_avg
 
 
