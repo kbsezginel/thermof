@@ -5,7 +5,7 @@ Thermal transport in MOFs (thermof)
 ===================================
 Investigating thermal transport in metal-organic frameworks.
 
-<p align="center"> <img src="img/Fig1.png"> </p>
+<p align="center"> <img src="https://raw.githubusercontent.com/kbsezginel/thermof/master/docs/img/Fig1.png"> </p>
 
 -   a) Idealized porous crystal (8 × 8 × 8 cubic unit cells), single unit cell highlighted in red
 -   b) Bonding arrangement for single unit cell using Morse potential (red bonds are modeled stronger than blue bonds)
