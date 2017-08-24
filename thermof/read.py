@@ -195,7 +195,7 @@ def average_trial(trial, isotropic=False):
     Returns:
         - dict: Trial data average for thermal conductivity and estimate
     """
-    trial_avg = dict(k={}, k_est={'stats':{}})
+    trial_avg = dict(k={}, k_est={'stats': {}})
     for direction in trial['data'][trial['runs'][0]]['directions']:
         # Take average of k for each direction
         trial_avg['k'][direction] = average_k([trial['data'][run]['k'][direction] for run in trial['runs']])
