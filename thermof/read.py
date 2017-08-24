@@ -114,7 +114,7 @@ def get_flux_directions(run_dir, k_par=k_parameters, verbose=True):
     if len(directions) == 0:
         raise FluxFileNotFoundError('No flux file found with prefix: %s' % k_par['prefix'])
     else:
-        print('%i directions found.' % (len(directions)))
+        print('%i directions found.' % (len(directions))) if verbose else None
     return flux_files, directions
 
 
