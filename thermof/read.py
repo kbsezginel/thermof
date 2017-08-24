@@ -134,7 +134,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     trial_data = []
     runs_id = []
     if os.path.isdir(run_dir):
-        flux_files, directions = get_flux_directions(run_dir, k_par=k_par)
+        flux_files, directions = get_flux_directions(run_dir, k_par=k_par, verbose=verbose)
         run_message = '%-9s ->' % run_data['name']
         for direction, flux_file in zip(directions, flux_files):
             flux, time = read_thermal_flux(flux_file, k_par=k_par)
@@ -177,7 +177,7 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir)
                 if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
-        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1)
+        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, verbose=verbose)
         trial['data'][run_data['name']] = run_data
         trial['runs'].append(run_data['name'])
     if k_par['average']:
