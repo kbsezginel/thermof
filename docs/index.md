@@ -52,6 +52,9 @@ Example jupyter notebooks can be found in `/notebooks`
 -   interpenetrate: Create interpenetrated structure
 -   read_simulation: Read and plot thermal conductivity Lammps simulation results
 
+### [Methods](https://kbsezginel.github.io/thermof/methods)
+Methods for thermal conductivity calculation and more.
+
 ### [Results](https://kbsezginel.github.io/thermof/results)
 Preliminary results are presented here.
 
