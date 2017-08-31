@@ -6,10 +6,10 @@ import yaml
 from thermof.parameters import k_parameters
 from thermof.read import read_run_info, read_trial
 
-# ---------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 main = ''                                                           # Directory of trials
 results_file = '%s-kest-results.yaml' % os.path.basename(main)      # Name of results file
-# ---------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 trial_list = [os.path.join(main, i) for i in os.listdir(main) if os.path.isdir(os.path.join(main, i))]
 results = dict(k=[], max=[], min=[], std=[], sigma=[], epsilon=[], trial=[])

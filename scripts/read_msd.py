@@ -1,3 +1,6 @@
+"""
+Reads mean squared displacement for a list of trials and saves results to a yaml file
+"""
 import os
 import yaml
 from teemof.trajectory import read_trajectory, msd_distance
@@ -9,8 +12,8 @@ ref_atom1 = 298
 ref_atom2 = 3809
 results_file = '%s-MSD-results.yaml' % os.path.basename(main)
 # --------------------------------------------------------------------------------------------------
-trial_list = [os.path.join(main, i) for i in os.listdir(main) if os.path.isdir(os.path.join(main, i))]
 
+trial_list = [os.path.join(main, i) for i in os.listdir(main) if os.path.isdir(os.path.join(main, i))]
 results = dict(msd1=[], msd2=[], sigma=[], epsilon=[], trial=[])
 
 for trial_index, trial in enumerate(trial_list, start=1):

@@ -1,3 +1,6 @@
+"""
+Reads relative distance btw frameworks for a list of trials and saves results to a yaml file
+"""
 import os
 import yaml
 from thermof.parameters import plot_parameters
