@@ -1,8 +1,7 @@
 """
-Tests trajectory read method
+Tests trajectory read and write methods.
 """
 import os
-import pytest
 import numpy as np
 import filecmp
 from thermof import Trajectory

@@ -53,3 +53,15 @@ class Trajectory:
         Write xyz trajectory file.
         """
         write_trajectory(self.xyz, traj_path)
+
+    def stretch(self, n_repeat, write=None):
+        """
+        Repeats each frame a given number of time.
+        """
+        xyz_stretch = []
+        for xyz in self.xyz:
+            for r in range(n_repeat):
+                xyz_stretch.append(xyz)
+        if write is not None:
+            write_trajectory(xyz_stretch, write)
+        return xyz_stretch
