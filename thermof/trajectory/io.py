@@ -26,6 +26,14 @@ def read_trajectory(traj_path):
     return trajectory
 
 
+def write_trajectory(trajectory_xyz, traj_path):
+    """ Write xyz trajectory to a file """
+    with open(traj_path, 'w') as traj:
+        for frame in trajectory_xyz:
+            for line in frame:
+                traj.write(line)
+
+
 def change_xyz_atom_names(traj_path, atoms=['C', 'O'], targets=['1', '2']):
     """ Change atom names of xyz trajectory file """
     with open(traj_path, 'r') as t:

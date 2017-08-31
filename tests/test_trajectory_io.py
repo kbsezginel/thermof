@@ -2,7 +2,9 @@
 Tests trajectory read method
 """
 import os
+import pytest
 import numpy as np
+import filecmp
 from thermof import Trajectory
 
 mof_trial_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'ideal-mof-trial')
@@ -29,3 +31,12 @@ def test_trajectory_read_method_for_interpenetrated_ideal_mof():
     assert len(traj) == traj.n_frames == 61
     assert traj.coordinates[0][0] == [0, 0, 0]
     assert np.allclose(traj.coordinates[-1][-1], [74.1941, 74.2373, 0.916302])
+
+
+def test_trajectory_write_method(tmpdir):
+    """ Test trajectory class write method """
+    ref_traj = os.path.join(mof_trial_dir, 'Run1', 'traj.xyz')
+    traj = Trajectory(read=ref_traj)
+    temp_file = tmpdir.join('traj-temp.xyz')
+    traj.write(temp_file.strpath)
+    assert filecmp.cmp(ref_traj, temp_file.strpath)

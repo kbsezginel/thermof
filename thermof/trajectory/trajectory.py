@@ -3,7 +3,7 @@
 """
 Read, manipulate and analyze Lammps trajectory output files of thermal conductivity measurements
 """
-from .io import read_trajectory
+from .io import read_trajectory, write_trajectory
 
 
 class Trajectory:
@@ -47,3 +47,9 @@ class Trajectory:
         self.coordinates = traj['coordinates']
         self.n_frames = len(traj['timestep'])
         self.n_atoms = len(traj['atoms'][0])
+
+    def write(self, traj_path):
+        """
+        Write xyz trajectory file.
+        """
+        write_trajectory(self.xyz, traj_path)
