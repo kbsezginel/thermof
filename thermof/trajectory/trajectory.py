@@ -72,3 +72,32 @@ class Trajectory:
         """
         self.unique_atoms = list(set([atom for frame in self.atoms for atom in frame]))
         return self.unique_atoms
+
+    def change_atoms(self, atom_map):
+        """
+        Changes atom names in trajectory (both self.atoms and self.xyz).
+
+        Args:
+            - atom_map (dict): Keys are atoms to be changed and values are new atoms (ex: {'1': 'C', '2': 'O'})
+
+        Returns:
+            - None (changes self.xyz and self.atoms to new atoms)
+        """
+        new_atoms = []
+        for frame in self.atoms:
+            frame_atoms = []
+            for atom in frame:
+                new_atom = atom_map[atom]
+                frame_atoms.append(new_atom)
+            new_atoms.append(frame_atoms)
+        self.atoms = new_atoms
+
+        new_xyz = []
+        for frame in self.xyz:
+            xyz_frame = frame[:2]
+            for line in frame[2:]:
+                atom = line.split()[0]
+                new_line = line.replace(atom, atom_map[atom])
+                xyz_frame.append(new_line)
+            new_xyz.append(xyz_frame)
+        self.xyz = new_xyz
