@@ -65,3 +65,10 @@ class Trajectory:
         if write is not None:
             write_trajectory(xyz_stretch, write)
         return xyz_stretch
+
+    def get_unique_atoms(self):
+        """
+        Finds unique atom names in the trajectory.
+        """
+        self.unique_atoms = list(set([atom for frame in self.atoms for atom in frame]))
+        return self.unique_atoms
