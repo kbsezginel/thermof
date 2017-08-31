@@ -3,4 +3,4 @@
 """
 Reading and analyzing Lammps .xyz trajectory files
 """
-from .trajectory import *
+from .trajectory import Trajectory
