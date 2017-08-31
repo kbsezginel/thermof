@@ -8,6 +8,29 @@ import math
 import periodictable
 
 
+class Trajectory:
+    """
+    Reading and analyzing Lammps simulation trajectories in xyz format
+    """
+    def __init__(self, read=None):
+        """
+        Create a trajectory object.
+        """
+        if read is not None:
+            self.read(read)
+
+    def read(self, traj_path):
+        """
+        Read xyz trajectory file.
+        """
+        traj = read_trajectory(traj_path)
+        self.xyz = traj['xyz']
+        self.timestep = traj['timestep']
+        self.atoms = traj['atoms']
+        self.coordinates = traj['coordinates']
+        self.n_frames = len(traj['timestep'])
+
+
 def change_xyz_atom_names(traj_path, atoms=['C', 'O'], targets=['1', '2']):
     """ Change atom names of xyz trajectory file """
     with open(traj_path, 'r') as t:
