@@ -37,17 +37,17 @@ def change_xyz_trajectories(trial_dir, name='traj.xyz', atoms=['C', 'O'], target
 
 
 def read_trajectory(traj_path):
-    """ Read xyz traectory and return coordinates as a list """
+    """ Read xyz trajectory and return coordinates as a list """
     with open(traj_path, 'r') as t:
         traj = t.readlines()
 
-    n_atoms = int(traj[0].strip())                # Get nmber of atoms from first line
+    n_atoms = int(traj[0].strip())                # Get number of atoms from first line
     n_frames = int(len(traj) / (n_atoms + 2))     # Calculate number of frames (assuming n_atoms is constant)
 
     trajectory = {'atoms': [], 'coordinates': [], 'xyz': [], 'timestep': []}
     for frame in range(n_frames):
         start = frame * (n_atoms + 2)             # Frame start
-        end = (frame + 1) * (n_atoms + 2) - 1     # Frame end
+        end = (frame + 1) * (n_atoms + 2)         # Frame end
         trajectory['xyz'].append(traj[start:end])
         trajectory['timestep'].append(traj[start + 1].strip().split()[2])
         trajectory['atoms'].append([line.split()[0] for line in traj[start + 2:end]])
