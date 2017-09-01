@@ -7,7 +7,14 @@ import os
 
 
 def read_trajectory(traj_path):
-    """ Read xyz trajectory and return coordinates as a list """
+    """ Read xyz trajectory and return coordinates as a list
+
+        Args:
+            - traj_path (str): xyz trajectory path to read
+
+        Returns:
+            - dict: Trajectory dictionary with atoms, coordinates, timestep and xyz keys
+    """
     with open(traj_path, 'r') as t:
         traj = t.readlines()
 
@@ -27,7 +34,15 @@ def read_trajectory(traj_path):
 
 
 def write_trajectory(trajectory_xyz, traj_path):
-    """ Write xyz trajectory to a file """
+    """ Write xyz trajectory to a file
+
+    Args:
+        - trajectory_xyz (list): List of lines for each frame of the xyz trajectory
+        - traj_path (str): xyz trajectory path to write
+
+    Returns:
+        - None: Write xyz trajectory file
+    """
     with open(traj_path, 'w') as traj:
         for frame in trajectory_xyz:
             for line in frame:

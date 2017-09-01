@@ -38,6 +38,12 @@ class Trajectory:
     def read(self, traj_path):
         """
         Read xyz trajectory file.
+
+        Args:
+            - traj_path (str): xyz trajectory file path to read
+
+        Returns:
+            - None: Assigns path, xyz, timestep, atoms, coordinates, n_frames, n_atoms variables
         """
         traj = read_trajectory(traj_path)
         self.path = traj_path
@@ -57,6 +63,13 @@ class Trajectory:
     def stretch(self, n_repeat, write=None):
         """
         Repeats each frame a given number of time.
+
+        Args:
+            - n_repeat (int): Repeat each frame <n_repeat> number of times
+            - write (str / None): Write xyz trajectory to given path (default: None)
+
+        Returns:
+            - list: List of lines for each frame of the stretched xyz trajectory
         """
         xyz_stretch = []
         for xyz in self.xyz:
