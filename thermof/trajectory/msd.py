@@ -8,7 +8,15 @@ import periodictable
 
 
 def center_of_mass(atoms, coordinates):
-    """ Calculate center of mass for given coordinates and atom names of a single frame """
+    """ Calculate center of mass for given coordinates and atom names of a single frame
+
+    Args:
+        - atoms (list): List of element names
+        - coordinates (list): List of coordinates (2D list)
+
+    Returns:
+        - list: Center of mass coordinate for list of atom coordinates
+    """
     masses = np.array([periodictable.elements.symbol(atom).mass for atom in atoms])
     total_mass = masses.sum()
     x_cm = (masses * np.array([i[0] for i in coordinates])).sum() / total_mass
