@@ -4,6 +4,7 @@
 Read, manipulate and analyze Lammps trajectory output files of thermal conductivity measurements
 """
 from .io import read_trajectory, write_trajectory
+from .msd import center_of_mass
 
 
 class Trajectory:
@@ -114,3 +115,9 @@ class Trajectory:
                 xyz_frame.append(new_line)
             new_xyz.append(xyz_frame)
         self.xyz = new_xyz
+
+    def get_com(self):
+        """
+        Get center of mass coordinates for the trajectory.
+        """
+        self.com = [center_of_mass(fa, fc) for fa, fc in zip(self.atoms, self.coordinates)]
