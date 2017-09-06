@@ -3,33 +3,18 @@
 """
 Mean squared displacement calculation for Lammps trajectory.
 """
-import math
+import numpy as np
 import periodictable
 
 
 def center_of_mass(atoms, coordinates):
-    """ Calculate center of mass for given coordinates and atom names """
-    xsum, ysum, zsum = 0, 0, 0
-    for atom, coor in zip(atoms, coordinates):
-        mass = periodictable.elements.symbol(atom).mass
-        wx, wy, wz = [mass * i for i in coor]
-        xsum += wx
-        ysum += wy
-        zsum += wz
-    return [xsum, ysum, zsum]
-
-
-def get_com(trajectory):
-    """ Analyze center of mass coordinate change """
-    trajectory['com'] = []
-    for atoms, coors in zip(trajectory['atoms'], trajectory['coordinates']):
-        com = center_of_mass(atoms, coors)
-        trajectory['com'].append(com)
-    x_avg = sum([i[0] for i in trajectory['com']]) / len(trajectory['com'])
-    y_avg = sum([i[1] for i in trajectory['com']]) / len(trajectory['com'])
-    z_avg = sum([i[2] for i in trajectory['com']]) / len(trajectory['com'])
-    trajectory['com_avg'] = [x_avg, y_avg, z_avg]
-    return trajectory
+    """ Calculate center of mass for given coordinates and atom names of a single frame """
+    masses = np.array([periodictable.elements.symbol(atom).mass for atom in atoms])
+    total_mass = masses.sum()
+    x_cm = (masses * np.array([i[0] for i in coordinates])).sum() / total_mass
+    y_cm = (masses * np.array([i[1] for i in coordinates])).sum() / total_mass
+    z_cm = (masses * np.array([i[2] for i in coordinates])).sum() / total_mass
+    return [x_cm, y_cm, z_cm]
 
 
 def mean_squared_displacement(pos_data, dt=1):
@@ -63,7 +48,7 @@ def msd_distance(coordinates, frames='all', atom=0):
     for frame in range(1, n_frames):
         coor_ref = coordinates[frame - 1][atom]         # Atom position at t -> r(t)
         coor = coordinates[frame][atom]                 # Atom position at t + 1 => r(t + 1)
-        d_sum += math.sqrt(((coor[0] - coor_ref[0]) ** 2 +
-                            (coor[1] - coor_ref[1]) ** 2 +
-                            (coor[2] - coor_ref[2]) ** 2))
+        d_sum += np.sqrt(((coor[0] - coor_ref[0]) ** 2 +
+                          (coor[1] - coor_ref[1]) ** 2 +
+                          (coor[2] - coor_ref[2]) ** 2))
     return (d_sum / n_frames)
