@@ -17,6 +17,7 @@ def test_trajectory_calculate_distances(max_dist=5):
         - Test a known distance
     """
     traj = Trajectory(read=os.path.join(mof_trial_dir, 'Run1', 'traj.xyz'))
+    traj.set_cell([80, 80, 80])
     traj.calculate_distances()
     assert np.allclose(traj.distances[0], np.zeros(traj.n_atoms))
     for frame in traj.distances:

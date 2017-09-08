@@ -123,10 +123,33 @@ class Trajectory:
         """
         self.com = [center_of_mass(fa, fc) for fa, fc in zip(self.atoms, self.coordinates)]
 
-    def calculate_distances(self, reference_frame=0, unit_cell=[80, 80, 80]):
+    def set_cell(self, unit_cell):
+        """
+        Set unit cell dimensions for the trajectory.
+
+        Args:
+            - unit_cell (list): Unit cell dimensions for periodic boundary conditions (ORTHORHOMBIC ONLY)
+
+        Returns:
+            - None (assigns cell dimensons to self.cell)
+        """
+        if len(unit_cell) == 3:
+            self.cell = unit_cell
+        else:
+            print('List dimension for the cell must be 3')
+
+    def calculate_distances(self, reference_frame=0):
         """
         Calculate distance of each atom from it's reference position for each frame in the trajectory.
+        ---------- ORTHORHOMBIC ONLY ----------
+
+        Args:
+            - reference_frame (int): Reference frame to calculate the distances from
+
+        Returns:
+            - None (assigns distances to self.distances as a numpy array)
         """
+        unit_cell = self.cell
         ref_coordinates = self.coordinates[reference_frame]
         self.distances = np.zeros((self.n_frames, self.n_atoms))
         for frame_idx, frame in enumerate(self.coordinates):
