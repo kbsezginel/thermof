@@ -3,6 +3,7 @@
 """
 Read, manipulate and analyze Lammps trajectory output files of thermal conductivity measurements
 """
+import numpy as np
 from .io import read_trajectory, write_trajectory
 from .msd import center_of_mass
 
@@ -121,3 +122,20 @@ class Trajectory:
         Get center of mass coordinates for the trajectory.
         """
         self.com = [center_of_mass(fa, fc) for fa, fc in zip(self.atoms, self.coordinates)]
+
+    def calculate_distances(self, reference_frame=0, unit_cell=[80, 80, 80]):
+        """
+        Calculate distance of each atom from it's reference position for each frame in the trajectory.
+        """
+        ref_coordinates = self.coordinates[reference_frame]
+        self.distances = np.zeros((self.n_frames, self.n_atoms))
+        for frame_idx, frame in enumerate(self.coordinates):
+            for atom_idx, (atom, ref_atom) in enumerate(zip(frame, ref_coordinates)):
+                d = [0, 0, 0]
+                for i in range(3):
+                    d[i] = atom[i] - ref_atom[i]
+                    if d[i] > unit_cell[i] * 0.5:
+                        d[i] = d[i] - unit_cell[i]
+                    elif d[i] <= -unit_cell[i] * 0.5:
+                        d[i] = d[i] + unit_cell[i]
+                self.distances[frame_idx][atom_idx] = np.sqrt((d[0] ** 2 + d[1] ** 2 + d[2] ** 2))
