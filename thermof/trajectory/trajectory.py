@@ -5,7 +5,7 @@ Read, manipulate and analyze Lammps trajectory output files of thermal conductiv
 """
 import numpy as np
 from .io import read_trajectory, write_trajectory
-from .msd import center_of_mass
+from .msd import center_of_mass, mean_displacement
 
 
 class Trajectory:
@@ -162,3 +162,24 @@ class Trajectory:
                     elif d[i] <= -unit_cell[i] * 0.5:
                         d[i] = d[i] + unit_cell[i]
                 self.distances[frame_idx][atom_idx] = np.sqrt((d[0] ** 2 + d[1] ** 2 + d[2] ** 2))
+
+    def calculate_mdisp(self, atoms='all', normalize=True, reference_frame=0):
+        """
+        Calculate time averaged (mean) displacement for given atoms.
+
+        Args:
+            - atoms (str or list): List of atoms to calculate displacement ('all' to calculate for all atoms)
+            - normalize (bool): Normalize displacement by subtracting coordinates from each frame for given reference frame
+            - reference_frame (int): Index for reference frame
+
+        Returns:
+            - None (assigns mean displacement to self.mdisp as 2D list)
+        """
+        if atoms == 'all':
+            atom_list = list(range(self.n_atoms))
+        else:
+            atom_list = atoms
+        self.mdisp = []
+        for atom in atom_list:
+            coordinates = [self.coordinates[i][atom] for i in range(self.n_frames)]
+            self.mdisp.append(mean_displacement(coordinates, normalize=normalize, reference_frame=reference_frame))
