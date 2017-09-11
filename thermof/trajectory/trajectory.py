@@ -5,7 +5,7 @@ Read, manipulate and analyze Lammps trajectory output files of thermal conductiv
 """
 import numpy as np
 from .io import read_trajectory, write_trajectory
-from .msd import center_of_mass, mean_displacement
+from .displacement import center_of_mass, mean_displacement
 
 
 class Trajectory:
