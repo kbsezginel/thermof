@@ -2,7 +2,7 @@
 Tests time averaged displacement for trajectory.
 """
 import numpy as np
-from thermof.trajectory.displacement import time_avg_displacement, time_avg_squared_displacement
+from thermof.trajectory.tools import time_avg_displacement, time_avg_squared_displacement
 
 
 def test_time_averaged_displacement_with_different_reference_frames():

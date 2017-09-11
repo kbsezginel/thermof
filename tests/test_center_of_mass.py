@@ -2,7 +2,7 @@
 Tests center of mass calculation
 """
 import numpy as np
-from thermof.trajectory.displacement import center_of_mass
+from thermof.trajectory.tools import center_of_mass
 
 
 def test_center_of_mass_for_linear_arrangement_of_atoms():
