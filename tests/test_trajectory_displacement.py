@@ -26,21 +26,44 @@ def test_center_of_mass_for_interpenetrated_ideal_mof():
     assert np.isclose(traj.com[0][0], traj.com[0][1], traj.com[0][2])
 
 
-def test_calculate_mean_disp_for_all_atoms():
-    """ Test trajectory class calculate_mean_disp function for all atoms """
-    traj = Trajectory()
-    traj.coordinates = [[[i + j, i + j, i + j] for i in range(6)] for j in range(6)]
-    traj.n_atoms, traj.n_frames = 6, 6
-    traj.calculate_mdisp()
-    for disp in traj.mdisp:
-        assert np.allclose([2.5, 2.5, 2.5], disp)
+def test_calculate_mean_disp_for_single_ideal_mof():
+    """ Test trajectory class calculate_mean_disp function for single ideal mof """
+    traj = Trajectory(read=os.path.join(mof_trial_dir, 'Run1', 'traj.xyz'))
+    traj.set_cell([80, 80, 80])
+    traj.calculate_distances()
+    traj.calculate_mean_disp()
+    assert np.all(traj.mean_disp > 0.0)
+    assert np.all(traj.mean_disp < 0.6)
 
 
-def test_calculate_mean_disp_for_selected_atoms():
-    """ Test trajectory class calculate_mean_disp function for selected atoms """
+def test_calculate_mean_squared_disp_for_single_ideal_mof():
+    """ Test trajectory class calculate_mean_squared_disp function for single ideal mof """
+    traj = Trajectory(read=os.path.join(mof_trial_dir, 'Run1', 'traj.xyz'))
+    traj.set_cell([80, 80, 80])
+    traj.calculate_distances()
+    traj.calculate_mean_squared_disp()
+    assert np.all(traj.mean_squared_disp > 0.0)
+    assert np.all(traj.mean_squared_disp < 0.4)
+
+
+def test_calculate_mean_disp_and_mean_squared_disp_for_linear_motion_of_particles():
+    """ Test trajectory class calculate_mean_disp and calculate_mean_squared_disp functions
+        for 6 particles with linear motion with alternative calculation """
+    n_atoms, n_frames = 6, 6
     traj = Trajectory()
-    traj.coordinates = [[[i + j, i + j, i + j] for i in range(10)] for j in range(6)]
-    traj.n_atoms, traj.n_frames = 10, 6
-    for i in range(9):
-        traj.calculate_mdisp(atoms=list(range(i + 1)))
-        assert np.allclose([2.5, 2.5, 2.5], traj.mdisp)
+    traj.coordinates = [[[i + j, i + j, i + j] for i in range(n_atoms)] for j in range(n_frames)]
+    traj.n_atoms, traj.n_frames = n_atoms, n_frames
+    traj.set_cell([10, 10, 10])
+    traj.calculate_distances()
+    traj.calculate_mean_disp()
+    traj.calculate_mean_squared_disp()
+    assert np.allclose([np.sum(range(n_frames)) / n_frames * np.sqrt(3)] * n_atoms, traj.mean_disp)
+    for i in range(traj.n_atoms):
+        c0 = traj.coordinates[0][i]
+        x2 = (np.array([f[i][0] for f in traj.coordinates]) - c0[0]) ** 2
+        y2 = (np.array([f[i][1] for f in traj.coordinates]) - c0[1]) ** 2
+        z2 = (np.array([f[i][2] for f in traj.coordinates]) - c0[2]) ** 2
+        mean_squared_disp = sum(x2 + y2 + z2) / n_frames
+        mean_disp = sum(np.sqrt(x2 + y2 + z2)) / n_frames
+        assert np.allclose(mean_disp, traj.mean_disp[i])
+        assert np.allclose(mean_squared_disp, traj.mean_squared_disp[i])

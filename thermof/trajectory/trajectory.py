@@ -5,7 +5,7 @@ Read, manipulate and analyze Lammps trajectory output files of thermal conductiv
 """
 import numpy as np
 from .io import read_trajectory, write_trajectory
-from .displacement import center_of_mass, mean_displacement
+from .displacement import center_of_mass
 
 
 class Trajectory:
@@ -163,23 +163,48 @@ class Trajectory:
                         d[i] = d[i] + unit_cell[i]
                 self.distances[frame_idx][atom_idx] = np.sqrt((d[0] ** 2 + d[1] ** 2 + d[2] ** 2))
 
-    def calculate_mdisp(self, atoms='all', normalize=True, reference_frame=0):
+    def calculate_mean_disp(self, reference_frame=0):
         """
-        Calculate time averaged (mean) displacement for given atoms.
+        Calculate time averaged (mean) displacement <d> for given atoms.
 
         Args:
-            - atoms (str or list): List of atoms to calculate displacement ('all' to calculate for all atoms)
-            - normalize (bool): Normalize displacement by subtracting coordinates from each frame for given reference frame
             - reference_frame (int): Index for reference frame
 
         Returns:
-            - None (assigns mean displacement to self.mdisp as 2D list)
+            - None (assigns mean displacement <d> to self.mean_disp as a numpy array)
         """
-        if atoms == 'all':
-            atom_list = list(range(self.n_atoms))
-        else:
-            atom_list = atoms
-        self.mdisp = []
-        for atom in atom_list:
-            coordinates = [self.coordinates[i][atom] for i in range(self.n_frames)]
-            self.mdisp.append(mean_displacement(coordinates, normalize=normalize, reference_frame=reference_frame))
+        if not hasattr(self, 'distances'):
+            if hasattr(self, 'cell'):
+                self.calculate_distances(reference_frame=reference_frame)
+            else:
+                print('Please define simulation cell size and calculate distances')
+        n_frames, n_atoms = np.shape(self.distances)
+        self.mean_disp = np.zeros((n_atoms, ))
+        for atom in range(n_atoms):
+            d_sum = 0
+            for frame in range(n_frames):
+                d_sum += self.distances[frame][atom]
+            self.mean_disp[atom] = d_sum / n_frames
+
+    def calculate_mean_squared_disp(self, reference_frame=0):
+        """
+        Calculate time averaged (mean) displacement <d2> for given atoms.
+
+        Args:
+            - reference_frame (int): Index for reference frame
+
+        Returns:
+            - None (assigns mean squared displacement <d2> to self.mean_squared_disp as a numpy array)
+        """
+        if not hasattr(self, 'distances'):
+            if hasattr(self, 'cell'):
+                self.calculate_distances(reference_frame=reference_frame)
+            else:
+                print('Please define simulation cell size and calculate distances')
+        n_frames, n_atoms = np.shape(self.distances)
+        self.mean_squared_disp = np.zeros((n_atoms, ))
+        for atom in range(n_atoms):
+            d_sum = 0
+            for frame in range(n_frames):
+                d_sum += self.distances[frame][atom] ** 2
+            self.mean_squared_disp[atom] = d_sum / n_frames
