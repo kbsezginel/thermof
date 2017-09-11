@@ -117,12 +117,6 @@ class Trajectory:
             new_xyz.append(xyz_frame)
         self.xyz = new_xyz
 
-    def get_com(self):
-        """
-        Get center of mass coordinates for the trajectory.
-        """
-        self.com = [center_of_mass(fa, fc) for fa, fc in zip(self.atoms, self.coordinates)]
-
     def set_cell(self, unit_cell):
         """
         Set unit cell dimensions for the trajectory.
@@ -137,6 +131,12 @@ class Trajectory:
             self.cell = unit_cell
         else:
             print('List dimension for the cell must be 3')
+
+    def calculate_com(self):
+        """
+        Get center of mass coordinates for the trajectory.
+        """
+        self.com = [center_of_mass(fa, fc) for fa, fc in zip(self.atoms, self.coordinates)]
 
     def calculate_distances(self, reference_frame=0):
         """

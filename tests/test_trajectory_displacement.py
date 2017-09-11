@@ -14,7 +14,7 @@ def test_center_of_mass_for_single_ideal_mof():
     """ Test trajectory class read method for non-interpenetrated ideal MOF """
     traj = Trajectory(read=os.path.join(mof_trial_dir, 'Run1', 'traj.xyz'))
     traj.change_atoms({'1': 'C'})
-    traj.get_com()
+    traj.calculate_com()
     assert np.isclose(traj.com[0][0], traj.com[0][1], traj.com[0][2])
 
 
@@ -22,7 +22,7 @@ def test_center_of_mass_for_interpenetrated_ideal_mof():
     """ Test trajectory class read method for interpenetrated ideal MOF """
     traj = Trajectory(read=os.path.join(ipmof_trial_dir, 'Run1', 'traj.xyz'))
     traj.change_atoms({'1': 'C', '2': 'O'})
-    traj.get_com()
+    traj.calculate_com()
     assert np.isclose(traj.com[0][0], traj.com[0][1], traj.com[0][2])
 
 
