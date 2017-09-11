@@ -25,13 +25,13 @@ def center_of_mass(atoms, coordinates):
     return [x_cm, y_cm, z_cm]
 
 
-def time_avg_displacement(coordinates, normalize=True, reference_frame=0):
+def mean_displacement(coordinates, normalize=True, reference_frame=0):
     """
-    Calculate time averaged displacement for a single atom in each direction using given trajectory coordinates.
+    Calculate time averaged (mean) displacement for a single atom in each direction using given trajectory coordinates.
 
     Args:
         - coordinates (list): 2D list of coordinates vs time
-        - normalize (bool): Normalize displacement b subtracting coordinates for given reference frame
+        - normalize (bool): Normalize displacement by subtracting coordinates from each frame for given reference frame
         - reference_frame (int): Index for reference frame
 
     Returns:
@@ -39,14 +39,15 @@ def time_avg_displacement(coordinates, normalize=True, reference_frame=0):
     """
     n_frames = len(coordinates)
     ref_frame = coordinates[reference_frame]
-    if normalize:
-        xd_sum, yd_sum, zd_sum = -ref_frame[0], -ref_frame[1], -ref_frame[2]
-    else:
-        xd_sum, yd_sum, zd_sum = 0, 0, 0
+    xd_sum, yd_sum, zd_sum = 0, 0, 0
     for frame in coordinates:
         xd_sum += frame[0]
         yd_sum += frame[1]
         zd_sum += frame[2]
+    if normalize:
+        xd_sum -= ref_frame[0] * n_frames
+        yd_sum -= ref_frame[1] * n_frames
+        zd_sum -= ref_frame[2] * n_frames
     return [xd_sum / n_frames, yd_sum / n_frames, zd_sum / n_frames]
 
 
