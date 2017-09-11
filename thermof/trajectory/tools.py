@@ -86,6 +86,8 @@ def calculate_distances(coordinates, unit_cell, reference_frame=0):
     Returns:
         - list: Distance of each atom in each frame to it's position in the reference frame
     """
+    if len(np.shape(coordinates)) != 3:
+        raise CoordinatesDimensionError('Coordinates list mst be 3 dimensional with shape: (n_frames, n_atoms, axis)')
     n_frames, n_atoms = np.shape(coordinates)[:2]
     ref_coordinates = coordinates[reference_frame]
     distances = np.zeros((n_frames, n_atoms))
@@ -100,3 +102,7 @@ def calculate_distances(coordinates, unit_cell, reference_frame=0):
                     d[i] = d[i] + unit_cell[i]
             distances[frame_idx][atom_idx] = np.sqrt((d[0] ** 2 + d[1] ** 2 + d[2] ** 2))
     return distances
+
+
+class CoordinatesDimensionError(Exception):
+    pass
