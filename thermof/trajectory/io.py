@@ -50,3 +50,30 @@ def write_trajectory(trajectory_xyz, traj_path, frames=None):
             xyz = trajectory_xyz[frame]
             for line in xyz:
                 traj.write(line)
+
+
+def generate_xyz(coordinates, atoms, header=''):
+    """
+    Generate xyz lines from given coordinates and atom names.
+
+    Args:
+        - trajectory_xyz (list): List of lines for each frame of the xyz trajectory
+        - traj_path (str): xyz trajectory path to write
+
+    Returns:
+        - list: List of xyz lines for each frame
+    """
+    if len(coordinates) != len(atoms):
+        raise FramesMismatchError('Number of frames do not match for coordinates (%i) and atoms (%i)'
+                                  % (len(coordinates), len(atoms)))
+    xyz_lines = []
+    for frame in range(len(coordinates)):
+        xyz_frame = ["%i\n" % len(atoms[frame]), '%s - %i' % (header, frame)]
+        for atom, coor in zip(atoms[frame], coordinates[frame]):
+            xyz_frame.append('%2s %6.4f %6.4f %6.4f\n' % (atom, coor[0], coor[1], coor[2]))
+        xyz_lines.append(xyz_frame)
+    return xyz_lines
+
+
+class FramesMismatchError(Exception):
+    pass
