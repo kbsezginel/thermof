@@ -3,8 +3,8 @@ language: python
 # Run jobs on container-based infrastructure, can be overridden per job
 sudo: false
 
-matrix:
-  - python: 3.5
+python:
+  - "3.5"
 
 before_install:
   - uname -a
