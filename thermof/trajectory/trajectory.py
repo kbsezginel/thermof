@@ -63,11 +63,11 @@ class Trajectory:
         self.coordinates = traj['coordinates']
         self.n_frames, self.n_atoms, self.n_dimensions = np.shape(traj['coordinates'])
 
-    def write(self, traj_path):
+    def write(self, traj_path, frames=None):
         """
         Write xyz trajectory file.
         """
-        write_trajectory(self.xyz, traj_path)
+        write_trajectory(self.xyz, traj_path, frames)
 
     def stretch(self, n_repeat, write=None):
         """

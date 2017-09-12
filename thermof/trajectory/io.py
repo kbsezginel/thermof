@@ -33,7 +33,7 @@ def read_trajectory(traj_path):
     return trajectory
 
 
-def write_trajectory(trajectory_xyz, traj_path):
+def write_trajectory(trajectory_xyz, traj_path, frames=None):
     """ Write xyz trajectory to a file
 
     Args:
@@ -43,7 +43,10 @@ def write_trajectory(trajectory_xyz, traj_path):
     Returns:
         - None: Write xyz trajectory file
     """
+    if frames is None:
+        frames = list(range(len(trajectory_xyz)))
     with open(traj_path, 'w') as traj:
-        for frame in trajectory_xyz:
-            for line in frame:
+        for frame in frames:
+            xyz = trajectory_xyz[frame]
+            for line in xyz:
                 traj.write(line)
