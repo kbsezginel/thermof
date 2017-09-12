@@ -40,13 +40,10 @@ def time_avg_displacement(coordinates, normalize=True, reference_frame=0):
     n_frames = len(coordinates)
     ref_frame = np.array(coordinates[reference_frame])
     if normalize:
-        coordinates = np.array(coordinates) - ref_frame
-    xd_sum, yd_sum, zd_sum = 0, 0, 0
-    for frame in coordinates:
-        xd_sum += frame[0]
-        yd_sum += frame[1]
-        zd_sum += frame[2]
-    return [xd_sum / n_frames, yd_sum / n_frames, zd_sum / n_frames]
+        coor = np.array(coordinates) - ref_frame
+    else:
+        coor = np.array(coordinates)
+    return np.sum(coor, axis=0) / len(coor)
 
 
 def time_avg_squared_displacement(coordinates, normalize=True, reference_frame=0):
@@ -64,13 +61,10 @@ def time_avg_squared_displacement(coordinates, normalize=True, reference_frame=0
     n_frames = len(coordinates)
     ref_frame = np.array(coordinates[reference_frame])
     if normalize:
-        coordinates = np.array(coordinates) - ref_frame
-    xd_sum, yd_sum, zd_sum = 0, 0, 0
-    for frame in coordinates:
-        xd_sum += frame[0] ** 2
-        yd_sum += frame[1] ** 2
-        zd_sum += frame[2] ** 2
-    return [xd_sum / n_frames, yd_sum / n_frames, zd_sum / n_frames]
+        coor = np.array(coordinates) - ref_frame
+    else:
+        coor = np.array(coordinates)
+    return np.sum(coor ** 2, axis=0) / len(coor)
 
 
 def calculate_distances(coordinates, unit_cell, reference_frame=0):
