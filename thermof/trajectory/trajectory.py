@@ -23,7 +23,7 @@ class Trajectory:
         """
         Returns basic trajectory info.
         """
-        return "<Trajectory | atoms: %i | frames: %i>" % (self.n_atoms, self.n_frames)
+        return "<Trajectory frames: %i | atoms: %i | dimensions: %i>" % (self.n_atoms, self.n_frames, self.n_dimensions)
 
     def __str__(self):
         """
@@ -53,8 +53,7 @@ class Trajectory:
         self.timestep = traj['timestep']
         self.atoms = traj['atoms']
         self.coordinates = traj['coordinates']
-        self.n_frames = len(traj['timestep'])
-        self.n_atoms = len(traj['atoms'][0])
+        self.n_frames, self.n_atoms, self.n_dimensions = np.shape(traj['coordinates'])
 
     def write(self, traj_path):
         """
