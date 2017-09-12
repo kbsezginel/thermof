@@ -5,7 +5,7 @@ Read, manipulate and analyze Lammps trajectory output files of thermal conductiv
 """
 import numpy as np
 from .io import read_trajectory, write_trajectory
-from .tools import center_of_mass, calculate_distances
+from .tools import center_of_mass, calculate_distances, subdivide_coordinates, subdivide_atoms
 
 
 class Trajectory:
@@ -36,6 +36,14 @@ class Trajectory:
         Returns number of frames.
         """
         return self.n_frames
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            check1 = (self.n_frames, self.n_atoms, self.n_dimensions) == (other.n_frames, other.n_atoms, other.n_dimensions)
+            check2 = np.allclose(self.coordinates, other.coordinates) and self.atoms == other.atoms
+            return check1 and check2
+        else:
+            return False
 
     def read(self, traj_path):
         """
@@ -115,6 +123,50 @@ class Trajectory:
                 xyz_frame.append(new_line)
             new_xyz.append(xyz_frame)
         self.xyz = new_xyz
+
+    def subdivide(self, frames=None, atoms=None, dimensions=None):
+        """
+        Subdivide trajectory by selecting frames, atoms and dimensions.
+
+        Args:
+            - atoms (list): List of atoms to be included in subdivision
+            - frames (list): List of frames to be included in the subdivision
+            - dimensions (list): List of dimensions to be included in the subdivision
+
+        Returns:
+            - Trajectory: New trajectory object
+
+        Examples:
+
+            >>> traj_div = traj.subdivide(atoms=list(range(5)), frames=[0], dimensions=[1])
+            <Trajectory | frames: 1 | atoms: 5 | dimensions: 1>
+        """
+        div_coor = subdivide_coordinates(self.coordinates, frames, atoms, dimensions)
+        div_traj = Trajectory()
+        div_traj.coordinates = div_coor
+        div_traj.n_frames, div_traj.n_atoms, div_traj.n_dimensions = np.shape(div_coor)
+        div_traj.atoms = subdivide_atoms(self.atoms, frames, atoms)
+        if frames is None:
+            frames = list(range(self.n_frames))
+        if hasattr(self, 'timestep'):
+            div_traj.timestep = [ts for i, ts in enumerate(self.timestep) if i in frames]
+        if hasattr(self, 'xyz'):
+            div_traj.xyz = [xyz for i, xyz in enumerate(self.xyz) if i in frames]
+        if hasattr(self, 'path'):
+            div_traj.path = self.path
+        return div_traj
+
+    def set_coordinates(self, coordinates):
+        """
+        Initialize Trajectory by setting coordinates.
+
+        Args:
+            - unit_cell (list): 3D list including coordinates of each atom for each frame.
+
+        Returns:
+            - None (assigns trajectory properties)
+        """
+        self.coordinates = coordinates
 
     def set_cell(self, unit_cell):
         """
