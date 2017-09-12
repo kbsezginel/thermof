@@ -3,8 +3,8 @@ Reads mean squared displacement for a list of trials and saves results to a yaml
 """
 import os
 import yaml
-from teemof.trajectory import Trajectory
-from teemof.read import read_legend
+from thermof.trajectory import Trajectory
+from thermof.read import read_run_info
 # --------------------------------------------------------------------------------------------------
 main = ''
 """
@@ -71,7 +71,7 @@ for trial_index, trial in enumerate(trial_list, start=1):
         results['md1'].append(sum(md1_avg) / len(md1_avg))
         results['msd2'].append(sum(msd2_avg) / len(msd2_avg))
         results['md2'].append(sum(md2_avg) / len(md2_avg))
-        results['msd'].append(sum(md_avg) / len(msd_avg))
+        results['msd'].append(sum(msd_avg) / len(msd_avg))
         results['md'].append(sum(md_avg) / len(md_avg))
         print('MSD1: %.2f (%i) | MSD2: %.2f (%i) MSD: %.2f (%i)'
               % (results['msd1'][-1], len(msd1_avg), results['msd2'][-1], len(msd2_avg), results['msd'][-1], len(msd_avg)))
@@ -83,8 +83,9 @@ for trial_index, trial in enumerate(trial_list, start=1):
         results['msd'].append(None)
         results['md'].append(None)
 
-    results['sigma'].append(read_legend(trial, key='sigma'))
-    results['epsilon'].append(read_legend(trial, key='epsilon'))
+    run_info = read_run_info(run)
+    results['sigma'].append(run_info['sigma'])
+    results['epsilon'].append(run_info['epsilon'])
     results['trial'].append(os.path.basename(trial))
 
 with open(results_file, 'w') as rfile:
