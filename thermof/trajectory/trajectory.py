@@ -4,7 +4,7 @@
 Read, manipulate and analyze Lammps trajectory output files of thermal conductivity measurements
 """
 import numpy as np
-from .io import read_trajectory, write_trajectory
+from .io import read_trajectory, write_trajectory, generate_xyz
 from .tools import center_of_mass, calculate_distances, subdivide_coordinates, subdivide_atoms
 
 
@@ -113,16 +113,7 @@ class Trajectory:
                 frame_atoms.append(new_atom)
             new_atoms.append(frame_atoms)
         self.atoms = new_atoms
-
-        new_xyz = []
-        for frame in self.xyz:
-            xyz_frame = frame[:2]
-            for line in frame[2:]:
-                atom = line.split()[0]
-                new_line = line.replace(atom, atom_map[atom])
-                xyz_frame.append(new_line)
-            new_xyz.append(xyz_frame)
-        self.xyz = new_xyz
+        self.xyz = generate_xyz(self.coordinates, self.atoms)
 
     def subdivide(self, frames=None, atoms=None, dimensions=None):
         """

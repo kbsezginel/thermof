@@ -52,7 +52,7 @@ def write_trajectory(trajectory_xyz, traj_path, frames=None):
                 traj.write(line)
 
 
-def generate_xyz(coordinates, atoms, header=''):
+def generate_xyz(coordinates, atoms, header='therMOF'):
     """
     Generate xyz lines from given coordinates and atom names.
 
@@ -68,9 +68,9 @@ def generate_xyz(coordinates, atoms, header=''):
                                   % (len(coordinates), len(atoms)))
     xyz_lines = []
     for frame in range(len(coordinates)):
-        xyz_frame = ["%i\n" % len(atoms[frame]), '%s - %i' % (header, frame)]
+        xyz_frame = ["%i\n" % len(atoms[frame]), '%s - %i\n' % (header, frame)]
         for atom, coor in zip(atoms[frame], coordinates[frame]):
-            xyz_frame.append('%2s %6.4f %6.4f %6.4f\n' % (atom, coor[0], coor[1], coor[2]))
+            xyz_frame.append('%-2s %-6.4f %-6.4f %-6.4f\n' % (atom, coor[0], coor[1], coor[2]))
         xyz_lines.append(xyz_frame)
     return xyz_lines
 
