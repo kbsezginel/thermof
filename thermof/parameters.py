@@ -73,3 +73,36 @@ plot_parameters = {
                    traj_start=0,
                    traj_end=1e6)
 }
+
+lammps_parameters = dict(cif_file='',                    # File options
+                         output_cif=False,
+                         output_raspa=False,
+                         force_field='UFF',              # Force field options
+                         mol_ff=None,
+                         h_bonding=False,
+                         dreid_bond_type='harmonic',
+                         fix_metal=False,
+                         minimize=False,                 # Simulation options
+                         bulk_moduli=False,
+                         thermal_scaling=False,
+                         thermal_conductivity=False,     # ----- Used by therMOF library -----
+                         npt=False,
+                         nvt=False,
+                         cutoff=12.5,
+                         replication=None,
+                         orthogonalize=False,
+                         random_vel=False,
+                         dump_dcd=0,
+                         dump_xyz=0,
+                         dump_lammpstrj=0,
+                         restart=False,
+                         tol=0.4,                        # Parameter options
+                         neighbour_size=5,
+                         iter_count=10,
+                         max_dev=0.01,
+                         temp=298.0,
+                         pressure=1.0,
+                         nprodstp=200000,
+                         neqstp=200000,
+                         insert_molecule="",             # Molecule insertion options
+                         deposit=0)
