@@ -5,4 +5,5 @@ Thermal conductivity calculations of porous crystals using Lammps
 """
 from .simulation import Simulation
 from .trajectory import Trajectory
+from .parameters import Parameters
 from .mof import MOF
