@@ -1,0 +1,62 @@
+#### Simulation Parameters ####
+variable        T equal 298
+variable        dt equal 0.5
+variable        txyz equal 10000
+variable        seed equal 2405148
+variable        p equal 20000      # correlation length
+variable        s equal 5          # sample interval
+variable        d equal $p*$s      # dump interval
+dump            1 all xyz ${txyz} traj.xyz
+velocity        all create $T ${seed} dist uniform
+timestep        ${dt}
+thermo          10000
+thermo_style    custom step temp press pe etotal vol
+
+### Equilibration in NVT ###
+fix             NVT all nvt temp $T $T 100
+run             1000000
+unfix           NVT
+
+### Equilibration in NVE ###
+fix             NVE all nve
+run             300000
+
+### Thermal flux calculation in NVE ###
+reset_timestep  0
+compute         PE all pe/atom
+compute         KE all ke/atom
+
+variable        CX atom (vx*(c_KE+c_PE))
+compute         Jcx all reduce sum v_CX
+
+variable        CZ atom (vz*(c_KE+c_PE))
+compute         Jcz all reduce sum v_CZ
+
+variable        CY atom (vy*(c_KE+c_PE))
+compute         Jcy all reduce sum v_CY
+
+compute         SA all stress/atom NULL virial
+
+variable        VX atom -(c_SA[1]*vx+c_SA[4]*vy+c_SA[5]*vz)*1.4593e-5
+compute         Jvx all reduce sum v_VX
+
+variable        VZ atom -(c_SA[3]*vz+c_SA[6]*vy+c_SA[5]*vx)*1.4593e-5
+compute         Jvz all reduce sum v_VZ
+
+variable        VY atom -(c_SA[2]*vy+c_SA[6]*vz+c_SA[4]*vx)*1.4593e-5
+compute         Jvy all reduce sum v_VY
+
+variable        Jx equal (c_Jcx+c_Jvx)/vol
+variable        Jz equal (c_Jcz+c_Jvz)/vol
+variable        Jy equal (c_Jcy+c_Jvy)/vol
+
+fix             JJTx all ave/correlate $s $p $d &
+                v_Jx type auto file J0Jt_tx.dat ave running
+
+fix             JJTy all ave/correlate $s $p $d &
+                v_Jy type auto file J0Jt_ty.dat ave running
+
+fix             JJTz all ave/correlate $s $p $d &
+                v_Jz type auto file J0Jt_tz.dat ave running
+
+run             1000000

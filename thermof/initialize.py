@@ -5,7 +5,7 @@ Initialize Lammps input files of thermal conductivity measurements
 """
 import os
 import yaml
-from thermof.sample import samples
+from thermof.sample import samples, thermal_flux_file
 
 
 def get_files(sample_files=samples['ideal_interpenetrated_mof']):
@@ -98,3 +98,10 @@ def add_run_info(run_info, run_dir):
     """ Add yaml file to run directory that contains simulation information """
     run_info_path = os.path.join(run_dir, 'run_info.yaml')
     yaml.dump(run_info, open(run_info_path, 'w'))
+
+
+def add_thermal_flux(input_lines):
+    """ Add lines for thermal flux calculation in Lammps to input file """
+    with open(thermal_flux_file, 'r') as flux:
+        flux_lines = flux.readlines()
+    return input_lines + flux_lines
