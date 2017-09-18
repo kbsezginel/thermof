@@ -1,0 +1,22 @@
+#!/bin/env bash
+
+#SBATCH --job-name=therMOF
+#SBATCH --output=therMOF.out
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=02:00:00
+#SBATCH --cluster=smp
+
+echo JOB_ID: $SBATCH_JOBID JOB_NAME: $SBATCH_JOB_NAME
+echo start_time: `date`
+
+cd $SLURM_SUBMIT_DIR
+module purge
+module load intel/2017.1.132
+module load intel-mpi/2017.1.132
+module load lammps/stable_31Mar2017
+
+mpirun -np 4 lmp_mpi -in in.thermof > lammps_out.txt
+
+echo end_time: `date`
+exit
