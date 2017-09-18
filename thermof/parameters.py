@@ -18,7 +18,7 @@ class Parameters:
 
     def show(self):
         """ Show parameters and values """
-        for v in vars(self):
+        for v in sorted(vars(self)):
             print('%-25s: %s' % (v, getattr(self, v)))
 
 
