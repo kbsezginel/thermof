@@ -16,6 +16,8 @@ thermal_flux_file = os.path.join(sample_dir, 'in.thermal_flux')            # The
 # Lammps structure files
 single_data_path = os.path.join(sample_dir, 'lammps_single.data.sample')   # Single MOF
 ipmof_data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Interpenetrated MOF
+# Sample MOF structures
+mof5_file = os.path.join(sample_dir, 'MOF5.cif')
 # Job submission file for Frank
 qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')
 
