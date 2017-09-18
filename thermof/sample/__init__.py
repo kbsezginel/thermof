@@ -20,8 +20,8 @@ ipmof_data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Int
 mof5_file = os.path.join(sample_dir, 'MOF5.cif')
 # Job submission file for Frank
 qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')
-pbs_file = os.path.join(sample_dir, 'lammps_pbs.sh.sample')
-slurm_file = os.path.join(sample_dir, 'lammps_slurm.sh.sample')
+pbs_file = os.path.join(sample_dir, 'job.pbs.sample')
+slurm_file = os.path.join(sample_dir, 'job.slurm.sample')
 
 samples = dict(ideal_mof=dict(inp=single_inp3_path, data=single_data_path, qsub=qsub_path),
                ideal_interpenetrated_mof=dict(inp=ipmof_inp3_path, data=ipmof_data_path, qsub=qsub_path))
