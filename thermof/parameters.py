@@ -105,7 +105,6 @@ lammps_parameters = dict(cif_file='',                    # File options
                          minimize=False,                 # Simulation options
                          bulk_moduli=False,
                          thermal_scaling=False,
-                         thermal_conductivity=False,     # ----- Used by therMOF library -----
                          npt=False,
                          nvt=False,
                          cutoff=12.5,
@@ -125,8 +124,11 @@ lammps_parameters = dict(cif_file='',                    # File options
                          nprodstp=200000,
                          neqstp=200000,
                          insert_molecule="",             # Molecule insertion options
-                         deposit=0)
-
+                         deposit=0,
+                         thermal_conductivity=False,     # ----- Used by therMOF library -----)
+                         timestep=0.5,                   # delta T
+                         thermo=10000,                   # Thermo dump interval
+                         seed=123456)                    # Seed number for velocity distribution
 
 job_parameters = dict(scheduler="slurm",
                       name="therMOF",
