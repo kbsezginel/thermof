@@ -5,6 +5,7 @@ import os
 import yaml
 import numpy as np
 from thermof import Simulation
+from thermof.simulation.plot import get_plot_data
 from thermof.parameters import k_parameters
 
 
@@ -30,8 +31,8 @@ def test_simulation_get_plot_data_for_run():
         time_ref = yaml.load(tiref)
     with open(thermo_ref_file, 'r') as tref:
         thermo_ref = yaml.load(tref)
-    assert sim.get_plot_data('thermo') == thermo_ref
-    k_plot_data = sim.get_plot_data('k')
+    assert get_plot_data(sim, 'thermo') == thermo_ref
+    k_plot_data = get_plot_data(sim, 'k')
     assert k_plot_data['x'] == time_ref
     assert k_plot_data['y'][sim.run['directions'].index('x')] == k_ref
     assert k_plot_data['legend'] == sim.run['directions']
@@ -43,6 +44,6 @@ def test_simulation_get_plot_data_for_trial():
     sim = Simulation(read=trial_dir, parameters=k_par, setup='trial')
     with open(time_ref_file, 'r') as tiref:
         time_ref = yaml.load(tiref)
-    assert sim.get_plot_data('k')['x'] == time_ref
-    assert sim.get_plot_data('k_sub')['x'] == time_ref
-    assert sim.get_plot_data('k')['legend'] == sim.trial['runs']
+    assert get_plot_data(sim, 'k')['x'] == time_ref
+    assert get_plot_data(sim, 'k_sub')['x'] == time_ref
+    assert get_plot_data(sim, 'k')['legend'] == sim.trial['runs']

@@ -80,7 +80,7 @@ class Simulation:
         Plot Lammps simulation results.
         """
         if data is None:
-            plot_data = self.get_plot_data(plot=selection)
+            plot_data = get_plot_data(plot=selection)
         else:
             plot_data = data
         if selection == 'k':
@@ -93,63 +93,6 @@ class Simulation:
             plot_framework_distance(plot_data, self.plot_parameters['f_dist'])
         else:
             print('Select plot: "k" | "k_sub" | "f_dist" | "thermo"')
-
-    def get_plot_data(self, plot='k', setup=None):
-        """
-        Pulls corresponding data for selected plot.
-        """
-        plot_data = {}
-        if setup is None:
-            setup = self.setup
-        if plot == 'k':
-            if setup == 'run':
-                plot_data = dict(x=self.run['time'], legend=self.run['directions'])
-                plot_data['y'] = [self.run['k'][d] for d in self.run['directions']]
-            elif setup == 'trial':
-                plot_data = dict(x=self.trial['data']['Run1']['time'], legend=self.trial['runs'])
-                plot_data['y'] = [self.trial['data'][run]['k']['iso'] for run in self.trial['runs']]
-            elif setup == 'trial_set':
-                ref_run = self.trial_set['data'][self.trial_set['trials'][0]]['runs'][0]
-                ref_trial = self.trial_set['trials'][0]
-                plot_data['x'] = self.trial_set['data'][ref_trial]['data'][ref_run]['time']
-                plot_data['y'] = [self.trial_set['data'][trial]['avg']['k']['iso'] for trial in self.trial_set['trials']]
-                plot_data['legend'] = self.trial_set['trials']
-        elif plot == 'k_sub':
-            if setup == 'run':
-                plot_data = dict(x=self.run['time'], legend=self.run['directions'])
-                plot_data['y'] = [self.run['k'][d] for d in self.run['directions']]
-            elif setup == 'trial':
-                plot_data = dict(x=self.trial['data']['Run1']['time'], legend=self.trial['runs'])
-                plot_data['y'] = [self.trial['data'][run]['k']['iso'] for run in self.trial['runs']]
-            elif setup == 'trial_set':
-                ref_run = self.trial_set['data'][self.trial_set['trials'][0]]['runs'][0]
-                ref_trial = self.trial_set['trials'][0]
-                plot_data['x'] = self.trial_set['data'][ref_trial]['data'][ref_run]['time']
-                plot_data['y'] = [self.trial_set['data'][trial]['avg']['k']['iso'] for trial in self.trial_set['trials']]
-                plot_data['legend'] = self.trial_set['trials']
-        elif plot == 'thermo':
-            if setup == 'run':
-                self.plot_parameters['thermo']['title'] = self.run['name']
-                plot_data = self.run['thermo']
-            elif setup == 'trial':
-                self.plot_parameters['thermo']['title'] = '%s' % (self.trial['runs'][0])
-                plot_data = self.trial['data'][self.trial['runs'][0]]['thermo']
-            elif setup == 'trial_set':
-                ref_run = self.trial_set['data'][self.trial_set['trials'][0]]['runs'][0]
-                ref_trial = self.trial_set['trials'][0]
-                self.plot_parameters['thermo']['title'] = '%s - %s' % (ref_trial, ref_run)
-                plot_data = self.trial_set['data'][ref_trial]['data'][ref_run]['thermo']
-        elif plot == 'f_dist':
-            if setup == 'run':
-                run_list = [self.sim_dir]
-            elif setup == 'trial':
-                run_list = [os.path.join(self.sim_dir, run) for run in self.trial['runs']]
-            elif setup == 'trial_set':
-                run_list = [os.path.join(self.sim_dir, trial, ref_run) for trial in self.trial_set['trials']]
-            plot_data = read_framework_distance(run_list, self.plot_parameters['f_dist'])
-        else:
-            print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
-        return plot_data
 
     def show_parameters(self):
         """
