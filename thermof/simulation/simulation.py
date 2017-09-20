@@ -9,6 +9,7 @@ from thermof.read import read_run, read_trial, read_trial_set, read_framework_di
 from thermof.parameters import k_parameters, plot_parameters
 from thermof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
 from thermof.visualize import subplot_thermal_conductivity
+from .plot import get_plot_data
 
 
 class Simulation:
