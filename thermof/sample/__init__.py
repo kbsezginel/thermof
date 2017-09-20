@@ -8,14 +8,14 @@ from thermof.parameters import k_parameters
 
 sample_dir = os.path.abspath(os.path.dirname(__file__))
 # Lammps input file with thermal flux measured in single direction
-single_inp_path = os.path.join(sample_dir, 'in_single.cond.sample')        # Single MOF
+single_inp_path = os.path.join(sample_dir, 'in_single.cond.sample')                 # Single MOF
 # Lammps input file with thermal flux measured in three directions
-single_inp3_path = os.path.join(sample_dir, 'in3_single.cond.sample')      # Single MOF
-ipmof_inp3_path = os.path.join(sample_dir, 'in3_ipmof.cond.sample')        # Interpenetrated MOF
-thermal_flux_file = os.path.join(sample_dir, 'in.thermal_flux')            # Thermal flux calculation
+single_inp3_path = os.path.join(sample_dir, 'in3_single.cond.sample')               # Single MOF
+ipmof_inp3_path = os.path.join(sample_dir, 'in3_ipmof.cond.sample')                 # Interpenetrated MOF
+thermal_conductivity_file = os.path.join(sample_dir, 'in.thermal_conductivity')     # Thermal conductivity calculation
 # Lammps structure files
-single_data_path = os.path.join(sample_dir, 'lammps_single.data.sample')   # Single MOF
-ipmof_data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')     # Interpenetrated MOF
+single_data_path = os.path.join(sample_dir, 'lammps_single.data.sample')            # Single MOF
+ipmof_data_path = os.path.join(sample_dir, 'lammps_ipmof.data.sample')              # Interpenetrated MOF
 # Sample MOF structures
 mof5_file = os.path.join(sample_dir, 'MOF5.cif')
 # Job submission file for Frank

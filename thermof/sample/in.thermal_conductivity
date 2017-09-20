@@ -1,8 +1,8 @@
 #### Simulation Parameters ####
 variable        T equal 298
 variable        dt equal 0.5
-variable        txyz equal 10000
 variable        seed equal 2405148
+variable        txyz equal 10000
 variable        p equal 20000      # correlation length
 variable        s equal 5          # sample interval
 variable        d equal $p*$s      # dump interval
