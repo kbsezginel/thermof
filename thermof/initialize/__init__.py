@@ -1,3 +1,5 @@
+# Date: September 2017
+# Author: Kutay B. Sezginel
 """
 Functions to help initialize Lammps simulations
 """
