@@ -126,3 +126,14 @@ lammps_parameters = dict(cif_file='',                    # File options
                          neqstp=200000,
                          insert_molecule="",             # Molecule insertion options
                          deposit=0)
+
+
+job_parameters = dict(scheduler="slurm",
+                      name="therMOF",
+                      nodes=2,
+                      ppn=12,
+                      walltime="12:00:00",
+                      cluster="mpi",
+                      queue="idist_big",
+                      input="in.thermof",
+                      output="lammps_out.txt")
