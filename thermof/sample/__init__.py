@@ -2,7 +2,6 @@
 Sample input files for predicting thermal conductivity of porous crystals using Lammps
 """
 import os
-from thermof import Simulation, Trajectory
 from thermof.parameters import k_parameters
 
 
@@ -32,6 +31,8 @@ tests_dir = os.path.join(sample_dir, '..', '..', 'tests')
 
 def load_sample_simulation(mof='single', setup='run', tests_dir=tests_dir, parameters=k_parameters.copy()):
     """ Load a sample simulation object from the tests directory """
+    from thermof import Simulation
+
     if mof == 'single':
         trial = os.path.join(tests_dir, 'ideal-mof-trial')
         if setup == 'run':
@@ -49,6 +50,8 @@ def load_sample_simulation(mof='single', setup='run', tests_dir=tests_dir, param
 
 def load_sample_trajectory(mof='single', tests_dir=tests_dir):
     """ Load a sample trajectory file from tests directory """
+    from thermof import Trajectory
+
     if mof == 'single':
         sample_traj = Trajectory(read=os.path.join(tests_dir, 'ideal-mof-trial', 'Run1', 'traj.xyz'))
     else:
