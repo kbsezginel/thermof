@@ -108,14 +108,8 @@ class Simulation:
         else:
             print('Select plot: "k" | "k_sub" | "f_dist" | "thermo"')
 
-    def show_parameters(self):
+    def show_parameters(self, parameter):
         """
-        Show thermal conductivity parameters.
+        Show selected simulation parameters.
         """
-        pprint.pprint(self.k_par)
-
-    def show_plot_parameters(self):
-        """
-        Show plot parameters.
-        """
-        pprint.pprint(self.plot_par)
+        pprint.pprint(getattr(self, '%s_par' % parameter))
