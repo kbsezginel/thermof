@@ -7,3 +7,4 @@ cluster: mpi
 queue: idist_big
 input: in.thermof
 output: lammps_out.txt
+prefix: job
