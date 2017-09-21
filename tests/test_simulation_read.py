@@ -26,7 +26,7 @@ def test_simulation_read_run():
     k_par['read_info'] = True
     run_dir = os.path.join(trial_dir, 'Run1')
     run_data = read_run(run_dir, k_par=k_par)
-    sim = Simulation(read=run_dir, parameters=k_par)
+    sim = Simulation(read=run_dir, k_par=k_par)
     sim.read(run_dir, setup='run')
     with open(run_info_ref_file, 'r') as riref:
         run_info_ref = yaml.load(riref)
@@ -45,7 +45,7 @@ def test_simulation_read_trial():
     k_par['isotropic'] = True
     k_par['average'] = True
     trial = read_trial(trial_dir, k_par=k_par)
-    sim = Simulation(read=trial_dir, setup='trial', parameters=k_par)
+    sim = Simulation(read=trial_dir, setup='trial', k_par=k_par)
     assert trial == sim.trial
     assert len(sim) == 10
     assert str(sim) == 'ideal-mof-trial'
@@ -57,7 +57,7 @@ def test_simulation_read_trial_set():
     k_par['isotropic'] = True
     k_par['average'] = True
     trial_set = read_trial_set(trial_set_dir, k_par=k_par)
-    sim = Simulation(read=trial_set_dir, setup='trial_set', parameters=k_par)
+    sim = Simulation(read=trial_set_dir, setup='trial_set', k_par=k_par)
     assert trial_set == sim.trial_set
     assert len(sim) == 4
     assert str(sim) == 'ideal-mof-trial-set'
