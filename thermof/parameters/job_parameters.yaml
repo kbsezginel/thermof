@@ -1,0 +1,9 @@
+scheduler: slurm
+name: therMOF
+nodes: 2
+ppn: 12
+walltime: 12:00:00
+cluster: mpi
+queue: idist_big
+input: in.thermof
+output: lammps_out.txt
