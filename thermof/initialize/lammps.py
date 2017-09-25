@@ -62,3 +62,19 @@ def get_nve_lines(simpar, nve_file=lammps_input['nve']):
         nve_lines = nve_lines[4:]
     nve_lines[42] = 'run             %i\n' % simpar['nve']['steps']
     return nve_lines
+
+
+def get_simpar_lines(simpar, simpar_file=lammps_input['simpar']):
+    """
+    Get input lines for Lammps simulation parameters using thermof_parameters.
+    """
+    simpar_lines = read_lines(simpar_file)
+    simpar_lines[1] = 'variable        T equal %i' % simpar['temperature']
+    simpar_lines[2] = 'variable        dt equal %.1f' % simpar['dt']
+    simpar_lines[3] = 'variable        seed equal %i' % simpar['seed']
+    simpar_lines[4] = 'variable        p equal %i' simpar['correlation_length']
+    simpar_lines[5] = 'variable        s equal %i' simpar['sample_interval']
+    simpar_lines[7] = 'variable        txyz equal %i' % simpar['dump_xyz']
+    simpar_lines[11] = 'thermo          %i' % simpar['thermo']
+    simpar_lines[12] = 'thermo_style    %s' % ''.join(simpar['thermo_style'])
+    return simpar_lines
