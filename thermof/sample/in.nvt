@@ -1,0 +1,4 @@
+### Equilibration in NVT ###
+fix             NVT all nvt temp $T $T 100
+run             1000000
+unfix           NVT

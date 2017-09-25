@@ -1,0 +1,24 @@
+### Minimization ###
+min_style       cg
+print           "MinStep,CellMinStep,AtomMinStep,FinalStep,Energy,EDiff" file IRMOF-1.min.csv screen no
+variable        min_eval   equal 1.00e-06
+variable        prev_E     equal 50000.00
+variable        iter       loop 100000
+label           loop_min
+min_style       cg
+fix             1 all box/relax aniso 0.0 vmax 0.01
+minimize        1.0e-15 1.0e-15 10000 100000
+unfix           1
+min_style       fire
+variable        tempstp    equal $(step)
+variable        CellMinStep equal ${tempstp}
+minimize        1.0e-15 1.0e-15 10000 100000
+variable        AtomMinStep equal ${tempstp}
+variable        temppe     equal $(pe)
+variable        min_E      equal abs(${prev_E}-${temppe})
+print           "${iter},${CellMinStep},${AtomMinStep},${AtomMinStep},$(pe),${min_E}" append IRMOF-1.min.csv screen no
+if              "${min_E} < ${min_eval}" then "jump SELF break_min"
+variable        prev_E     equal ${temppe}
+next            iter
+jump            SELF loop_min
+label           break_min

@@ -1,0 +1,6 @@
+### Equilibration in NPT ###
+variable        pdamp      equal 1000*${dt}
+variable        tdamp      equal 100*${dt}
+fix             NPT all npt temp $T $T ${tdamp} tri 1.00 1.00 ${pdamp}
+run             500000
+unfix           NPT
