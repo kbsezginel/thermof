@@ -12,7 +12,7 @@ setup(
                       'matplotlib',
                       'periodictable',
                       'ase'],
-    dependency_links=['git+ssh://git@github.com/kbsezginel/lammps_interface.git'],
+    dependency_links=['http://github.com/kbsezginel/lammps_interface/tarball/master'],
     include_package_data=True,
     packages=find_packages()
 )
