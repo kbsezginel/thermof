@@ -6,7 +6,7 @@ import yaml
 import numpy as np
 from thermof import Simulation
 from thermof.simulation.plot import get_plot_data
-from thermof.parameters import k_parameters
+from thermof.parameters import Parameters
 
 
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')
@@ -21,10 +21,10 @@ k_est_iso_ref = [0.8624217134742657, 0.6839092609282974, 0.9263423943319228, 0.8
 
 def test_simulation_get_plot_data_for_run():
     """Test Simulation class get_plot_data method for pulling correct data for different plots of a run"""
-    k_par = k_parameters.copy()
-    k_par['read_thermo'] = True
+    par = Parameters()
+    par.k['read_thermo'] = True
     run_dir = os.path.join(trial_dir, 'Run1')
-    sim = Simulation(read=run_dir, k_par=k_par, setup='run')
+    sim = Simulation(read=run_dir, parameters=par, setup='run')
     with open(k_ref_file, 'r') as kref:
         k_ref = yaml.load(kref)
     with open(time_ref_file, 'r') as tiref:
@@ -40,8 +40,8 @@ def test_simulation_get_plot_data_for_run():
 
 def test_simulation_get_plot_data_for_trial():
     """Test Simulation class get_plot_data method for pulling correct data for different plots of a trial"""
-    k_par = k_parameters.copy()
-    sim = Simulation(read=trial_dir, k_par=k_par, setup='trial')
+    par = Parameters()
+    sim = Simulation(read=trial_dir, parameters=par, setup='trial')
     with open(time_ref_file, 'r') as tiref:
         time_ref = yaml.load(tiref)
     assert get_plot_data(sim, 'k')['x'] == time_ref

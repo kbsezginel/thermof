@@ -6,7 +6,7 @@ import yaml
 import numpy as np
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof import Simulation
-from thermof.parameters import k_parameters
+from thermof.parameters import Parameters
 
 
 k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-conductivity.yaml')
@@ -21,12 +21,12 @@ k_est_iso_ref = [0.8624217134742657, 0.6839092609282974, 0.9263423943319228, 0.8
 
 def test_simulation_read_run():
     """Test Simulation class read method for reading a single run with read_run"""
-    k_par = k_parameters.copy()
-    k_par['read_thermo'] = True
-    k_par['read_info'] = True
+    par = Parameters()
+    par.k['read_thermo'] = True
+    par.k['read_info'] = True
     run_dir = os.path.join(trial_dir, 'Run1')
-    run_data = read_run(run_dir, k_par=k_par)
-    sim = Simulation(read=run_dir, k_par=k_par)
+    run_data = read_run(run_dir, k_par=par.k)
+    sim = Simulation(read=run_dir, parameters=par)
     sim.read(run_dir, setup='run')
     with open(run_info_ref_file, 'r') as riref:
         run_info_ref = yaml.load(riref)
@@ -41,11 +41,11 @@ def test_simulation_read_run():
 
 def test_simulation_read_trial():
     """Test Simulation class read method for reading a trial"""
-    k_par = k_parameters.copy()
-    k_par['isotropic'] = True
-    k_par['average'] = True
-    trial = read_trial(trial_dir, k_par=k_par)
-    sim = Simulation(read=trial_dir, setup='trial', k_par=k_par)
+    par = Parameters()
+    par.k['isotropic'] = True
+    par.k['average'] = True
+    trial = read_trial(trial_dir, k_par=par.k)
+    sim = Simulation(read=trial_dir, setup='trial', parameters=par)
     assert trial == sim.trial
     assert len(sim) == 10
     assert str(sim) == 'ideal-mof-trial'
@@ -53,11 +53,11 @@ def test_simulation_read_trial():
 
 def test_simulation_read_trial_set():
     """Test Simulation class read method for reading a trial set"""
-    k_par = k_parameters.copy()
-    k_par['isotropic'] = True
-    k_par['average'] = True
-    trial_set = read_trial_set(trial_set_dir, k_par=k_par)
-    sim = Simulation(read=trial_set_dir, setup='trial_set', k_par=k_par)
+    par = Parameters()
+    par.k['isotropic'] = True
+    par.k['average'] = True
+    trial_set = read_trial_set(trial_set_dir, k_par=par.k)
+    sim = Simulation(read=trial_set_dir, setup='trial_set', parameters=par)
     assert trial_set == sim.trial_set
     assert len(sim) == 4
     assert str(sim) == 'ideal-mof-trial-set'
