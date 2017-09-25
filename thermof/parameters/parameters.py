@@ -2,6 +2,7 @@
 Parameters for reading and plotting thermal flux
 """
 import pprint
+from copy import deepcopy
 from .default import default_parameters
 
 
@@ -18,7 +19,7 @@ class Parameters:
     def set(self, par_set):
         """ Set parameters from given dictionary """
         for par in par_set:
-            setattr(self, par, par_set[par].copy())
+            setattr(self, par, deepcopy(par_set[par]))
 
     def show(self, par=None):
         """ Show parameters and values """

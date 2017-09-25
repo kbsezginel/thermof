@@ -14,5 +14,6 @@ k_parameters = read_yaml(os.path.join(par_dir, 'k_parameters.yaml'))
 plot_parameters = read_yaml(os.path.join(par_dir, 'plot_parameters.yaml'))
 lammps_parameters = read_yaml(os.path.join(par_dir, 'lammps_parameters.yaml'))
 thermof_parameters = read_yaml(os.path.join(par_dir, 'thermof_parameters.yaml'))
-default_parameters = dict(k=k_parameters, lammps=lammps_parameters,
+job_parameters = read_yaml(os.path.join(par_dir, 'job_parameters.yaml'))
+default_parameters = dict(k=k_parameters, lammps=lammps_parameters, job=job_parameters,
                           plot=plot_parameters, thermof=thermof_parameters)
