@@ -1,0 +1,35 @@
+temperature: 298.0              # Simulation temperature
+dt: 0.5                         # Timestep (ps)
+seed: 123456                    # Seed number for velocity dist
+dump_xyz: 10000                 # Dump xyz trjectory each 'n' steps
+dump_modify: null               # Modify atom names in dump
+correlation_length: 20000       # Autocorrelation length for thermal conductivity
+sample_interval: 5              # Sample interval for thermal conductivity calc
+fix: ['NVT', 'NVE']             # Setups: TC / NPT / NVT / NVE
+npt:                            # NPT Parameters
+  pdamp: 1000
+  tdamp: 100
+  steps: 500000
+nvt:                            # NVT Parameters
+  steps: 1000000
+nve:                            # NVE Parameters (includes thermal conductivity calc)
+  equilibration: 300000
+  steps: 100
+thermo: 10000                   # Print thermodynamic properties each 'n' steps
+thermo_style:                   # Print listed properties
+  - custom
+  - step
+  - temp
+  - press
+  - pe
+  - etotal
+  - vol
+  - lx
+  - ly
+  - lz
+  - pxx
+  - pyy
+  - pzz
+  - pxy
+  - pxz
+  - pyz
