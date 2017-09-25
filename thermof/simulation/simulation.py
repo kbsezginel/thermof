@@ -31,6 +31,7 @@ class Simulation:
             self.simdir = read
         elif mof is not None:
             self.set_mof(mof)
+        self.verbose = True
 
     def __repr__(self):
         """
@@ -78,15 +79,19 @@ class Simulation:
         """
         Initialize input files for a Lammps simulation.
         """
-        write_lammps_files(self.simdir, self.parameters)
-        write_lammps_input(self.simdir, self.parameters)
-        job_submission_file(os.path.join(self.simdir, '%s.%s' % ()))
+        write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
+        write_lammps_input(self.simdir, self.parameters, verbose=self.verbose)
+        job_submission_file(self.simdir, self.parameters, verbose=self.verbose)
+        print('Done!') if self.verbose else None
 
     def set_mof(self, mof_file):
         """
         Set MOF file for Lammps simulation
         """
         self.mof = MOF(mof_file)
+        self.parameters.lammps['cif_file'] = self.mof.path
+        self.parameters.job['name'] = self.mof.name
+        self.parameters.job['input'] = 'in.%s' % self.mof.name
 
     def plot(self, selection, data=None):
         """
