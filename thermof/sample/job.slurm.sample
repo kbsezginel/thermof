@@ -15,7 +15,7 @@ module load intel/2017.1.132
 module load intel-mpi/2017.1.132
 module load lammps/stable_31Mar2017
 
-mpirun -np ${SLURM_NTASKS} lmp_mpi -in in.thermof > lammps_out.txt
+srun --mpi=pmi2 lmp_mpi -in in.therMOF > lammps_out.txt
 
 echo end_time: `date`
 exit
