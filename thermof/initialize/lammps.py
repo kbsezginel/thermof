@@ -40,3 +40,12 @@ def get_npt_lines(simpar, npt_file=lammps_input['npt']):
     npt_lines[2] = 'variable        tdamp      equal %i*${dt}' % simpar['npt']['tdamp']
     npt_lines[4] = 'run             %i' % simpar['npt']['steps']
     return npt_lines
+
+
+def get_nvt_lines(simpar, nvt_file=lammps_input['nvt']):
+    """
+    Get input lines for NVT simulation using thermof_parameters.
+    """
+    nvt_lines = read_lines(nvt_file)
+    npt_lines[2] = 'run             %i' % simpar['nvt']['steps']
+    return npt_lines
