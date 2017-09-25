@@ -14,7 +14,7 @@ nvt:                            # NVT Parameters
   steps: 1000000
 nve:                            # NVE Parameters (includes thermal conductivity calc)
   equilibration: 300000
-  steps: 100
+  steps: 1000000
 thermo: 10000                   # Print thermodynamic properties each 'n' steps
 thermo_style:                   # Print listed properties
   - custom

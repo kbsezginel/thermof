@@ -36,9 +36,9 @@ def get_npt_lines(simpar, npt_file=lammps_input['npt']):
     Get input lines for NPT simulation using thermof_parameters.
     """
     npt_lines = read_lines(npt_file)
-    npt_lines[1] = 'variable        pdamp      equal %i*${dt}' % simpar['npt']['pdamp']
-    npt_lines[2] = 'variable        tdamp      equal %i*${dt}' % simpar['npt']['tdamp']
-    npt_lines[4] = 'run             %i' % simpar['npt']['steps']
+    npt_lines[1] = 'variable        pdamp      equal %i*${dt}\n' % simpar['npt']['pdamp']
+    npt_lines[2] = 'variable        tdamp      equal %i*${dt}\n' % simpar['npt']['tdamp']
+    npt_lines[4] = 'run             %i\n' % simpar['npt']['steps']
     return npt_lines
 
 
@@ -47,5 +47,18 @@ def get_nvt_lines(simpar, nvt_file=lammps_input['nvt']):
     Get input lines for NVT simulation using thermof_parameters.
     """
     nvt_lines = read_lines(nvt_file)
-    npt_lines[2] = 'run             %i' % simpar['nvt']['steps']
+    npt_lines[2] = 'run             %i\n' % simpar['nvt']['steps']
     return npt_lines
+
+
+def get_nve_lines(simpar, nve_file=lammps_input['nve']):
+    """
+    Get input lines for NVE simulation (including thermal conductivity calc.) using thermof_parameters.
+    """
+    nve_lines = read_lines(nve_file)
+    if simpar['nve']['equilibration'] >= 0:
+        nve_lines[2] = 'run             %i\n' % simpar['nve']['equilibration']
+    else:
+        nve_lines = nve_lines[4:]
+    nve_lines[42] = 'run             %i\n' % simpar['nve']['steps']
+    return nve_lines
