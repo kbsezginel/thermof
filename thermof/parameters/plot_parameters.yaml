@@ -6,17 +6,17 @@ k:
   dpi: 200
   avg: true
   cmap: 'Spectral_r'
-  save: None
+  save: null
   legendloc: (1.02, 0)
   ncol: 1
-  title: None
+  title: null
   xlabel: 'Time'
   ylabel: 'k (W/mK)'
 thermo:
   size: (20, 10)
   dpi: 200
-  save: None
-  title: None
+  save: null
+  title: null
   fontsize: 8
   scilimits: (-4, 4)
   subplots_adjust: (0.3, 0.25)
@@ -39,7 +39,7 @@ k_sub:
   k_est_t0: 5
   k_est_t1: 10
   ylim: (0, 1.2)
-  save: None
+  save: null
   xlabel: 'Time'
   ylabel: 'k (W/mK)'
 f_dist:
@@ -55,7 +55,7 @@ f_dist:
   grid_limit: 10
   ticks: false
   cbar: [0.92, 0.135, 0.02, 0.755]
-  save: None
+  save: null
   traj: 'traj.xyz'
   traj_start: 0
   traj_end: 1e6

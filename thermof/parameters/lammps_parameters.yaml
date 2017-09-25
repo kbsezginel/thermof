@@ -2,7 +2,7 @@ cif_file: ''                    # File options
 output_cif: false
 output_raspa: false
 force_field: 'UFF'              # Force field options
-mol_ff: None
+mol_ff: null
 h_bonding: false
 dreid_bond_type: 'harmonic'
 fix_metal: false
@@ -12,7 +12,7 @@ thermal_scaling: false
 npt: false
 nvt: false
 cutoff: 12.5
-replication: None
+replication: null
 orthogonalize: false
 random_vel: false
 dump_dcd: 0
