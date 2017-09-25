@@ -17,7 +17,6 @@ nve:                            # NVE Parameters (includes thermal conductivity 
   steps: 1000000
 thermo: 10000                   # Print thermodynamic properties each 'n' steps
 thermo_style:                   # Print listed properties
-  - custom
   - step
   - temp
   - press

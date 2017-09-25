@@ -89,7 +89,7 @@ def get_simpar_lines(simpar, simpar_file=lammps_input['simpar']):
     simpar_lines[5] = 'variable        s equal %i\n' % simpar['sample_interval']
     simpar_lines[7] = 'variable        txyz equal %i\n' % simpar['dump_xyz']
     simpar_lines[11] = 'thermo          %i\n' % simpar['thermo']
-    simpar_lines[12] = 'thermo_style    %s\n' % ' '.join(simpar['thermo_style'])
+    simpar_lines[12] = 'thermo_style    custom %s\n' % ' '.join(simpar['thermo_style'])
     return simpar_lines
 
 
