@@ -4,7 +4,7 @@ k:
   fontsize: 8
   lw: 1.5
   dpi: 200
-  avg: True
+  avg: true
   cmap: 'Spectral_r'
   save: None
   legendloc: (1.02, 0)
@@ -33,7 +33,7 @@ k_sub:
   subplots_adjust: (.4, .3)
   fontsize: 9
   lw: 2.5
-  k_est: True
+  k_est: true
   k_est_color: 'r'
   k_est_loc: (5, 0.1)
   k_est_t0: 5
@@ -53,7 +53,7 @@ f_dist:
   vmin: 1.1
   cmap: 'YlOrRd'
   grid_limit: 10
-  ticks: False
+  ticks: false
   cbar: [0.92, 0.135, 0.02, 0.755]
   save: None
   traj: 'traj.xyz'

@@ -10,7 +10,7 @@ class Parameters:
         if par_set is not None:
             self.set(par_set)
         else:
-            self.set(default_parameters)
+            self.set(default_parameters.copy())
 
     def __repr__(self):
         return "<Parameter set: %i parameters>" % (len(vars(self).keys()))
@@ -18,7 +18,7 @@ class Parameters:
     def set(self, par_set):
         """ Set parameters from given dictionary """
         for par in par_set:
-            setattr(self, par, par_set[par])
+            setattr(self, par, par_set[par].copy())
 
     def show(self, par=None):
         """ Show parameters and values """

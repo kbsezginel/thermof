@@ -1,24 +1,24 @@
 cif_file: ''                    # File options
-output_cif: False
-output_raspa: False
+output_cif: false
+output_raspa: false
 force_field: 'UFF'              # Force field options
 mol_ff: None
-h_bonding: False
+h_bonding: false
 dreid_bond_type: 'harmonic'
-fix_metal: False
-minimize: False                 # Simulation options
-bulk_moduli: False
-thermal_scaling: False
-npt: False
-nvt: False
+fix_metal: false
+minimize: false                 # Simulation options
+bulk_moduli: false
+thermal_scaling: false
+npt: false
+nvt: false
 cutoff: 12.5
 replication: None
-orthogonalize: False
-random_vel: False
+orthogonalize: false
+random_vel: false
 dump_dcd: 0
 dump_xyz: 0
 dump_lammpstrj: 0
-restart: False
+restart: false
 tol: 0.4                        # Parameter options
 neighbour_size: 5
 iter_count: 10
@@ -29,7 +29,7 @@ nprodstp: 200000
 neqstp: 200000
 insert_molecule: ""             # Molecule insertion options
 deposit: 0
-thermal_conductivity: False     # ----- Used by therMOF library -----)
+thermal_conductivity: false     # ----- Used by therMOF library -----)
 timestep: 0.5                   # delta T
 thermo: 10000                   # Thermo dump interval
 seed: 123456                    # Seed number for velocity distribution

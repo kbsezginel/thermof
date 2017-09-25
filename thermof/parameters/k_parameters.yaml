@@ -7,5 +7,5 @@ prefix: 'J0Jt_t'
 isotropic: true
 average: true
 traj: 'traj.xyz'
-read_info: False
-read_thermo: False
+read_info: false
+read_thermo: false
