@@ -7,36 +7,46 @@ import os
 import glob
 from lammps_interface.lammps_main import LammpsSimulation
 from lammps_interface.structure_data import from_CIF
-from thermof.initialize import read_lines, write_lines
+from . import read_lines, write_lines
 from thermof.sample import lammps_input
 
 
-def write_lammps_files(parameters):
+def write_lammps_files(simdir, parameters):
     """
     Write Lammps files using lammps_interface.
 
     Args:
+        - simdir (str): Directory to write Lammps simulation files
         - parameters (Parameters): Lammps simulation parameters
 
     Returns:
         - None: Writes Lammps simulation files to simulation directory
     """
-    sim = LammpsSimulation(parameters)
-    cell, graph = from_CIF(parameters.cif_file)
+    lammpspar = parameters.lammps_interface
+    sim = LammpsSimulation(lammpspar)
+    cell, graph = from_CIF(lammpspar.cif_file)
     sim.set_cell(cell)
     sim.set_graph(graph)
     sim.split_graph()
     sim.assign_force_fields()
     sim.compute_simulation_size()
     sim.merge_graphs()
-    sim.write_lammps_files(parameters.sim_dir)
+    sim.write_lammps_files(lammpspar.sim_dir)
 
 
-def write_lammps_input(sim_dir, simpar):
+def write_lammps_input(simdir, parameters):
     """
     Write Lammps simulation input file.
+
+    Args:
+        - simdir (str): Directory to write Lammps input file
+        - parameters (Parameters): Lammps simulation parameters
+
+    Returns:
+        - None: Rewrites Lammps simulation input file to simulation directory
     """
-    inp_file = glob.glob(os.path.join(sim_dir, 'in.*'))[0]
+    simpar = parameters.thermof
+    inp_file = glob.glob(os.path.join(simdir, 'in.*'))[0]
     input_lines = read_lines(inp_file)
     for fix in simpar['fix']:
         fix_lines = get_fix_lines(fix, simpar, lammps_input=lammps_input)
@@ -67,8 +77,8 @@ def get_simpar_lines(simpar, simpar_file=lammps_input['simpar']):
     simpar_lines[1] = 'variable        T equal %i\n' % simpar['temperature']
     simpar_lines[2] = 'variable        dt equal %.1f\n' % simpar['dt']
     simpar_lines[3] = 'variable        seed equal %i\n' % simpar['seed']
-    simpar_lines[4] = 'variable        p equal %i\n' simpar['correlation_length']
-    simpar_lines[5] = 'variable        s equal %i\n' simpar['sample_interval']
+    simpar_lines[4] = 'variable        p equal %i\n' % simpar['correlation_length']
+    simpar_lines[5] = 'variable        s equal %i\n' % simpar['sample_interval']
     simpar_lines[7] = 'variable        txyz equal %i\n' % simpar['dump_xyz']
     simpar_lines[11] = 'thermo          %i\n' % simpar['thermo']
     simpar_lines[12] = 'thermo_style    %s\n' % ''.join(simpar['thermo_style'])

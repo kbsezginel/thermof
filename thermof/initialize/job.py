@@ -4,7 +4,7 @@
 Initializing job submission files for computing cluster
 """
 from thermof.sample import slurm_file, pbs_file
-from thermof.initialize import read_lines, write_lines
+from . import read_lines, write_lines
 
 
 def job_submission_file(file_name, parameters):
