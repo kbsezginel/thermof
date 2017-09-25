@@ -3,6 +3,28 @@
 """
 Plot functions for Simulation class
 """
+from thermof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
+from thermof.visualize import subplot_thermal_conductivity
+
+
+def plot_simulation(simulation, selection, data=None):
+    """
+    Plot Lammps simulation results.
+    """
+    if data is None:
+        plot_data = get_plot_data(plot=selection)
+    else:
+        plot_data = data
+    if selection == 'k':
+        plot_thermal_conductivity(plot_data, simulation.parameters.plot['k'])
+    elif selection == 'thermo':
+        plot_thermo(plot_data, simulation.parameters.plot['thermo'])
+    elif selection == 'k_sub':
+        subplot_thermal_conductivity(plot_data, simulation.parameters.plot['k_sub'])
+    elif selection == 'f_dist':
+        plot_framework_distance(plot_data, simulation.parameters.plot['f_dist'])
+    else:
+        print('Select plot: "k" | "k_sub" | "f_dist" | "thermo"')
 
 
 def get_plot_data(simulation, plot='k', setup=None):

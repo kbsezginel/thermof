@@ -7,12 +7,10 @@ import os
 import pprint
 from thermof.parameters import Parameters
 from thermof.read import read_run, read_trial, read_trial_set, read_framework_distance
-from thermof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
-from thermof.visualize import subplot_thermal_conductivity
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
 from thermof.initialize.job import job_submission_file
 from thermof.mof import MOF
-from .plot import get_plot_data
+from .plot import plot_simulation
 
 
 class Simulation:
@@ -94,20 +92,7 @@ class Simulation:
         """
         Plot Lammps simulation results.
         """
-        if data is None:
-            plot_data = get_plot_data(plot=selection)
-        else:
-            plot_data = data
-        if selection == 'k':
-            plot_thermal_conductivity(plot_data, self.parameters.plot['k'])
-        elif selection == 'thermo':
-            plot_thermo(plot_data, self.parameters.plot['thermo'])
-        elif selection == 'k_sub':
-            subplot_thermal_conductivity(plot_data, self.parameters.plot['k_sub'])
-        elif selection == 'f_dist':
-            plot_framework_distance(plot_data, self.parameters.plot['f_dist'])
-        else:
-            print('Select plot: "k" | "k_sub" | "f_dist" | "thermo"')
+        plot_simulation(self, selection, data)
 
     def show_parameters(self, par=None):
         """
