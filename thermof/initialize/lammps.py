@@ -9,9 +9,10 @@ from lammps_interface.lammps_main import LammpsSimulation
 from lammps_interface.structure_data import from_CIF
 from . import read_lines, write_lines
 from thermof.sample import lammps_input
+from thermof.parameters import Parameters
 
 
-def write_lammps_files(simdir, parameters):
+def write_lammps_files(simdir, parameters, verbose=True):
     """
     Write Lammps files using lammps_interface.
 
@@ -22,7 +23,8 @@ def write_lammps_files(simdir, parameters):
     Returns:
         - None: Writes Lammps simulation files to simulation directory
     """
-    lammpspar = parameters.lammps_interface
+    print('I. Writing Lammps input and data files...') if verbose else None
+    lammpspar = Parameters(parameters.lammps)
     sim = LammpsSimulation(lammpspar)
     cell, graph = from_CIF(lammpspar.cif_file)
     sim.set_cell(cell)
@@ -31,10 +33,10 @@ def write_lammps_files(simdir, parameters):
     sim.assign_force_fields()
     sim.compute_simulation_size()
     sim.merge_graphs()
-    sim.write_lammps_files(lammpspar.sim_dir)
+    sim.write_lammps_files(simdir)
 
 
-def write_lammps_input(simdir, parameters):
+def write_lammps_input(simdir, parameters, lammps_input=lammps_input, verbose=True):
     """
     Write Lammps simulation input file.
 
@@ -47,10 +49,16 @@ def write_lammps_input(simdir, parameters):
     """
     simpar = parameters.thermof
     inp_file = glob.glob(os.path.join(simdir, 'in.*'))[0]
+    print('II. Updating Lammps input file -> %s' % inp_file) if verbose else None
     input_lines = read_lines(inp_file)
+    simpar_lines = get_simpar_lines(simpar, simpar_file=lammps_input['simpar'])
+    input_lines += '\n'
+    input_lines += simpar_lines
+    print('Adding fixes: %s' % ' | '.join(simpar['fix'])) if verbose else None
     for fix in simpar['fix']:
         fix_lines = get_fix_lines(fix, simpar, lammps_input=lammps_input)
-        input_lines += ('\n' + fix_lines)
+        input_lines += '\n'
+        input_lines += fix_lines
     write_lines(inp_file, input_lines)
 
 
@@ -81,7 +89,7 @@ def get_simpar_lines(simpar, simpar_file=lammps_input['simpar']):
     simpar_lines[5] = 'variable        s equal %i\n' % simpar['sample_interval']
     simpar_lines[7] = 'variable        txyz equal %i\n' % simpar['dump_xyz']
     simpar_lines[11] = 'thermo          %i\n' % simpar['thermo']
-    simpar_lines[12] = 'thermo_style    %s\n' % ''.join(simpar['thermo_style'])
+    simpar_lines[12] = 'thermo_style    %s\n' % ' '.join(simpar['thermo_style'])
     return simpar_lines
 
 
@@ -101,8 +109,8 @@ def get_nvt_lines(simpar, nvt_file=lammps_input['nvt']):
     Get input lines for NVT simulation using thermof_parameters.
     """
     nvt_lines = read_lines(nvt_file)
-    npt_lines[2] = 'run             %i\n' % simpar['nvt']['steps']
-    return npt_lines
+    nvt_lines[2] = 'run             %i\n' % simpar['nvt']['steps']
+    return nvt_lines
 
 
 def get_nve_lines(simpar, nve_file=lammps_input['nve']):
