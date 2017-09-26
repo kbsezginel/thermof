@@ -4,7 +4,6 @@
 Simulation class for reading and initializing Lammps simulations
 """
 import os
-import pprint
 from thermof.parameters import Parameters
 from thermof.read import read_run, read_trial, read_trial_set, read_framework_distance
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
@@ -82,6 +81,7 @@ class Simulation:
         write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
         write_lammps_input(self.simdir, self.parameters, verbose=self.verbose)
         job_submission_file(self.simdir, self.parameters, verbose=self.verbose)
+        self.save_parameters()
         print('Done!') if self.verbose else None
 
     def set_mof(self, mof_file):
@@ -108,3 +108,9 @@ class Simulation:
         Show selected simulation parameters.
         """
         self.parameters.show(par=par)
+
+    def save_parameters(self, parameters=['thermof', 'lammps', 'job']):
+        """
+        Save simulation parameters.
+        """
+        self.parameters.save(parameters=parameters, savedir=self.simdir, verbose=self.verbose)
