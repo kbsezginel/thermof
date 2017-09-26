@@ -4,6 +4,7 @@
 Simulation class for reading and initializing Lammps simulations
 """
 import os
+import yaml
 from thermof.parameters import Parameters
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
@@ -118,3 +119,12 @@ class Simulation:
         Save simulation parameters.
         """
         self.parameters.save(parameters=parameters, savedir=self.simdir, verbose=self.verbose)
+
+    def read_parameters(self):
+        """
+        Read simulation parameters.
+        """
+        simpar_file = os.path.join(self.simdir, 'simpar.yaml')
+        with open(simpar_file, 'r') as sp:
+            simpar = yaml.load(sp)
+        self.parameters = Parameters(simpar)
