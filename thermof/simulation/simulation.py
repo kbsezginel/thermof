@@ -95,7 +95,7 @@ class Simulation:
         rep = [int(i) for i in self.parameters.lammps['replication'].split()]
         self.parameters.thermof['mof'] = dict(name=self.mof.name,
                                               replication=rep,
-                                              volume=self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2])
+                                              volume=float(self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2]))
 
     def plot(self, selection, data=None):
         """
