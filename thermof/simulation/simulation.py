@@ -5,7 +5,7 @@ Simulation class for reading and initializing Lammps simulations
 """
 import os
 from thermof.parameters import Parameters
-from thermof.read import read_run, read_trial, read_trial_set, read_framework_distance
+from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
 from thermof.initialize.job import job_submission_file
 from thermof.mof import MOF

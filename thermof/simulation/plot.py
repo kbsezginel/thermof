@@ -3,6 +3,8 @@
 """
 Plot functions for Simulation class
 """
+import os
+from thermof.read import read_framework_distance
 from thermof.visualize import plot_thermal_conductivity, plot_framework_distance, plot_thermo
 from thermof.visualize import subplot_thermal_conductivity
 
@@ -12,7 +14,7 @@ def plot_simulation(simulation, selection, data=None):
     Plot Lammps simulation results.
     """
     if data is None:
-        plot_data = get_plot_data(plot=selection)
+        plot_data = get_plot_data(simulation, plot=selection)
     else:
         plot_data = data
     if selection == 'k':
@@ -74,11 +76,11 @@ def get_plot_data(simulation, plot='k', setup=None):
             plot_data = simulation.trial_set['data'][ref_trial]['data'][ref_run]['thermo']
     elif plot == 'f_dist':
         if setup == 'run':
-            run_list = [simulation.sim_dir]
+            run_list = [simulation.simdir]
         elif setup == 'trial':
-            run_list = [os.path.join(simulation.sim_dir, run) for run in simulation.trial['runs']]
+            run_list = [os.path.join(simulation.simdir, run) for run in simulation.trial['runs']]
         elif setup == 'trial_set':
-            run_list = [os.path.join(simulation.sim_dir, trial, ref_run) for trial in simulation.trial_set['trials']]
+            run_list = [os.path.join(simulation.simdir, trial, ref_run) for trial in simulation.trial_set['trials']]
         plot_data = read_framework_distance(run_list, simulation.parameters.plot['f_dist'])
     else:
         print('Select plot: "k" | "k_sub" | "hist" | "thermo"')
