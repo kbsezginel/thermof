@@ -14,8 +14,5 @@ setup(
                       'pyyaml',
                       'matplotlib',
                       'periodictable',
-                      'ase',
-                      'lammps_interface'],
-    dependency_links=['https://github.com/kbsezginel/lammps_interface/tarball/master#egg=package-1.0'],
-    zip_safe=False
+                      'ase']
 )
