@@ -8,7 +8,7 @@ import math
 import yaml
 import numpy as np
 from thermof.reldist import reldist
-from thermof.parameters import k_parameters
+from thermof.parameters import k_parameters, thermo_headers
 
 
 def read_thermal_flux(file_path, k_par=k_parameters, start=200014, j_index=3):
@@ -145,7 +145,10 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         if k_par['read_info']:
             run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
         if k_par['read_thermo']:
-            run_data['thermo'] = read_thermo(read_log(os.path.join(run_dir, 'log.lammps')))
+            headers = get_thermo_headers(k_par['thermo_style'])
+            thermo_data = read_log(os.path.join(run_dir, 'log.lammps'), headers=headers)
+            fix = k_par['fix']
+            run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -268,7 +271,7 @@ def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
     return thermo_data
 
 
-def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
+def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
     """Read thermo data from given thermo log lines
 
     Args:
@@ -328,6 +331,13 @@ def read_framework_distance(run_list, fdist_par):
         title = '%s/%s' % (os.path.split(os.path.split(run)[0])[1], os.path.split(run)[1])
         dist_data.append(dict(x=x_coords[start:], y=y_coords[start:], z=z_coords[start:], title=title))
     return dist_data
+
+
+def get_thermo_headers(thermo_style, thermo_headers=thermo_headers):
+    """
+    Lammps thermo headers for log file.
+    """
+    return ' '.join([thermo_headers[i] for i in thermo_style])
 
 
 class FluxFileNotFoundError(Exception):
