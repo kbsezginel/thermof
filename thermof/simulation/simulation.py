@@ -92,6 +92,10 @@ class Simulation:
         self.parameters.lammps['cif_file'] = self.mof.path
         self.parameters.job['name'] = self.mof.name
         self.parameters.job['input'] = 'in.%s' % self.mof.name
+        rep = [int(i) for i in self.parameters.lammps['replication'].split()]
+        self.parameters.thermof['mof'] = dict(name=self.mof.name,
+                                              replication=rep,
+                                              volume=self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2])
 
     def plot(self, selection, data=None):
         """
