@@ -100,7 +100,7 @@ def test_read_run_read_thermo():
     run = read_run(run_dir, k_par=k_par, t0=5, t1=10)
     run_info_path = os.path.join(run_dir, 'run_info.yaml')
     assert set(list(run['thermo'].keys())) == set(['NVT', 'NVE1', 'NVE2'])
-    assert set(list(run['thermo']['NVT'].keys())) == set(['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'])
+    assert set(list(run['thermo']['NVT'].keys())) == set(['step', 'temp', 'epair', 'emol', 'etotal', 'press'])
     assert len(run['thermo']['NVT']['step']) == 3001
     assert run['thermo']['NVT']['step'][0] == 0
     assert run['thermo']['NVT']['step'][-1] == 300000
