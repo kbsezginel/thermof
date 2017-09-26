@@ -4,6 +4,7 @@
 MOF class for file I/O and molecular operations.
 """
 import os
+import numpy as np
 from . import ase
 
 
@@ -72,3 +73,10 @@ class MOF:
             write_dir = os.getcwd()
         mof_file = os.path.join(write_dir, self.name + '.' + file_format)
         ase.write(mof_file, self.ase_atoms, file_format=file_format)
+
+    def get_replication(self, min_cell_size):
+        """
+        Get required replication to fulfill given minimum cell size.
+        """
+        cell = [np.linalg.norm(vec) for vec in self.ase_atoms.cell]
+        return [int(np.ceil(min_cell_size[i] / cell[i])) for i in range(3)]

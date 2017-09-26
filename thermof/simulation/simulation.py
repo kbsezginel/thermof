@@ -92,7 +92,11 @@ class Simulation:
         self.parameters.lammps['cif_file'] = self.mof.path
         self.parameters.job['name'] = self.mof.name
         self.parameters.job['input'] = 'in.%s' % self.mof.name
-        rep = [int(i) for i in self.parameters.lammps['replication'].split()]
+        if self.parameters.thermof['min_cell_size'] is not None:
+            rep = self.mof.get_replication(self.parameters.thermof['min_cell_size'])
+            self.parameters.lammps['replication'] = ' '.join([str(i) for i in rep])
+        else:
+            rep = None
         self.parameters.thermof['mof'] = dict(name=self.mof.name,
                                               replication=rep,
                                               volume=float(self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2]))
