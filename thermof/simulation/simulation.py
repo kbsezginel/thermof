@@ -5,6 +5,7 @@ Simulation class for reading and initializing Lammps simulations
 """
 import os
 import yaml
+import shutil
 from thermof.parameters import Parameters
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
@@ -79,11 +80,22 @@ class Simulation:
         """
         Initialize input files for a Lammps simulation.
         """
+        self.set_dir(self.simdir)
         write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
         write_lammps_input(self.simdir, self.parameters, verbose=self.verbose)
         job_submission_file(self.simdir, self.parameters, verbose=self.verbose)
         self.save_parameters()
         print('Done!') if self.verbose else None
+
+    def set_dir(self, simdir):
+        """
+        Set simulation directory for initialization.
+        """
+        if os.path.exists(simdir):
+            shutil.rmtree(simdir)
+            print('Removing existing simulation directory -> %s' % simdir)
+        os.makedirs(simdir)
+        self.simdir = simdir
 
     def set_mof(self, mof_file):
         """
@@ -95,9 +107,9 @@ class Simulation:
         self.parameters.job['input'] = 'in.%s' % self.mof.name
         if self.parameters.thermof['min_cell_size'] is not None:
             rep = self.mof.get_replication(self.parameters.thermof['min_cell_size'])
-            self.parameters.lammps['replication'] = ' '.join([str(i) for i in rep])
         else:
-            rep = None
+            rep = [1, 1, 1]
+        self.parameters.lammps['replication'] = ' '.join([str(i) for i in rep])
         self.parameters.thermof['mof'] = dict(name=self.mof.name,
                                               replication=rep,
                                               volume=float(self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2]))
