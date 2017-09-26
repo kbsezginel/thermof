@@ -32,3 +32,4 @@ thermo_style:                   # Print listed properties
   - pxy
   - pxz
   - pyz
+min_cell_size: null             # Minimum size of the cell to calculate replication

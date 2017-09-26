@@ -29,7 +29,3 @@ nprodstp: 200000
 neqstp: 200000
 insert_molecule: ""             # Molecule insertion options
 deposit: 0
-thermal_conductivity: false     # ----- Used by therMOF library -----)
-timestep: 0.5                   # delta T
-thermo: 10000                   # Thermo dump interval
-seed: 123456                    # Seed number for velocity distribution
