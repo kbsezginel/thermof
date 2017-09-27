@@ -3,6 +3,7 @@ Trials
 Results
 extra_docs
 notebooks/mof5
+notebooks/tests
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
