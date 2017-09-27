@@ -15,6 +15,11 @@ nvt:                            # NVT Parameters
 nve:                            # NVE Parameters (includes thermal conductivity calc)
   equilibration: 300000
   steps: 1000000
+min:
+  etol: 1.0e-15
+  ftol: 1.0e-15
+  maxiter: 10000
+  maxeval: 100000
 thermo: 10000                   # Print thermodynamic properties each 'n' steps
 thermo_style:                   # Print listed properties
   - step
