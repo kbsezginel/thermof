@@ -22,6 +22,7 @@ class Simulation:
         """
         Create a Lammps simulation object.
         """
+        self.setup = '---'
         if parameters is None:
             self.parameters = Parameters()
         else:
@@ -80,6 +81,7 @@ class Simulation:
         """
         Initialize input files for a Lammps simulation.
         """
+        self.setup = '|'.join(self.parameters['thermof']['fix'])
         self.set_dir(self.simdir)
         write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
         write_lammps_input(self.simdir, self.parameters, verbose=self.verbose)
