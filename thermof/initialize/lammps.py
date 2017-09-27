@@ -72,6 +72,8 @@ def get_fix_lines(fix, simpar, lammps_input=lammps_input):
         fix_lines = get_nve_lines(simpar, nve_file=lammps_input['nve'])
     elif fix == 'NVT':
         fix_lines = get_nvt_lines(simpar, nvt_file=lammps_input['nvt'])
+    elif fix == 'MIN':
+        fix_lines = get_min_lines(simpar, min_file=lammps_input['min'])
     elif fix == 'TC':
         fix_lines = get_tc_lines(simpar, tc_file=lammps_input['thermal_conductivity'])
     return fix_lines
@@ -124,6 +126,19 @@ def get_nve_lines(simpar, nve_file=lammps_input['nve']):
         nve_lines = nve_lines[4:]
     nve_lines[42] = 'run             %i\n' % simpar['nve']['steps']
     return nve_lines
+
+
+def get_min_lines(simpar, min_file=lammps_input['min']):
+    """
+    Get input lines for minimization using thermof_parameters.
+    """
+    mof = simpar['mof']['name']
+    min_lines = read_lines(min_file)
+    min_lines[2] = 'print           "MinStep,CellMinStep,AtomMinStep,FinalStep,Energy,EDiff" file %s.min.csv screen no\n' % mof
+    min_lines[9] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
+    min_lines[14] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
+    min_lines[18] = 'print           "${iter},${CellMinStep},${AtomMinStep},${AtomMinStep},$(pe),${min_E}" append %s.min.csv screen no\n' % mof
+    return min_lines
 
 
 def get_tc_lines(simpar, tc_file=lammps_input['thermal_conductivity']):
