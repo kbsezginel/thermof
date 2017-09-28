@@ -3,12 +3,14 @@ layout: default
 title:  "Screening Tests"
 date:   2017-09-25
 ---
-### Procedures
-1. NVT | NVE
-2. Min | NVT | NVE
-3. NPT | NVT | NVE
 
-### Thermal Conductivity
+### Procedure 0 (NVT | NVE)
+
+#### Thermal Conductivity
+<p align="center"> <img src="img/P0-k.png"> </p>
+
+#### Thermodynamics
+<p align="center"> <img src="img/P0-thermo.png"> </p>
 
 ### Volume change
 
