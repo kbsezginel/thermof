@@ -271,7 +271,7 @@ def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
     return thermo_data
 
 
-def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
+def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal', 'press'], fix=None):
     """Read thermo data from given thermo log lines
 
     Args:
@@ -283,6 +283,8 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal',
         - dict: Thermo data for all fixes separated as: thermo['fix1']['header1'] = ...
     """
     thermo = {}
+    if fix is None:
+        fix = list(range(len(thermo_data)))
     if len(fix) != len(thermo_data):
         raise ThermoFixDataMatchError('Fixes: %s do not match fixes read in log file' % ' | '.join(fix))
     else:
