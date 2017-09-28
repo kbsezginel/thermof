@@ -146,7 +146,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
         if k_par['read_thermo']:
             headers = get_thermo_headers(k_par['thermo_style'])
-            thermo_data = read_log(os.path.join(run_dir, 'log.lammps'), headers=headers)
+            thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
             fix = k_par['fix']
             run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
         run_data['time'] = time

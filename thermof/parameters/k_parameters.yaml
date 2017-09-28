@@ -7,6 +7,7 @@ prefix: 'J0Jt_t'
 isotropic: true
 average: true
 traj: 'traj.xyz'
+log_file: 'log.lammps'
 read_info: false
 read_thermo: false
 fix:
