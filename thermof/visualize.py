@@ -111,7 +111,10 @@ def plot_thermo(thermo, parameters):
     for i, y_axis in enumerate(parameters['variable'], start=1):
         ax = fig.add_subplot(1, n_var, i)
         for fix in parameters['fix']:
-            plt.plot(thermo[fix]['step'], thermo[fix][y_axis], c=parameters['colors'][fix])
+            if fix in parameters['colors']:
+                plt.plot(thermo[fix]['step'], thermo[fix][y_axis], c=parameters['colors'][fix])
+            else:
+                plt.plot(thermo[fix]['step'], thermo[fix][y_axis])
             plt.ticklabel_format(style='sci', axis='both', scilimits=parameters['scilimits'], fontsize=parameters['fontsize'])
             plt.tick_params(axis='both', labelsize=parameters['fontsize'])
             plt.ylabel(y_axis, fontsize=parameters['fontsize'] + 2)
@@ -120,7 +123,8 @@ def plot_thermo(thermo, parameters):
         plt.suptitle(parameters['title'], fontsize=parameters['fontsize'] + 4)
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
-    plt.legend(parameters['fix'], frameon=False)
+    if parameters['legend'] is not None:
+        plt.legend(parameters['fix'], frameon=False)
     plt.show()
 
 

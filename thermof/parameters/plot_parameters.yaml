@@ -17,6 +17,7 @@ thermo:
   dpi: 200
   save: null
   title: null
+  legend: null
   fontsize: 8
   scilimits: [-4, 4]
   subplots_adjust: [0.3, 0.25]
