@@ -22,3 +22,4 @@ variable        prev_E     equal ${temppe}
 next            iter
 jump            SELF loop_min
 label           break_min
+velocity        all create $T ${seed} dist uniform
