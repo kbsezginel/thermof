@@ -24,6 +24,7 @@ def test_simulation_read_run():
     par = Parameters()
     par.k['read_thermo'] = True
     par.k['read_info'] = True
+    par.thermof['kpar'] = par.k
     run_dir = os.path.join(trial_dir, 'Run1')
     run_data = read_run(run_dir, k_par=par.k)
     sim = Simulation(read=run_dir, parameters=par)
@@ -44,6 +45,7 @@ def test_simulation_read_trial():
     par = Parameters()
     par.k['isotropic'] = True
     par.k['average'] = True
+    par.thermof['kpar'] = par.k
     trial = read_trial(trial_dir, k_par=par.k)
     sim = Simulation(read=trial_dir, setup='trial', parameters=par)
     assert trial == sim.trial
@@ -56,6 +58,7 @@ def test_simulation_read_trial_set():
     par = Parameters()
     par.k['isotropic'] = True
     par.k['average'] = True
+    par.thermof['kpar'] = par.k
     trial_set = read_trial_set(trial_set_dir, k_par=par.k)
     sim = Simulation(read=trial_set_dir, setup='trial_set', parameters=par)
     assert trial_set == sim.trial_set

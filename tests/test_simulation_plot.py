@@ -23,6 +23,7 @@ def test_simulation_get_plot_data_for_run():
     """Test Simulation class get_plot_data method for pulling correct data for different plots of a run"""
     par = Parameters()
     par.k['read_thermo'] = True
+    par.thermof['kpar']['read_thermo'] = True
     run_dir = os.path.join(trial_dir, 'Run1')
     sim = Simulation(read=run_dir, parameters=par, setup='run')
     with open(k_ref_file, 'r') as kref:

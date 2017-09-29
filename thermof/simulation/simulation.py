@@ -69,11 +69,11 @@ class Simulation:
         self.simdir = simdir
         self.name = os.path.basename(simdir)
         if setup == 'run':
-            self.run = read_run(simdir, k_par=self.parameters.k)
+            self.run = read_run(simdir, k_par=self.parameters.thermof['kpar'])
         elif setup == 'trial':
-            self.trial = read_trial(simdir, k_par=self.parameters.k)
+            self.trial = read_trial(simdir, k_par=self.parameters.thermof['kpar'])
         elif setup == 'trial_set':
-            self.trial_set = read_trial_set(simdir, k_par=self.parameters.k)
+            self.trial_set = read_trial_set(simdir, k_par=self.parameters.thermof['kpar'])
         else:
             print('Select setup: "run" | "trial" | "trial_set"')
 

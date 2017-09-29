@@ -38,3 +38,29 @@ thermo_style:                   # Print listed properties
   - pxz
   - pyz
 min_cell_size: null             # Minimum size of the cell to calculate replication
+kpar:
+  kb: 0.001987
+  conv: 69443.84
+  dt: 5
+  volume: 512000
+  temp: 300
+  t0: 5
+  t1: 10
+  prefix: 'J0Jt_t'
+  isotropic: true
+  average: true
+  traj: 'traj.xyz'
+  log_file: 'log.lammps'
+  read_info: false
+  read_thermo: false
+  fix:
+    - 'NVT'
+    - 'NVE1'
+    - 'NVE2'
+  thermo_style:
+    - 'step'
+    - 'temp'
+    - 'epair'
+    - 'emol'
+    - 'etotal'
+    - 'press'
