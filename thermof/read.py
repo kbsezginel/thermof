@@ -123,8 +123,6 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     Args:
         - run_dir (str): Lammps simulation directory for single run
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -140,7 +138,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             flux, time = read_thermal_flux(flux_file, k_par=k_par)
             k = calculate_k(flux, k_par=k_par)
             run_data['k'][direction] = k
-            run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
+            run_data['k_est'][direction] = estimate_k(k, time, t0=k_par['t0'], t1=k_par['t1'])
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
         if k_par['read_info']:
             run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
@@ -156,20 +154,18 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         raise RunDirectoryNotFoundError('Run directory not found: %s' % run_dir)
     if k_par['isotropic']:
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
-        run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
+        run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=k_par['t0'], t1=k_par['t1'])
         print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
 
     return run_data
 
 
-def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
+def read_trial(trial_dir, k_par=k_parameters, verbose=True):
     """Read Lammps simulation trial with any number of runs
 
     Args:
         - trial_dir (str): Lammps simulation directory including directories for multiple runs
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -180,7 +176,7 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir)
                 if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
-        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, verbose=verbose)
+        run_data = read_run(run, k_par=k_par, verbose=verbose)
         trial['data'][run_data['name']] = run_data
         trial['runs'].append(run_data['name'])
     if k_par['average']:
@@ -218,14 +214,12 @@ def average_trial(trial, isotropic=False):
     return trial_avg
 
 
-def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
+def read_trial_set(trial_set_dir, k_par=k_parameters, verbose=True):
     """Read multiple trials with multiple runs
 
     Args:
         - trial_set_dir (str): Lammps simulation directory including directories for multiple trials
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -235,7 +229,7 @@ def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True)
     trial_list = [os.path.join(trial_set_dir, t) for t in os.listdir(trial_set_dir)
                   if os.path.isdir(os.path.join(trial_set_dir, t))]
     for trial_dir in trial_list:
-        trial = read_trial(trial_dir, k_par=k_par, t0=5, t1=10, verbose=verbose)
+        trial = read_trial(trial_dir, k_par=k_par, verbose=verbose)
         trial_set['trials'].append(os.path.basename(trial_dir))
         trial_set['data'][trial['name']] = trial
     return trial_set

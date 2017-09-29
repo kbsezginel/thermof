@@ -3,6 +3,8 @@ conv: 69443.84
 dt: 5
 volume: 512000
 temp: 300
+t0: 5
+t1: 10
 prefix: 'J0Jt_t'
 isotropic: true
 average: true
