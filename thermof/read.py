@@ -147,6 +147,8 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
             fix = k_par['fix']
             run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
+        if k_par['read_walltime']:
+            run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -235,17 +237,17 @@ def read_trial_set(trial_set_dir, k_par=k_parameters, verbose=True):
     return trial_set
 
 
-def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
+def read_log(log_file, headers='Step Temp E_pair E_mol TotEng Press'):
     """Read log.lammps file and return lines for multiple thermo data
 
     Args:
-        - log_path (str): Lammps simulation log file path
+        - log_file (str): Lammps simulation log file path
         - headers (str): The headers for thermo data ('Step Temp E_pair E_mol TotEng Press')
 
     Returns:
         - list: 2D list of thermo lines for all fixes
     """
-    with open(log_path, 'r') as log:
+    with open(log_file, 'r') as log:
         log_lines = log.readlines()
 
     thermo_start = []
@@ -290,6 +292,24 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal',
                     ther[h].append(float(line[i]))
             thermo[fix[t]] = ther
     return thermo
+
+
+def read_walltime(log_file):
+    """Read log.lammps file and return lines for multiple thermo data
+
+    Args:
+        - log_file (str): Lammps simulation log file path
+
+    Returns:
+        - list: Wall time in hours, minutes, and seconds -> [h, m, s]
+    """
+    with open(log_file, 'r') as log:
+        log_lines = log.readlines()
+
+    if 'Total wall time' in log_lines[-1]:
+        walltime = log_lines[-1].split()[-1]
+        h, m, s = walltime.split(':')
+    return [int(h), int(m), int(s)]
 
 
 def read_run_info(run_dir, filename='run_info.yaml'):
