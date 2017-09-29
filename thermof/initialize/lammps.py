@@ -89,9 +89,12 @@ def get_simpar_lines(simpar, simpar_file=lammps_input['simpar']):
     simpar_lines[3] = 'variable        seed equal %i\n' % simpar['seed']
     simpar_lines[4] = 'variable        p equal %i\n' % simpar['correlation_length']
     simpar_lines[5] = 'variable        s equal %i\n' % simpar['sample_interval']
-    simpar_lines[7] = 'variable        txyz equal %i\n' % simpar['dump_xyz']
     simpar_lines[11] = 'thermo          %i\n' % simpar['thermo']
     simpar_lines[12] = 'thermo_style    custom %s\n' % ' '.join(simpar['thermo_style'])
+    if simpar['dump_xyz'] != 0:
+        simpar_lines[7] = 'variable        txyz equal %i\n' % simpar['dump_xyz']
+    else:
+        del simpar_lines[7:9]
     return simpar_lines
 
 
