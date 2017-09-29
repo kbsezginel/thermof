@@ -81,7 +81,7 @@ class Simulation:
         """
         Initialize input files for a Lammps simulation.
         """
-        self.setup = '|'.join(self.parameters['thermof']['fix'])
+        self.setup = '|'.join(self.parameters.thermof['fix'])
         self.set_dir(self.simdir)
         write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
         write_lammps_input(self.simdir, self.parameters, verbose=self.verbose)
