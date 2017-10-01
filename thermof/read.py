@@ -309,6 +309,10 @@ def read_walltime(log_file):
     if 'Total wall time' in log_lines[-1]:
         walltime = log_lines[-1].split()[-1]
         h, m, s = walltime.split(':')
+    else:
+        err_msg = 'Walltime not found! Simulation might not be finished, please check log file -> %s' % log_file
+        err_msg += '\nLast line of log file -> %s' % log_lines[-1]
+        raise WallTimeNotFoundError(err_msg)
     return [int(h), int(m), int(s)]
 
 
@@ -369,4 +373,8 @@ class RunDirectoryNotFoundError(Exception):
 
 
 class ThermoFixDataMatchError(Exception):
+    pass
+
+
+class WallTimeNotFoundError(Exception):
     pass
