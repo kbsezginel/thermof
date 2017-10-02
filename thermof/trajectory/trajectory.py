@@ -23,7 +23,7 @@ class Trajectory:
         """
         Returns basic trajectory info.
         """
-        return "<Trajectory frames: %i | atoms: %i | dimensions: %i>" % (self.n_atoms, self.n_frames, self.n_dimensions)
+        return "<Trajectory atoms: %i | frames: %i | dimensions: %i>" % (self.n_atoms, self.n_frames, self.n_dimensions)
 
     def __str__(self):
         """
