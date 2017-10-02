@@ -142,3 +142,20 @@ class Simulation:
         with open(simpar_file, 'r') as sp:
             simpar = yaml.load(sp)
         self.parameters = Parameters(simpar)
+
+    def summarize(self, run_dict, padding=0):
+        for i in run_dict.keys():
+            if type(run_dict[i]) == dict:
+                keys = [str(i) for i in list(run_dict[i].keys())]
+                info = '%s%-10s -> dict: %s' % (' ' * padding, str(i), ' '.join(keys))
+                print(info)
+                self.summarize(run_dict[i], padding=padding + 5)
+            elif type(run_dict[i]) in [str, int, float]:
+                info = '%s%-10s -> %s' % (' ' * padding, i, run_dict[i])
+                print(info)
+            elif type(run_dict[i]) == list:
+                info = '%s%-10s -> list of length: %s' % (' ' * padding, i, len(run_dict[i]))
+                print(info)
+            else:
+                info = '%s%-10s -> %s' % (' ' * padding, i, type(run_dict[i]))
+                print(info)
