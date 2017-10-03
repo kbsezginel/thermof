@@ -1,0 +1,67 @@
+temperature: 298.0              # Simulation temperature
+dt: 0.5                         # Timestep (ps)
+seed: 123456                    # Seed number for velocity dist
+dump_xyz: 10000                 # Dump xyz trjectory each 'n' steps
+dump_modify: null               # Modify atom names in dump
+correlation_length: 20000       # Autocorrelation length for thermal conductivity
+sample_interval: 5              # Sample interval for thermal conductivity calc
+fix: ['NVT', 'NVE']             # Setups: TC / NPT / NVT / NVE
+npt:                            # NPT Parameters
+  pdamp: 1000
+  tdamp: 100
+  steps: 500000
+nvt:                            # NVT Parameters
+  steps: 1000000
+nve:                            # NVE Parameters (includes thermal conductivity calc)
+  equilibration: 300000
+  steps: 1000000
+min:
+  etol: 1.0e-15
+  ftol: 1.0e-15
+  maxiter: 10000
+  maxeval: 100000
+thermo: 10000                   # Print thermodynamic properties each 'n' steps
+thermo_style:                   # Print listed properties
+  - step
+  - temp
+  - press
+  - pe
+  - etotal
+  - vol
+  - lx
+  - ly
+  - lz
+  - pxx
+  - pyy
+  - pzz
+  - pxy
+  - pxz
+  - pyz
+min_cell_size: null             # Minimum size of the cell to calculate replication
+kpar:
+  kb: 0.001987
+  conv: 69443.84
+  dt: 5
+  volume: 512000
+  temp: 300
+  t0: 5
+  t1: 10
+  prefix: 'J0Jt_t'
+  isotropic: true
+  average: true
+  traj: 'traj.xyz'
+  log_file: 'log.lammps'
+  read_info: false
+  read_thermo: false
+  read_walltime: false
+  fix:
+    - 'NVT'
+    - 'NVE1'
+    - 'NVE2'
+  thermo_style:
+    - 'step'
+    - 'temp'
+    - 'epair'
+    - 'emol'
+    - 'etotal'
+    - 'press'

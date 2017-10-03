@@ -8,7 +8,7 @@ import math
 import yaml
 import numpy as np
 from thermof.reldist import reldist
-from thermof.parameters import k_parameters
+from thermof.parameters import k_parameters, thermo_headers
 
 
 def read_thermal_flux(file_path, k_par=k_parameters, start=200014, j_index=3):
@@ -123,8 +123,6 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     Args:
         - run_dir (str): Lammps simulation directory for single run
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -140,12 +138,17 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             flux, time = read_thermal_flux(flux_file, k_par=k_par)
             k = calculate_k(flux, k_par=k_par)
             run_data['k'][direction] = k
-            run_data['k_est'][direction] = estimate_k(k, time, t0=t0, t1=t1)
+            run_data['k_est'][direction] = estimate_k(k, time, t0=k_par['t0'], t1=k_par['t1'])
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
         if k_par['read_info']:
             run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
         if k_par['read_thermo']:
-            run_data['thermo'] = read_thermo(read_log(os.path.join(run_dir, 'log.lammps')))
+            headers = get_thermo_headers(k_par['thermo_style'])
+            thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
+            fix = k_par['fix']
+            run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
+        if k_par['read_walltime']:
+            run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -153,20 +156,18 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         raise RunDirectoryNotFoundError('Run directory not found: %s' % run_dir)
     if k_par['isotropic']:
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
-        run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=t0, t1=t1)
+        run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=k_par['t0'], t1=k_par['t1'])
         print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
 
     return run_data
 
 
-def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
+def read_trial(trial_dir, k_par=k_parameters, verbose=True):
     """Read Lammps simulation trial with any number of runs
 
     Args:
         - trial_dir (str): Lammps simulation directory including directories for multiple runs
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -177,7 +178,7 @@ def read_trial(trial_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     run_list = [os.path.join(trial_dir, run) for run in os.listdir(trial_dir)
                 if os.path.isdir(os.path.join(trial_dir, run))]
     for run in run_list:
-        run_data = read_run(run, k_par=k_par, t0=t0, t1=t1, verbose=verbose)
+        run_data = read_run(run, k_par=k_par, verbose=verbose)
         trial['data'][run_data['name']] = run_data
         trial['runs'].append(run_data['name'])
     if k_par['average']:
@@ -215,14 +216,12 @@ def average_trial(trial, isotropic=False):
     return trial_avg
 
 
-def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
+def read_trial_set(trial_set_dir, k_par=k_parameters, verbose=True):
     """Read multiple trials with multiple runs
 
     Args:
         - trial_set_dir (str): Lammps simulation directory including directories for multiple trials
         - k_par (dict): Dictionary of calculation parameters
-        - t0 (int): Timestep to start taking average of k values
-        - t1 (int): Timestep to end taking average of k values
         - verbose (bool): Print information about the run
 
     Returns:
@@ -232,23 +231,23 @@ def read_trial_set(trial_set_dir, k_par=k_parameters, t0=5, t1=10, verbose=True)
     trial_list = [os.path.join(trial_set_dir, t) for t in os.listdir(trial_set_dir)
                   if os.path.isdir(os.path.join(trial_set_dir, t))]
     for trial_dir in trial_list:
-        trial = read_trial(trial_dir, k_par=k_par, t0=5, t1=10, verbose=verbose)
+        trial = read_trial(trial_dir, k_par=k_par, verbose=verbose)
         trial_set['trials'].append(os.path.basename(trial_dir))
         trial_set['data'][trial['name']] = trial
     return trial_set
 
 
-def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
+def read_log(log_file, headers='Step Temp E_pair E_mol TotEng Press'):
     """Read log.lammps file and return lines for multiple thermo data
 
     Args:
-        - log_path (str): Lammps simulation log file path
+        - log_file (str): Lammps simulation log file path
         - headers (str): The headers for thermo data ('Step Temp E_pair E_mol TotEng Press')
 
     Returns:
         - list: 2D list of thermo lines for all fixes
     """
-    with open(log_path, 'r') as log:
+    with open(log_file, 'r') as log:
         log_lines = log.readlines()
 
     thermo_start = []
@@ -268,7 +267,7 @@ def read_log(log_path, headers='Step Temp E_pair E_mol TotEng Press'):
     return thermo_data
 
 
-def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'], fix=['NVT', 'NVE1', 'NVE2']):
+def read_thermo(thermo_data, headers=['step', 'temp', 'epair', 'emol', 'etotal', 'press'], fix=None):
     """Read thermo data from given thermo log lines
 
     Args:
@@ -280,6 +279,8 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_en
         - dict: Thermo data for all fixes separated as: thermo['fix1']['header1'] = ...
     """
     thermo = {}
+    if fix is None:
+        fix = list(range(len(thermo_data)))
     if len(fix) != len(thermo_data):
         raise ThermoFixDataMatchError('Fixes: %s do not match fixes read in log file' % ' | '.join(fix))
     else:
@@ -291,6 +292,28 @@ def read_thermo(thermo_data, headers=['step', 'temp', 'e_pair', 'e_mol', 'tot_en
                     ther[h].append(float(line[i]))
             thermo[fix[t]] = ther
     return thermo
+
+
+def read_walltime(log_file):
+    """Read log.lammps file and return lines for multiple thermo data
+
+    Args:
+        - log_file (str): Lammps simulation log file path
+
+    Returns:
+        - list: Wall time in hours, minutes, and seconds -> [h, m, s]
+    """
+    with open(log_file, 'r') as log:
+        log_lines = log.readlines()
+
+    if 'Total wall time' in log_lines[-1]:
+        walltime = log_lines[-1].split()[-1]
+        h, m, s = walltime.split(':')
+    else:
+        err_msg = 'Walltime not found! Simulation might not be finished, please check log file -> %s' % log_file
+        err_msg += '\nLast line of log file -> %s' % log_lines[-1]
+        raise WallTimeNotFoundError(err_msg)
+    return [int(h), int(m), int(s)]
 
 
 def read_run_info(run_dir, filename='run_info.yaml'):
@@ -330,6 +353,13 @@ def read_framework_distance(run_list, fdist_par):
     return dist_data
 
 
+def get_thermo_headers(thermo_style, thermo_headers=thermo_headers):
+    """
+    Lammps thermo headers for log file.
+    """
+    return ' '.join([thermo_headers[i] for i in thermo_style])
+
+
 class FluxFileNotFoundError(Exception):
     pass
 
@@ -343,4 +373,8 @@ class RunDirectoryNotFoundError(Exception):
 
 
 class ThermoFixDataMatchError(Exception):
+    pass
+
+
+class WallTimeNotFoundError(Exception):
     pass

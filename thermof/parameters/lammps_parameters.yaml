@@ -1,0 +1,31 @@
+cif_file: ''                    # File options
+output_cif: false
+output_raspa: false
+force_field: 'UFF'              # Force field options
+mol_ff: null
+h_bonding: false
+dreid_bond_type: 'harmonic'
+fix_metal: false
+minimize: false                 # Simulation options
+bulk_moduli: false
+thermal_scaling: false
+npt: false
+nvt: false
+cutoff: 12.5
+replication: null
+orthogonalize: false
+random_vel: false
+dump_dcd: 0
+dump_xyz: 0
+dump_lammpstrj: 0
+restart: false
+tol: 0.4                        # Parameter options
+neighbour_size: 5
+iter_count: 10
+max_dev: 0.01
+temp: 298.0
+pressure: 1.0
+nprodstp: 200000
+neqstp: 200000
+insert_molecule: ""             # Molecule insertion options
+deposit: 0

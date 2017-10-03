@@ -15,3 +15,5 @@ Preliminary results for thermal conductivity calculations of Metal-Organic Frame
 ### [IRMOF-10](https://kbsezginel.github.io/thermof/irmof10)
 
 ### [Force field parameters and charges](https://kbsezginel.github.io/thermof/forcefield)
+
+### [Screening Tests](https://kbsezginel.github.io/thermof/screening-test)

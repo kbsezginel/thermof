@@ -1,15 +1,18 @@
 from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
 
 setup(
     name="thermof",
-    version="0.1",
-    description="Thermoelectrically entangled MOFs",
+    version="0.1.2",
+    description="Investigating thermal conductivity of MOFs using Lammps",
     author="Kutay B. Sezginel",
     author_email="kbs37@pitt.edu",
-    install_requires=requirements,
+    url='https://github.com/kbsezginel/thermof',
     include_package_data=True,
-    packages=find_packages()
+    packages=find_packages(),
+    install_requires=['pytest',
+                      'pyyaml',
+                      'matplotlib',
+                      'periodictable',
+                      'ase']
 )

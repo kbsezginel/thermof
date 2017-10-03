@@ -69,7 +69,7 @@ def test_read_run_input_error():
     k_par = k_parameters.copy()
     k_par['prefix'] = 'wrong-name'
     with pytest.raises(FluxFileNotFoundError):
-        read_run(run_dir, k_par=k_par, t0=5, t1=10)
+        read_run(run_dir, k_par=k_par)
 
 
 def test_read_run_directory_not_found_error():
@@ -77,7 +77,7 @@ def test_read_run_directory_not_found_error():
     run_dir = os.path.join(trial_dir, 'Run11')
     k_par = k_parameters.copy()
     with pytest.raises(RunDirectoryNotFoundError):
-        read_run(run_dir, k_par=k_par, t0=5, t1=10)
+        read_run(run_dir, k_par=k_par)
 
 
 def test_read_run_read_info():
@@ -85,7 +85,7 @@ def test_read_run_read_info():
     run_dir = os.path.join(trial_dir, 'Run1')
     k_par = k_parameters.copy()
     k_par['read_info'] = True
-    run = read_run(run_dir, k_par=k_par, t0=5, t1=10)
+    run = read_run(run_dir, k_par=k_par)
     run_info_path = os.path.join(run_dir, 'run_info.yaml')
     with open(os.path.join(run_dir, 'run_info.yaml'), 'r') as ri:
         ref_run_info = yaml.load(ri)
@@ -97,10 +97,10 @@ def test_read_run_read_thermo():
     run_dir = os.path.join(trial_dir, 'Run1')
     k_par = k_parameters.copy()
     k_par['read_thermo'] = True
-    run = read_run(run_dir, k_par=k_par, t0=5, t1=10)
+    run = read_run(run_dir, k_par=k_par)
     run_info_path = os.path.join(run_dir, 'run_info.yaml')
     assert set(list(run['thermo'].keys())) == set(['NVT', 'NVE1', 'NVE2'])
-    assert set(list(run['thermo']['NVT'].keys())) == set(['step', 'temp', 'e_pair', 'e_mol', 'tot_eng', 'press'])
+    assert set(list(run['thermo']['NVT'].keys())) == set(['step', 'temp', 'epair', 'emol', 'etotal', 'press'])
     assert len(run['thermo']['NVT']['step']) == 3001
     assert run['thermo']['NVT']['step'][0] == 0
     assert run['thermo']['NVT']['step'][-1] == 300000

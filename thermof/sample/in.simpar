@@ -1,0 +1,13 @@
+#### Simulation Parameters ####
+variable        T equal 298
+variable        dt equal 0.5
+variable        seed equal 2405148
+variable        p equal 20000      # correlation length
+variable        s equal 5          # sample interval
+variable        d equal $p*$s      # dump interval
+variable        txyz equal 10000
+dump            1 all xyz ${txyz} traj.xyz
+velocity        all create $T ${seed} dist uniform
+timestep        ${dt}
+thermo          10000
+thermo_style    custom step temp press pe etotal vol lx ly lz pxx pyy pzz pxy pxz pyz

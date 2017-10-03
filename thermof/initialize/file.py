@@ -5,7 +5,7 @@ Initialize Lammps input files of thermal conductivity measurements
 """
 import os
 import yaml
-from thermof.sample import samples
+from thermof.sample import samples, thermal_flux_file
 
 
 def get_files(sample_files=samples['ideal_interpenetrated_mof']):
@@ -17,13 +17,6 @@ def get_files(sample_files=samples['ideal_interpenetrated_mof']):
     with open(sample_files['qsub'], 'r') as qsub_input:
         qsub_lines = qsub_input.readlines()
     return input_lines, data_lines, qsub_lines
-
-
-def export_lines(file_lines, export_path):
-    """ Exports array of lines onto a file """
-    with open(export_path, 'w') as f:
-        for l in file_lines:
-            f.write(l)
 
 
 def change_seed(input_lines, seed=None):
@@ -82,19 +75,14 @@ def change_masses(data_lines, masses):
     return new_lines
 
 
-def lammps_qsub(qsub_lines, name='Lammps', walltime='12:00:00', nodes=1, ppn=4, queue='shared'):
-    """ Genereate qsub file for Lammps """
-    new_lines = qsub_lines[:3]
-    new_lines += ['#PBS -N %s\n' % name]
-    new_lines += ['#PBS -q %s\n' % queue]
-    new_lines += ['#PBS -l nodes=%i:ppn=%i\n' % (nodes, ppn)]
-    new_lines += ['#PBS -l walltime=%s\n' % walltime]
-    new_lines += qsub_lines[7:]
-
-    return new_lines
-
-
 def add_run_info(run_info, run_dir):
     """ Add yaml file to run directory that contains simulation information """
     run_info_path = os.path.join(run_dir, 'run_info.yaml')
     yaml.dump(run_info, open(run_info_path, 'w'))
+
+
+def add_thermal_flux(input_lines):
+    """ Add lines for thermal flux calculation in Lammps to input file """
+    with open(thermal_flux_file, 'r') as flux:
+        flux_lines = flux.readlines()
+    return input_lines + flux_lines

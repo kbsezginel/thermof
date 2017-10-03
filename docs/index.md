@@ -55,6 +55,8 @@ Example jupyter notebooks can be found in `/notebooks`
 ### [Methods](https://kbsezginel.github.io/thermof/methods)
 Methods for thermal conductivity calculation and more.
 
+[Lammps benchmarking](https://kbsezginel.github.io/thermof/lammps-benchmark)
+
 ### [Results](https://kbsezginel.github.io/thermof/results)
 Preliminary results are presented here.
 
