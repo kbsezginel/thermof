@@ -61,6 +61,7 @@ Wall time
 | IRMOF-1        |    3392 |        27      |        33.4667 |         28.95  |
 
 <p align="center"> <img src="img/walltime-natoms.png"> </p>
+
 <p align="center"> <img src="img/walltime-natoms-all.png" width=500> </p>
 
 Heat flux autocorrelation
@@ -73,3 +74,14 @@ Heat flux autocorrelation
 
 ### Procedure 2 (MIN | NVT | NVE)
 <p align="center"> <img src="img/k-P2.png"> </p>
+
+Computational Resource
+----------------------
+### Wall time
+<p align="center"> <img src="img/cpu-time.png"> </p>
+
+### Thermal conductivity
+<p align="center"> <img src="img/cpu-k.png"> </p>
+
+### Volume change
+<p align="center"> <img src="img/cpu-dv.png"> </p>
