@@ -45,7 +45,8 @@ def plot_thermal_conductivity(plot_data, parameters=plot_parameters['k']):
     plt.legend(legend, loc=parameters['legendloc'], ncol=parameters['ncol'], fontsize=parameters['fontsize'])
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
-    plt.show()
+    if parameters['show']:
+        plt.show()
 
 
 def plot_framework_distance(dist_data, parameters=plot_parameters['f_dist']):
@@ -90,7 +91,8 @@ def plot_framework_distance(dist_data, parameters=plot_parameters['f_dist']):
         plt.colorbar(cax=cbar_ax)
     if parameters['save'] is not None:
         plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
-    plt.show()
+    if parameters['show']:
+        plt.show()
 
 
 def plot_thermo(thermo, parameters):
@@ -121,11 +123,12 @@ def plot_thermo(thermo, parameters):
             plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
     if parameters['title'] is not None:
         plt.suptitle(parameters['title'], fontsize=parameters['fontsize'] + 4)
-    if parameters['save'] is not None:
-        plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
     if parameters['legend'] is not None:
         plt.legend(parameters['fix'], frameon=False)
-    plt.show()
+    if parameters['save'] is not None:
+        plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
+    if parameters['show']:
+        plt.show()
 
 
 def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub']):
@@ -158,4 +161,7 @@ def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub'])
         plt.yticks(fontsize=parameters['fontsize'])
         plt.ylabel(parameters['ylabel'], fontsize=parameters['fontsize'] + 2)
         plt.xlabel(parameters['xlabel'], fontsize=parameters['fontsize'] + 2)
-    plt.show()
+    if parameters['save'] is not None:
+        plt.savefig(parameters['save'], dpi=parameters['dpi'], transparent=True, bbox_inches='tight')
+    if parameters['show']:
+        plt.show()

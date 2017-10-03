@@ -7,6 +7,7 @@ k:
   avg: true
   cmap: 'Spectral_r'
   save: null
+  show: True
   legendloc: [1.02, 0]
   ncol: 1
   title: null
@@ -16,6 +17,7 @@ thermo:
   size: [20, 10]
   dpi: 200
   save: null
+  show: True
   title: null
   legend: null
   fontsize: 8
@@ -47,6 +49,7 @@ k_sub:
   k_est_t1: 10
   ylim: [0, 1.2]
   save: null
+  show: True
   xlabel: 'Time'
   ylabel: 'k (W/mK)'
 f_dist:
@@ -63,6 +66,7 @@ f_dist:
   ticks: false
   cbar: [0.92, 0.135, 0.02, 0.755]
   save: null
+  show: True
   traj: 'traj.xyz'
   traj_start: 0
   traj_end: 1000000
