@@ -60,6 +60,11 @@ def write_lammps_input(simdir, parameters, lammps_input=lammps_input, verbose=Tr
         input_lines += '\n'
         input_lines += fix_lines
     write_lines(inp_file, input_lines)
+    print('Updating simulation parameters...')
+    parameters.thermof['kpar']['log_file'] = 'log.%s' % parameters.thermof['mof']['name']
+    parameters.thermof['kpar']['fix'] = None
+    parameters.thermof['kpar']['temp'] = parameters.thermof['temperature']
+    parameters.thermof['kpar']['thermo_style'] = parameters.thermof['thermo_style']
 
 
 def get_fix_lines(fix, simpar, lammps_input=lammps_input):
