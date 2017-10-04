@@ -143,6 +143,7 @@ def get_min_lines(simpar, min_file=lammps_input['min']):
     mof = simpar['mof']['name']
     min_lines = read_lines(min_file)
     min_lines[2] = 'print           "MinStep,CellMinStep,AtomMinStep,FinalStep,Energy,EDiff" file %s.min.csv screen no\n' % mof
+    min_lines[3] = 'variable        min_eval   equal %.1e\n' % simpar['min']['edif']
     min_lines[9] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
     min_lines[14] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
     min_lines[18] = 'print           "${iter},${CellMinStep},${AtomMinStep},${AtomMinStep},$(pe),${min_E}" append %s.min.csv screen no\n' % mof

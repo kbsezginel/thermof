@@ -16,6 +16,7 @@ nve:                            # NVE Parameters (includes thermal conductivity 
   equilibration: 300000
   steps: 1000000
 min:
+  edif: 1.0e-6
   etol: 1.0e-15
   ftol: 1.0e-15
   maxiter: 10000
