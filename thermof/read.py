@@ -132,6 +132,20 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     trial_data = []
     runs_id = []
     if os.path.isdir(run_dir):
+        if k_par['read_thermo']:
+            print('Reading log file -> %s' % k_par['log_file'])
+            headers = get_thermo_headers(k_par['thermo_style'])
+            thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
+            fix = k_par['fix']
+            run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
+            if 'vol' in k_par['thermo_style']:
+                if fix is None:
+                    fix = list(range(len(thermo_data)))
+                    k_par['fix'] = fix
+                k_par['initial_volume'] = k_par['volume']
+                k_par['volume'] = run_data['thermo'][fix[-1]]['vol'][-1]
+                k_par['deltaV'] = (k_par['volume'] - k_par['initial_volume']) / k_par['initial_volume'] * 100
+                print('Volume read as: %.3f | Delta V: %.2f %%' % (k_par['volume'], k_par['deltaV'])) if verbose else None
         flux_files, directions = get_flux_directions(run_dir, k_par=k_par, verbose=verbose)
         run_message = '%-9s ->' % run_data['name']
         for direction, flux_file in zip(directions, flux_files):
@@ -142,11 +156,6 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
         if k_par['read_info']:
             run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
-        if k_par['read_thermo']:
-            headers = get_thermo_headers(k_par['thermo_style'])
-            thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
-            fix = k_par['fix']
-            run_data['thermo'] = read_thermo(thermo_data, headers=k_par['thermo_style'], fix=fix)
         if k_par['read_walltime']:
             run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
         run_data['time'] = time
