@@ -59,17 +59,6 @@ Wall time
 | IRMOF-1  |     13568 |            27      |            33.4667 |             28.95  |
 | LUKLIN   |     14400 |            26.0333 |            31.3667 |             27.05  |
 
-Heat flux autocorrelation
--------------------------
-### Procedure 0 (NVT | NVE)
-<p align="center"> <img src="img/k-P0.png"> </p>
-
-### Procedure 1 (NPT | NVT | NVE)
-<p align="center"> <img src="img/k-P1.png"> </p>
-
-### Procedure 2 (MIN | NVT | NVE)
-<p align="center"> <img src="img/k-P2.png"> </p>
-
 Computational Resource
 ----------------------
 ### Wall time
@@ -116,3 +105,18 @@ Number of steps
 
 ### Thermal conductivity
 <p align="center"> <img src="img/k-steps.png"> </p>
+
+
+Heat flux autocorrelation
+-------------------------
+### Procedure 0 (NVT | NVE)
+<p align="center"> <img src="img/k-P0.png"> </p>
+
+### Procedure 1 (NPT | NVT | NVE)
+<p align="center"> <img src="img/k-P1.png"> </p>
+
+### Procedure 2 (MIN | NVT | NVE)
+<p align="center"> <img src="img/k-P2.png"> </p>
+
+### Procedure 3 (MIN  | NPT | NVT | NVE)
+<p align="center"> <img src="img/k-P3.png"> </p>
