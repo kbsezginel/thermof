@@ -104,3 +104,15 @@ Computational Resource
 | IRMOF-1 | NPT         |       2 |    28 |      33.6833 |   0.534997 |  -7.66637 |
 | IRMOF-1 | NPT         |       3 |    28 |      32.4167 |   0.508687 |  -7.96882 |
 | IRMOF-1 | NPT         |       4 |    28 |      33.6833 |   0.42761  |  -7.62663 |
+
+Number of steps
+----------------------
+
+### Volume change
+<p align="center"> <img src="img/dv-steps.png"> </p>
+
+### Wall time
+<p align="center"> <img src="img/walltime-steps.png"> </p>
+
+### Thermal conductivity
+<p align="center"> <img src="img/k-steps.png"> </p>
