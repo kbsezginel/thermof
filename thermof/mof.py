@@ -80,3 +80,9 @@ class MOF:
         """
         cell = [np.linalg.norm(vec) for vec in self.ase_atoms.cell]
         return [int(np.ceil(min_cell_size[i] / cell[i])) for i in range(3)]
+
+    def get_volume(self, replication=[1, 1, 1]):
+        """
+        Calculate cell volume for given replication.
+        """
+        return float(self.ase_atoms.get_volume() * replication[0] * replication[1] * replication[2])

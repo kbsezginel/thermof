@@ -112,9 +112,11 @@ class Simulation:
         else:
             rep = [1, 1, 1]
         self.parameters.lammps['replication'] = ' '.join([str(i) for i in rep])
+        self.mof.volume = self.mof.get_volume()
         self.parameters.thermof['mof'] = dict(name=self.mof.name,
                                               replication=rep,
-                                              volume=float(self.mof.ase_atoms.get_volume() * rep[0] * rep[1] * rep[2]))
+                                              volume=self.mof.volume)
+        self.parameters.thermof['kpar']['volume'] = self.mof.volume
 
     def plot(self, selection, data=None):
         """
