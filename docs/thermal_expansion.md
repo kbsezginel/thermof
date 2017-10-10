@@ -60,3 +60,7 @@ def two_pass_covariance(data1, data2):
         covariance += a * b / n
     return covariance
 ```
+
+#### Lammps
+
+Using `real` units in Lammps `enthalpy` is reported in `kcal/mol` and volume is reported in `Å³`. Using Boltzmann constant as `0.0019872041 kcal/mol.K` we can calculate thermal expansion in `1/K` units.
