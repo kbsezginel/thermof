@@ -6,6 +6,7 @@ Read Lammps output files for thermal conductivity calculations
 import os
 import math
 import yaml
+import csv
 import numpy as np
 from thermof.reldist import reldist
 from thermof.parameters import k_parameters, thermo_headers
@@ -337,6 +338,26 @@ def read_run_info(run_dir, filename='run_info.yaml'):
     with open(os.path.join(run_dir, filename), 'r') as ri:
         run_info = yaml.load(ri)
     return run_info
+
+
+def read_thermal_expansion(thexp_file):
+    """
+    Read thermal expansion csv file.
+
+    Args:
+        - thexp_file (str): Thermal expansion csv file
+
+    Returns:
+        - dict: Thermal expansion data for Lammps run
+    """
+    thexp = dict(step=[], volume=[], enthalpy=[])
+    with open(thexp_file, newline='') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',', quotechar='|')
+        for row in csv_reader:
+            thexp['step'].append(float(row[0]))
+            thexp['volume'].append(float(row[1]))
+            thexp['enthalpy'].append(float(row[2]))
+    return thexp
 
 
 def read_framework_distance(run_list, fdist_par):
