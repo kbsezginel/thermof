@@ -81,6 +81,8 @@ def get_fix_lines(fix, simpar, lammps_input=lammps_input):
         fix_lines = get_min_lines(simpar, min_file=lammps_input['min'])
     elif fix == 'TC':
         fix_lines = get_tc_lines(simpar, tc_file=lammps_input['thermal_conductivity'])
+    elif fix == 'THEXP':
+        fix_lines = get_thexp_lines(simpar, thexp_file=lammps_input['thermal_expansion'])
     return fix_lines
 
 
@@ -166,3 +168,22 @@ def get_tc_lines(simpar, tc_file=lammps_input['thermal_conductivity']):
     tc_lines[2] = 'variable        dt equal %.1f\n' % simpar['dt']
     tc_lines[3] = 'variable        seed equal %i\n' % simpar['seed']
     return tc_lines
+
+
+def get_thexp_lines(simpar, thexp_file=lammps_input['thermal_expansion']):
+    """
+    Get thermal expansion calculation Lammps input lines
+
+    Args:
+        - parameters (Parameters): Lammps parameters (see thermof.parameters)
+        - thexp_file (str): Sample thermal expansion Lammps input file
+
+    Returns:
+        - list: List of Lammps input lines for thermal expansion calculation
+    """
+    thexp_lines = read_lines(thexp_file)
+    thexp_lines[1] = 'variable        pdamp      equal %i*${dt}\n' % simpar['thexp']['pdamp']
+    thexp_lines[2] = 'variable        tdamp      equal %i*${dt}\n' % simpar['thexp']['tdamp']
+    thexp_lines[4] = 'fix             thexp all print %i "$(step),$(vol),$(enthalpy)" file %s screen no title "Step,Volume,Enthalpy"\n' % (simpar['thexp']['print'], simpar['thexp']['file'])
+    thexp_lines[5] = 'run             %i\n' % simpar['thexp']['steps']
+    return thexp_lines

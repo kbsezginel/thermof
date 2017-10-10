@@ -27,12 +27,14 @@ npt_file = os.path.join(sample_dir, 'in.npt')
 min_file = os.path.join(sample_dir, 'in.minimization')
 simpar_file = os.path.join(sample_dir, 'in.simpar')
 thermal_conductivity_file = os.path.join(sample_dir, 'in.thermal_conductivity')     # Thermal conductivity calculation
+thermal_expansion_file = os.path.join(sample_dir, 'in.thermal_expansion')     # Thermal expansion calculation
 
 samples = dict(ideal_mof=dict(inp=single_inp3_path, data=single_data_path, qsub=qsub_path),
                ideal_interpenetrated_mof=dict(inp=ipmof_inp3_path, data=ipmof_data_path, qsub=qsub_path))
 
 lammps_input = dict(npt=npt_file, nvt=nvt_file, nve=nve_file, simpar=simpar_file,
-                    thermal_conductivity=thermal_conductivity_file, min=min_file)
+                    thermal_conductivity=thermal_conductivity_file, min=min_file,
+                    thermal_expansion=thermal_expansion_file)
 
 tests_dir = os.path.join(sample_dir, '..', '..', 'tests')
 

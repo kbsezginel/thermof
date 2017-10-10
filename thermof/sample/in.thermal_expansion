@@ -1,0 +1,8 @@
+### Thermal Expansion in NPT ###
+variable        pdamp      equal 1000*${dt}
+variable        tdamp      equal 100*${dt}
+fix             NPT all npt temp $T $T ${tdamp} tri 1.00 1.00 ${pdamp}
+fix             thexp all print 10 "$(step),$(vol),$(enthalpy)" file thermal_expansion.csv screen no title "Step,Volume,Enthalpy"
+run             200000
+unfix           NPT
+unfix           thexp

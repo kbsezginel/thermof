@@ -21,6 +21,12 @@ min:
   ftol: 1.0e-15
   maxiter: 10000
   maxeval: 100000
+thexp:
+  pdamp: 1000
+  tdamp: 100
+  file: thermal_expansion.csv
+  print: 10
+  steps: 200000
 thermo: 10000                   # Print thermodynamic properties each 'n' steps
 thermo_style:                   # Print listed properties
   - step
