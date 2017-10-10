@@ -155,8 +155,6 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_data['k'][direction] = k
             run_data['k_est'][direction] = estimate_k(k, time, t0=k_par['t0'], t1=k_par['t1'])
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
-        if k_par['read_info']:
-            run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
         if k_par['read_walltime']:
             run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
         run_data['time'] = time
@@ -324,20 +322,6 @@ def read_walltime(log_file):
         err_msg += '\nLast line of log file -> %s' % log_lines[-1]
         raise WallTimeNotFoundError(err_msg)
     return [int(h), int(m), int(s)]
-
-
-def read_run_info(run_dir, filename='run_info.yaml'):
-    """ Read run info yaml file
-
-    Args:
-        - run_dir (str): Lammps simulation directory with run info file
-        - headers (str): Name of the run info file
-    Returns:
-        - dict: Run info data for Lammps run
-    """
-    with open(os.path.join(run_dir, filename), 'r') as ri:
-        run_info = yaml.load(ri)
-    return run_info
 
 
 def read_thermal_expansion(thexp_file):
