@@ -80,25 +80,12 @@ def test_read_run_directory_not_found_error():
         read_run(run_dir, k_par=k_par)
 
 
-def test_read_run_read_info():
-    """Tests whether read_run raises exception for missing flux file correctly"""
-    run_dir = os.path.join(trial_dir, 'Run1')
-    k_par = k_parameters.copy()
-    k_par['read_info'] = True
-    run = read_run(run_dir, k_par=k_par)
-    run_info_path = os.path.join(run_dir, 'run_info.yaml')
-    with open(os.path.join(run_dir, 'run_info.yaml'), 'r') as ri:
-        ref_run_info = yaml.load(ri)
-    assert run['info'] == ref_run_info
-
-
 def test_read_run_read_thermo():
     """Tests whether read_run raises exception for missing flux file correctly"""
     run_dir = os.path.join(trial_dir, 'Run1')
     k_par = k_parameters.copy()
     k_par['read_thermo'] = True
     run = read_run(run_dir, k_par=k_par)
-    run_info_path = os.path.join(run_dir, 'run_info.yaml')
     assert set(list(run['thermo'].keys())) == set(['NVT', 'NVE1', 'NVE2'])
     assert set(list(run['thermo']['NVT'].keys())) == set(['step', 'temp', 'epair', 'emol', 'etotal', 'press'])
     assert len(run['thermo']['NVT']['step']) == 3001

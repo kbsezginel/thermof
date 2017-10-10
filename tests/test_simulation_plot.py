@@ -13,7 +13,6 @@ k_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'thermal-c
 time_ref_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'time.yaml')
 trial_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'ideal-mof-trial')
 trial_set_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'ideal-mof-trial-set')
-run_info_ref_file = os.path.join(trial_dir, 'Run1', 'run_info.yaml')
 thermo_ref_file = os.path.join(trial_dir, 'Run1', 'thermo.yaml')
 k_est_iso_ref = [0.8624217134742657, 0.6839092609282974, 0.9263423943319228, 0.8656413422445915, 0.8983945996223535,
                  0.8802163796582159, 0.6416173216846418, 0.8356379755434158, 0.7098404203275488, 0.8686063495516347]
