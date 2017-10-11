@@ -30,7 +30,7 @@ def write_slurm_file(file_name, jobpar):
     job_lines[5] = '#SBATCH --ntasks-per-node=%i\n' % jobpar['ppn']
     job_lines[6] = '#SBATCH --time=%s\n' % jobpar['walltime']
     job_lines[7] = '#SBATCH --cluster=%s\n' % jobpar['cluster']
-    job_lines[17] = 'srun --mpi=pmi2 lmp_mpi -in %s > %s\n' % (jobpar['input'], jobpar['output'])
+    job_lines[18] = 'srun --mpi=pmi2 lmp_mpi -in %s > %s\n' % (jobpar['input'], jobpar['output'])
     write_lines(file_name, job_lines)
 
 
