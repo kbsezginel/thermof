@@ -159,6 +159,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
         if k_par['read_thexp']:
             run_data['thexp'] = read_thermal_expansion(os.path.join(run_dir, '%s' % k_par['thexp_file']))
+            print('Thermal expansion read') if verbose else None
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -339,6 +340,7 @@ def read_thermal_expansion(thexp_file):
     thexp = dict(step=[], volume=[], enthalpy=[])
     with open(thexp_file, newline='') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',', quotechar='|')
+        next(csv_reader, None)  # Skip the headers
         for row in csv_reader:
             thexp['step'].append(float(row[0]))
             thexp['volume'].append(float(row[1]))
