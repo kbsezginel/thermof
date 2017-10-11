@@ -112,7 +112,7 @@ class Simulation:
         else:
             rep = [1, 1, 1]
         self.parameters.lammps['replication'] = ' '.join([str(i) for i in rep])
-        self.mof.volume = self.mof.get_volume()
+        self.mof.volume = self.mof.get_volume(rep)
         self.parameters.thermof['mof'] = dict(name=self.mof.name,
                                               replication=rep,
                                               volume=self.mof.volume)
