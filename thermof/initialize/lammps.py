@@ -62,7 +62,7 @@ def write_lammps_input(simdir, parameters, lammps_input=lammps_input, verbose=Tr
         input_lines += '\n'
         input_lines += fix_lines
     write_lines(inp_file, input_lines)
-    print('Updating simulation parameters...')
+    print('Updating simulation parameters...') if verbose else None
     parameters.thermof['kpar']['log_file'] = 'log.%s' % parameters.thermof['mof']['name']
     parameters.thermof['kpar']['fix'] = None
     parameters.thermof['kpar']['temp'] = parameters.thermof['temperature']
