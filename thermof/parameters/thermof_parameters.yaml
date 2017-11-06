@@ -10,17 +10,21 @@ npt:                            # NPT Parameters
   pdamp: 1000
   tdamp: 100
   steps: 500000
+  restart: false
 nvt:                            # NVT Parameters
   steps: 1000000
+  restart: false
 nve:                            # NVE Parameters (includes thermal conductivity calc)
   equilibration: 300000
   steps: 1000000
+  restart: false
 min:
   edif: 1.0e-6
   etol: 1.0e-15
   ftol: 1.0e-15
   maxiter: 10000
   maxeval: 100000
+  restart: false
 thexp:
   pdamp: 1000
   tdamp: 100

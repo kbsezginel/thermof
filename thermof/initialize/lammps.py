@@ -116,6 +116,8 @@ def get_npt_lines(simpar, npt_file=lammps_input['npt']):
     npt_lines[1] = 'variable        pdamp      equal %i*${dt}\n' % simpar['npt']['pdamp']
     npt_lines[2] = 'variable        tdamp      equal %i*${dt}\n' % simpar['npt']['tdamp']
     npt_lines[4] = 'run             %i\n' % simpar['npt']['steps']
+    if simpar['npt']['restart']:
+        npt_lines.append('write_restart   restart.npt\n')
     return npt_lines
 
 
@@ -125,6 +127,8 @@ def get_nvt_lines(simpar, nvt_file=lammps_input['nvt']):
     """
     nvt_lines = read_lines(nvt_file)
     nvt_lines[2] = 'run             %i\n' % simpar['nvt']['steps']
+    if simpar['nvt']['restart']:
+        nvt_lines.append('write_restart   restart.nvt\n')
     return nvt_lines
 
 
@@ -138,6 +142,8 @@ def get_nve_lines(simpar, nve_file=lammps_input['nve']):
     else:
         nve_lines = nve_lines[4:]
     nve_lines[42] = 'run             %i\n' % simpar['nve']['steps']
+    if simpar['nve']['restart']:
+        nve_lines.append('write_restart   restart.nve\n')
     return nve_lines
 
 
@@ -152,6 +158,8 @@ def get_min_lines(simpar, min_file=lammps_input['min']):
     min_lines[9] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
     min_lines[14] = 'minimize        %.1e %.1e %i %i\n' % (simpar['min']['etol'], simpar['min']['ftol'], simpar['min']['maxiter'], simpar['min']['maxeval'])
     min_lines[18] = 'print           "${iter},${CellMinStep},${AtomMinStep},${AtomMinStep},$(pe),${min_E}" append %s.min.csv screen no\n' % mof
+    if simpar['min']['restart']:
+        nve_lines.append('write_restart   restart.min\n')
     return min_lines
 
 
