@@ -6,6 +6,7 @@ Simulation class for reading and initializing Lammps simulations
 import os
 import yaml
 import shutil
+import glob
 from thermof.parameters import Parameters
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
@@ -89,6 +90,33 @@ class Simulation:
         self.save_parameters()
         print('Done!') if self.verbose else None
 
+    def initialize_runs(self, n_runs, run_parameters=None):
+        """
+        Initialize input files for a Lammps simulation with multiple runs.
+        """
+        self.setup = '|'.join(self.parameters.thermof['fix'])
+        self.set_dir(self.simdir)
+        write_lammps_files(self.simdir, self.parameters, verbose=self.verbose)
+        inp_file = glob.glob(os.path.join(self.simdir, 'in.*'))[0]
+        data_file = glob.glob(os.path.join(self.simdir, 'data.*'))[0]
+        jobname = self.parameters.job['name']
+        for run in range(1, n_runs + 1):
+            rundir = os.path.join(self.simdir, '%i' % run)
+            os.makedirs(rundir)
+            shutil.copy(inp_file, rundir)
+            shutil.copy(data_file, rundir)
+            self.parameters.thermof['seed'] += 1
+            self.parameters.job['name'] = '%s-%i' % (jobname, run)
+            if run_parameters is not None:
+                for par_key, par_val in run_parameters.items():
+                    self.parameters.thermof[par_key] = par_val[run - 1]
+            write_lammps_input(rundir, self.parameters, verbose=self.verbose)
+            job_submission_file(rundir, self.parameters, verbose=self.verbose)
+            self.save_parameters(simdir=rundir)
+        os.remove(inp_file)
+        os.remove(data_file)
+        print('Done!') if self.verbose else None
+
     def set_dir(self, simdir):
         """
         Set simulation directory for initialization.
@@ -130,11 +158,13 @@ class Simulation:
         """
         self.parameters.show(par=par)
 
-    def save_parameters(self, parameters=['thermof', 'lammps', 'job']):
+    def save_parameters(self, simdir=None, parameters=['thermof', 'lammps', 'job']):
         """
         Save simulation parameters.
         """
-        self.parameters.save(parameters=parameters, savedir=self.simdir, verbose=self.verbose)
+        if simdir is None:
+            simdir = self.simdir
+        self.parameters.save(parameters=parameters, savedir=simdir, verbose=self.verbose)
 
     def read_parameters(self):
         """
