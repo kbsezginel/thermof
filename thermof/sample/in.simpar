@@ -7,6 +7,7 @@ variable        s equal 5          # sample interval
 variable        d equal $p*$s      # dump interval
 variable        txyz equal 10000
 dump            1 all xyz ${txyz} traj.xyz
+dump_modify     1 element C H O
 velocity        all create $T ${seed} dist uniform
 timestep        ${dt}
 thermo          10000
