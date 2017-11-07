@@ -20,6 +20,7 @@ mof5_file = os.path.join(sample_dir, 'MOF5.cif')
 qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')
 pbs_file = os.path.join(sample_dir, 'job.pbs.sample')
 slurm_file = os.path.join(sample_dir, 'job.slurm.sample')
+slurm_scratch_file = os.path.join(sample_dir, 'job.slurm-scratch.sample')
 # Lammps input files
 nve_file = os.path.join(sample_dir, 'in.nve')
 nvt_file = os.path.join(sample_dir, 'in.nvt')
