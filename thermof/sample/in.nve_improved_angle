@@ -1,0 +1,30 @@
+### Equilibration in NVE ###
+fix             NVE all nve
+run             300000
+
+### Thermal flux calculation in NVE ###
+reset_timestep  0
+compute         PE all pe/atom
+compute         KE all ke/atom
+compute         STRESS_p   all stress/atom NULL pair
+compute         STRESS_b   all stress/atom NULL bond
+compute         STRESS_i   all stress/atom NULL improper
+compute         Jp    all heat/flux KE PE STRESS_p
+compute         Jb    all heat/flux KE PE STRESS_b
+compute         Ji    all heat/flux KE PE STRESS_i
+compute         Jad   all heat/flux_improved_atom angle dihedral
+
+variable        Jx equal (c_Jp[1]+c_Jb[1]+c_Ji[1]+c_Jad[1]-2.0*c_Jp[4])/vol
+variable        Jy equal (c_Jp[2]+c_Jb[2]+c_Ji[2]+c_Jad[2]-2.0*c_Jp[5])/vol
+variable        Jz equal (c_Jp[3]+c_Jb[3]+c_Ji[3]+c_Jad[3]-2.0*c_Jp[6])/vol
+
+fix             JJTx all ave/correlate $s $p $d &
+                v_Jx type auto file J0Jt_tx.dat ave running
+
+fix             JJTy all ave/correlate $s $p $d &
+                v_Jy type auto file J0Jt_ty.dat ave running
+
+fix             JJTz all ave/correlate $s $p $d &
+                v_Jz type auto file J0Jt_tz.dat ave running
+
+run             1000000

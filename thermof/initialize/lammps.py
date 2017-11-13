@@ -85,6 +85,8 @@ def get_fix_lines(fix, simpar, lammps_input=lammps_input):
         fix_lines = get_tc_lines(simpar, tc_file=lammps_input['thermal_conductivity'])
     elif fix == 'THEXP':
         fix_lines = get_thexp_lines(simpar, thexp_file=lammps_input['thermal_expansion'])
+    elif fix == 'NVE_ANGLE':
+        fix_lines = get_nve_improved_angle_lines(simpar, nve_file=lammps_input['nve_improved_angle'])
     return fix_lines
 
 
@@ -142,6 +144,21 @@ def get_nve_lines(simpar, nve_file=lammps_input['nve']):
     else:
         nve_lines = nve_lines[4:]
     nve_lines[42] = 'run             %i\n' % simpar['nve']['steps']
+    if simpar['nve']['restart']:
+        nve_lines.append('write_restart   restart.nve\n')
+    return nve_lines
+
+
+def get_nve_improved_angle_lines(simpar, nve_file=lammps_input['nve_improved_angle']):
+    """
+    Get input lines for NVE simulation (including thermal conductivity calc.) using thermof_parameters.
+    """
+    nve_lines = read_lines(nve_file)
+    if simpar['nve']['equilibration'] >= 0:
+        nve_lines[2] = 'run             %i\n' % simpar['nve']['equilibration']
+    else:
+        nve_lines = nve_lines[4:]
+    nve_lines[29] = 'run             %i\n' % simpar['nve']['steps']
     if simpar['nve']['restart']:
         nve_lines.append('write_restart   restart.nve\n')
     return nve_lines
