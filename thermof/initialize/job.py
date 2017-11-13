@@ -35,7 +35,9 @@ def write_slurm_file(file_name, jobpar, sample):
     if jobpar['scheduler'] == 'slurm':
         job_lines[18] = 'srun --mpi=pmi2 lmp_mpi -in %s > %s\n' % (jobpar['input'], jobpar['output'])
     elif jobpar['scheduler'] == 'slurm-scratch':
-        job_lines[39] = 'srun --mpi=pmi2 lmp_mpi -in %s > %s\n' % (jobpar['input'], jobpar['output'])
+        job_lines[24] = 'zfs=%s\n' % jobpar['zfsdir']
+        job_lines[38] = 'lmpdir=%s\n' % (jobpar['lmpdir'])
+        job_lines[39] = 'srun --mpi=pmi2 $lmpdir -in %s > %s\n' % (jobpar['input'], jobpar['output'])
     write_lines(file_name, job_lines)
 
 
