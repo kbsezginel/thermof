@@ -4,13 +4,13 @@ title:  "Thermal Expansion"
 date:   2017-09-25
 ---
 
-Thermal expansion is the tendency of matter to change in shape, area, and volume in response to a change in temperature.<sup>[1][1]</sup>
+Thermal expansion is the tendency of matter to change in shape, area, and volume in response to a change in temperature.<sup>[1](https://en.wikipedia.org/wiki/Thermal_expansion)</sup>
 In the general case of a gas, liquid, or solid, the volumetric coefficient of thermal expansion is given by
 
 <p align="center"><img src="img/thexp-1.png"></p>
 
 The thermal expansion coefficient is based on the [covariance](https://en.wikipedia.org/wiki/Covariance) of volume and enthalpy of the system.
-We can calculate thermal expansion in NPT ensemble using the relation below: <sup>[2][2], [3][3]</sup>
+We can calculate thermal expansion in NPT ensemble using the relation below: <sup>[2](http://pubs.acs.org/doi/pdf/10.1021/ct200731v), [3](http://utkstair.org/clausius/docs/mse614/pdf/thermo_intro_v01.pdf)</sup>
 
 <p align="center"><img src="img/thexp-2.png"></p>
 
@@ -64,14 +64,3 @@ def two_pass_covariance(data1, data2):
 #### Lammps
 
 Using `real` units in Lammps `enthalpy` is reported in `kcal/mol` and volume is reported in `Å³`. Using Boltzmann constant as `0.0019872041 kcal/mol.K` we can calculate thermal expansion in `1/K` units.
-
-
-#### Sources
-
-[1]: (https://en.wikipedia.org/wiki/Thermal_expansion)
-
-[2]: (http://pubs.acs.org/doi/pdf/10.1021/ct200731v)
-
-[3]: (http://utkstair.org/clausius/docs/mse614/pdf/thermo_intro_v01.pdf)
-
-[4]: (https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Covariance)
