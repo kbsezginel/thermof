@@ -20,6 +20,7 @@ mof5_file = os.path.join(sample_dir, 'MOF5.cif')
 qsub_path = os.path.join(sample_dir, 'lammps_qsub.sh.sample')
 pbs_file = os.path.join(sample_dir, 'job.pbs.sample')
 slurm_file = os.path.join(sample_dir, 'job.slurm.sample')
+slurm_scratch_file = os.path.join(sample_dir, 'job.slurm-scratch.sample')
 # Lammps input files
 nve_file = os.path.join(sample_dir, 'in.nve')
 nvt_file = os.path.join(sample_dir, 'in.nvt')
@@ -27,12 +28,16 @@ npt_file = os.path.join(sample_dir, 'in.npt')
 min_file = os.path.join(sample_dir, 'in.minimization')
 simpar_file = os.path.join(sample_dir, 'in.simpar')
 thermal_conductivity_file = os.path.join(sample_dir, 'in.thermal_conductivity')     # Thermal conductivity calculation
+thermal_expansion_file = os.path.join(sample_dir, 'in.thermal_expansion')     # Thermal expansion calculation
+nve_improved_angle_file = os.path.join(sample_dir, 'in.nve_improved_angle')
 
 samples = dict(ideal_mof=dict(inp=single_inp3_path, data=single_data_path, qsub=qsub_path),
                ideal_interpenetrated_mof=dict(inp=ipmof_inp3_path, data=ipmof_data_path, qsub=qsub_path))
 
 lammps_input = dict(npt=npt_file, nvt=nvt_file, nve=nve_file, simpar=simpar_file,
-                    thermal_conductivity=thermal_conductivity_file, min=min_file)
+                    thermal_conductivity=thermal_conductivity_file, min=min_file,
+                    thermal_expansion=thermal_expansion_file,
+                    nve_improved_angle=nve_improved_angle_file)
 
 tests_dir = os.path.join(sample_dir, '..', '..', 'tests')
 

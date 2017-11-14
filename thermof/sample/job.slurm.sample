@@ -15,6 +15,7 @@ module load intel/2017.1.132
 module load intel-mpi/2017.1.132
 module load lammps/stable_31Mar2017
 
+export I_MPI_FABRICS_LIST="ofa"
 srun --mpi=pmi2 lmp_mpi -in in.therMOF > lammps_out.txt
 
 echo end_time: `date`

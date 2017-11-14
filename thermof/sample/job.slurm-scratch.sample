@@ -1,0 +1,40 @@
+#!/bin/env bash
+
+#SBATCH --job-name=therMOF
+#SBATCH --output=therMOF.out
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=12
+#SBATCH --time=12:00:00
+#SBATCH --cluster=mpi
+
+# Load Modules
+module load intel/2017.1.132 intel-mpi/2017.1.132
+
+# Copy everything to scratch
+shopt -s nullglob # Sets nullglob
+inputs=$(ls {data,in,job,simpar}.*)
+shopt -u nullglob # unsets nullglob
+for i in ${inputs[@]}; do
+    sbcast $SLURM_SUBMIT_DIR/$i $SLURM_SCRATCH/$i
+done
+
+# The ulimit
+ulimit -s unlimited
+
+# Copy results to zfs
+zfs=/zfs1/7/cwilmer/kbs37/Lammps
+mofdir=`dirname "$SLURM_SUBMIT_DIR"`
+mofdir=${mofdir##*/}
+rundir=`basename "$SLURM_SUBMIT_DIR"`
+outdir=$zfs/$mofdir/$rundir
+mkdir -p $outdir
+
+run_on_exit(){
+  cp -pR $SLURM_SCRATCH/* $outdir/.
+}
+trap run_on_exit EXIT
+
+cd $SLURM_SCRATCH
+export I_MPI_FABRICS_LIST="ofa"
+lmpdir=/ihome/cwilmer/pab135/workspace/lammps-hf-h2p/src/lmp_mpi
+srun --mpi=pmi2 $lmpdir -in in.therMOF > lammps_out.txt

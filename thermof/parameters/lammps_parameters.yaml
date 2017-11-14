@@ -13,6 +13,7 @@ npt: false
 nvt: false
 cutoff: 12.5
 replication: null
+dont_replicate_molecules: false
 orthogonalize: false
 random_vel: false
 dump_dcd: 0

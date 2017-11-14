@@ -10,17 +10,27 @@ npt:                            # NPT Parameters
   pdamp: 1000
   tdamp: 100
   steps: 500000
+  restart: false
 nvt:                            # NVT Parameters
   steps: 1000000
+  restart: false
 nve:                            # NVE Parameters (includes thermal conductivity calc)
   equilibration: 300000
   steps: 1000000
+  restart: false
 min:
   edif: 1.0e-6
   etol: 1.0e-15
   ftol: 1.0e-15
   maxiter: 10000
   maxeval: 100000
+  restart: false
+thexp:
+  pdamp: 1000
+  tdamp: 100
+  file: thermal_expansion.csv
+  print: 10
+  steps: 200000
 thermo: 10000                   # Print thermodynamic properties each 'n' steps
 thermo_style:                   # Print listed properties
   - step
@@ -40,7 +50,7 @@ thermo_style:                   # Print listed properties
   - pyz
 min_cell_size: null             # Minimum size of the cell to calculate replication
 kpar:
-  kb: 0.001987
+  kb: 0.0019872                 # kcal/molK
   conv: 69443.84
   dt: 5
   volume: 512000
@@ -52,9 +62,11 @@ kpar:
   average: true
   traj: 'traj.xyz'
   log_file: 'log.lammps'
+  thexp_file: 'thermal_expansion.csv'
   read_info: false
   read_thermo: false
   read_walltime: false
+  read_thexp: false
   fix:
     - 'NVT'
     - 'NVE1'

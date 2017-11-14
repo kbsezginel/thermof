@@ -6,6 +6,7 @@ Read Lammps output files for thermal conductivity calculations
 import os
 import math
 import yaml
+import csv
 import numpy as np
 from thermof.reldist import reldist
 from thermof.parameters import k_parameters, thermo_headers
@@ -154,10 +155,11 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
             run_data['k'][direction] = k
             run_data['k_est'][direction] = estimate_k(k, time, t0=k_par['t0'], t1=k_par['t1'])
             run_message += ' k: %.3f W/mK (%s) |' % (run_data['k_est'][direction], direction)
-        if k_par['read_info']:
-            run_data['info'] = read_run_info(run_dir, filename='run_info.yaml')
         if k_par['read_walltime']:
             run_data['walltime'] = read_walltime(os.path.join(run_dir, '%s' % k_par['log_file']))
+        if k_par['read_thexp']:
+            run_data['thexp'] = read_thermal_expansion(os.path.join(run_dir, '%s' % k_par['thexp_file']))
+            print('Thermal expansion read') if verbose else None
         run_data['time'] = time
         run_data['directions'] = directions
         print(run_message) if verbose else None
@@ -325,18 +327,25 @@ def read_walltime(log_file):
     return [int(h), int(m), int(s)]
 
 
-def read_run_info(run_dir, filename='run_info.yaml'):
-    """ Read run info yaml file
+def read_thermal_expansion(thexp_file):
+    """
+    Read thermal expansion csv file.
 
     Args:
-        - run_dir (str): Lammps simulation directory with run info file
-        - headers (str): Name of the run info file
+        - thexp_file (str): Thermal expansion csv file
+
     Returns:
-        - dict: Run info data for Lammps run
+        - dict: Thermal expansion data for Lammps run
     """
-    with open(os.path.join(run_dir, filename), 'r') as ri:
-        run_info = yaml.load(ri)
-    return run_info
+    thexp = dict(step=[], volume=[], enthalpy=[])
+    with open(thexp_file, newline='') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',', quotechar='|')
+        next(csv_reader, None)  # Skip the headers
+        for row in csv_reader:
+            thexp['step'].append(float(row[0]))
+            thexp['volume'].append(float(row[1]))
+            thexp['enthalpy'].append(float(row[2]))
+    return thexp
 
 
 def read_framework_distance(run_list, fdist_par):
