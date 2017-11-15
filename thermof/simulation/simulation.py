@@ -26,6 +26,7 @@ class Simulation:
         self.setup = '---'
         if parameters is None:
             self.parameters = Parameters()
+            print('WARNING!: Default simulation parameters are loaded.')
         else:
             self.parameters = parameters
         if read is not None and setup is not None:
@@ -62,13 +63,15 @@ class Simulation:
                 n_runs += len(self.trial_set['data'][trial]['runs'])
         return n_runs
 
-    def read(self, simdir, setup='run'):
+    def read(self, simdir, setup='run', read_parameters=True):
         """
         Read Lammps simulation results from given directory.
         """
         self.setup = setup
         self.simdir = simdir
         self.name = os.path.basename(simdir)
+        if read_parameters:
+            self.read_parameters()
         if setup == 'run':
             self.run = read_run(simdir, k_par=self.parameters.thermof['kpar'])
         elif setup == 'trial':
@@ -166,11 +169,12 @@ class Simulation:
             simdir = self.simdir
         self.parameters.save(parameters=parameters, savedir=simdir, verbose=self.verbose)
 
-    def read_parameters(self):
+    def read_parameters(self, simpar_file=None):
         """
         Read simulation parameters.
         """
-        simpar_file = os.path.join(self.simdir, 'simpar.yaml')
+        if simpar_file is None:
+            simpar_file = os.path.join(self.simdir, 'simpar.yaml')
         with open(simpar_file, 'r') as sp:
             simpar = yaml.load(sp)
         self.parameters = Parameters(simpar)
