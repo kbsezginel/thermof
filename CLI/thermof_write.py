@@ -1,7 +1,10 @@
 """
 TherMOF command line interface.
 """
+import os
 import argparse
+from thermof import Simulation
+from thermof import Parameters
 
 
 parser = argparse.ArgumentParser(
@@ -38,3 +41,13 @@ parser.add_argument('--forcefield', '-ff', default='UFF', type=str, metavar='',
 
 # Parse arguments
 args = parser.parse_args()
+
+# Initialize simulation
+simpar = Parameters()
+sim = Simulation(mof=args.molecule, parameters=simpar)
+mof_name = os.path.splitext(os.path.basename(args.molecule))[0]
+sim.simdir = os.path.join(os.path.dirname(args.molecule), mof_name)
+try:
+    sim.initialize()
+except Exception as e:
+    print(e)
