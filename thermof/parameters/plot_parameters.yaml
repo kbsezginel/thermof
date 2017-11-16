@@ -35,19 +35,19 @@ thermo:
   variable: null
   n_columns: 4
 k_sub:
-  limit: [0, 10000]
-  size: [20, 6]
+  limit: [0, 20000]
+  size: null
+  n_columns: 4
   dpi: 200
-  subplot: [2, 5]
   subplots_adjust: [.4, .3]
   fontsize: 9
   lw: 2.5
   k_est: true
   k_est_color: 'r'
-  k_est_loc: [5, 0.1]
+  k_est_loc: null
   k_est_t0: 5
   k_est_t1: 10
-  ylim: [0, 1.2]
+  ylim: null
   save: null
   show: True
   xlabel: 'Time'
