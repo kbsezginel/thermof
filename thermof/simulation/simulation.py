@@ -7,7 +7,7 @@ import os
 import yaml
 import shutil
 import glob
-from thermof.parameters import Parameters
+from thermof.parameters import Parameters, plot_parameters
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
 from thermof.initialize.job import job_submission_file
@@ -63,7 +63,7 @@ class Simulation:
                 n_runs += len(self.trial_set['data'][trial]['runs'])
         return n_runs
 
-    def read(self, simdir, setup='run', read_parameters=True):
+    def read(self, simdir, setup='run', read_parameters=False):
         """
         Read Lammps simulation results from given directory.
         """
@@ -153,6 +153,8 @@ class Simulation:
         """
         Plot Lammps simulation results.
         """
+        if 'plot' not in vars(self.parameters).keys():
+            self.parameters.plot = plot_parameters.copy()
         plot_simulation(self, selection, data)
 
     def show_parameters(self, par=None):
