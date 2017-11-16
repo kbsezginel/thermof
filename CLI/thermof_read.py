@@ -1,6 +1,7 @@
 """
 TherMOF command line interface.
 """
+import os
 import argparse
 from thermof import Simulation, Parameters, Trajectory
 from thermof.parameters import k_parameters, plot_parameters
@@ -40,7 +41,7 @@ parser.add_argument('--setup', '-s', default='run', type=str, metavar='',
                     help='Simulation setup (run | trial | trial_set).')
 parser.add_argument('--no_parameters', '-np', action='store_true', default=False,
                     help='Dont read simulation parameters, use default.')
-parser.add_argument('--plot', '-p', action='store_true', default=False,
+parser.add_argument('--plot', '-p', nargs='+', default=[],
                     help='Plot HCACF, k, and thermodynamic properties.')
 parser.add_argument('--write', '-w', action='store_true', default=False,
                     help='Write results to a file.')
@@ -48,7 +49,14 @@ parser.add_argument('--write', '-w', action='store_true', default=False,
 # Parse arguments
 args = parser.parse_args()
 
+# Initialize simulation and read
 sim = Simulation()
-sim.read(args.simdir, setup=args.setup, read_parameters=(not args.no_parameters))
+simdir = os.path.abspath(args.simdir)
+sim.read(simdir, setup=args.setup, read_parameters=(not args.no_parameters))
 
 # Plotting
+if len(args.plot) > 0:
+    sim.parameters.plot = plot_parameters.copy()
+    for plt in args.plot:
+        sim.parameters.plot[plt]['save'] = os.path.join(simdir, '%s-%s.png' % (os.path.basename(simdir), plt))
+        sim.plot(plt)
