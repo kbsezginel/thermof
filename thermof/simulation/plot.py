@@ -41,7 +41,7 @@ def get_plot_data(simulation, plot='k', setup=None):
             plot_data = dict(x=simulation.run['time'], legend=simulation.run['directions'])
             plot_data['y'] = [simulation.run['k'][d] for d in simulation.run['directions']]
         elif setup == 'trial':
-            plot_data = dict(x=simulation.trial['data']['Run1']['time'], legend=simulation.trial['runs'])
+            plot_data = dict(x=simulation.trial['data'][simulation.trial['runs'][0]]['time'], legend=simulation.trial['runs'])
             plot_data['y'] = [simulation.trial['data'][run]['k']['iso'] for run in simulation.trial['runs']]
         elif setup == 'trial_set':
             ref_run = simulation.trial_set['data'][simulation.trial_set['trials'][0]]['runs'][0]
@@ -54,7 +54,7 @@ def get_plot_data(simulation, plot='k', setup=None):
             plot_data = dict(x=simulation.run['time'], legend=simulation.run['directions'])
             plot_data['y'] = [simulation.run['k'][d] for d in simulation.run['directions']]
         elif setup == 'trial':
-            plot_data = dict(x=simulation.trial['data']['Run1']['time'], legend=simulation.trial['runs'])
+            plot_data = dict(x=simulation.trial['data'][simulation.trial['runs'][0]]['time'], legend=simulation.trial['runs'])
             plot_data['y'] = [simulation.trial['data'][run]['k']['iso'] for run in simulation.trial['runs']]
         elif setup == 'trial_set':
             ref_run = simulation.trial_set['data'][simulation.trial_set['trials'][0]]['runs'][0]
