@@ -11,7 +11,7 @@ k:
   legendloc: [1.02, 0]
   ncol: 1
   title: null
-  xlabel: 'Time'
+  xlabel: 'Time (ps)'
   ylabel: 'k (W/mK)'
 thermo:
   size: null
@@ -50,7 +50,7 @@ k_sub:
   ylim: null
   save: null
   show: True
-  xlabel: 'Time'
+  xlabel: 'Time (ps)'
   ylabel: 'k (W/mK)'
 f_dist:
   subplot: [2, 5]
@@ -70,3 +70,18 @@ f_dist:
   traj: 'traj.xyz'
   traj_start: 0
   traj_end: 1000000
+hcacf:
+  limit: [0, 20000]
+  size: null
+  n_columns: 4
+  dpi: 200
+  subplots_adjust: [.4, .3]
+  fontsize: 9
+  lw: 2.5
+  k_est: false
+  k_est_loc: null
+  ylim: null
+  save: null
+  show: True
+  xlabel: 'Time (ps)'
+  ylabel: 'HCACF'
