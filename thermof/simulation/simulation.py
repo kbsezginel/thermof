@@ -171,12 +171,28 @@ class Simulation:
             simdir = self.simdir
         self.parameters.save(parameters=parameters, savedir=simdir, verbose=self.verbose)
 
-    def read_parameters(self, simpar_file=None):
+    def read_parameters(self, simpar_file=None, setup=None):
         """
         Read simulation parameters.
         """
         if simpar_file is None:
-            simpar_file = os.path.join(self.simdir, 'simpar.yaml')
+            if self.setup == 'run':
+                run_dir = self.simdir
+            elif self.setup == 'trial':
+                for run in os.listdir(self.simdir):
+                    if 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
+                        run_dir = os.path.join(self.simdir, run)
+                        break
+            elif self.setup == 'trial_set':
+                for trial in os.listdir(self.simdir):
+                    for run in os.listdir(os.path.join(self.simdir, trial)):
+                        if 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
+                            run_dir = os.path.join(self.simdir, run)
+                            break
+            simpar_file = os.path.join(run_dir, 'simpar.yaml')
+        else:
+            run_dir = os.path.dirname(simpar_file)
+        print('Reading simulation parameters from -> %s' % run_dir) if self.verbose else None
         with open(simpar_file, 'r') as sp:
             simpar = yaml.load(sp)
         self.parameters = Parameters(simpar)
