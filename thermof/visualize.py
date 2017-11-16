@@ -157,8 +157,9 @@ def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub'])
     fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
     fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
     max_k = max([max(k) for k in plot_data['y']])
+    min_k = min([min(k) for k in plot_data['y']])
     if parameters['ylim'] is None:
-        parameters['ylim'] = [0, max_k * 1.1]
+        parameters['ylim'] = [min_k, max_k * 1.1]
     if parameters['k_est_loc'] is None:
         parameters['k_est_loc'] = [parameters['k_est_t0'], max_k]
     lim = parameters['limit']
