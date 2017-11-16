@@ -19,7 +19,7 @@ class Simulation:
     """
     Reading and initializing Lammps simulations
     """
-    def __init__(self, read=None, setup=None, parameters=None, mof=None):
+    def __init__(self, read=None, setup=None, parameters=None, mof=None, read_parameters=False):
         """
         Create a Lammps simulation object.
         """
@@ -29,10 +29,10 @@ class Simulation:
             print('WARNING!: Default simulation parameters are loaded.')
         else:
             self.parameters = parameters
-        if read is not None and setup is not None:
-            self.read(read, setup)
+        if setup is not None:
             self.setup = setup
-            self.simdir = read
+            if read is not None:
+                self.read(read, setup, read_parameters=read_parameters)
         elif mof is not None:
             self.set_mof(mof)
         self.verbose = True
@@ -63,7 +63,7 @@ class Simulation:
                 n_runs += len(self.trial_set['data'][trial]['runs'])
         return n_runs
 
-    def read(self, simdir, setup='run', read_parameters=False):
+    def read(self, simdir, setup, read_parameters=False):
         """
         Read Lammps simulation results from given directory.
         """
@@ -180,7 +180,7 @@ class Simulation:
                 run_dir = self.simdir
             elif self.setup == 'trial':
                 for run in os.listdir(self.simdir):
-                    if 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
+                    if os.path.isdir(os.path.join(self.simdir, run)) and 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
                         run_dir = os.path.join(self.simdir, run)
                         break
             elif self.setup == 'trial_set':
