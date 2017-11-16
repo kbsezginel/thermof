@@ -39,7 +39,7 @@ parser.add_argument('molecule', type=str, help='Molecule file to read.')
 parser.add_argument('--forcefield', '-ff', default='UFF', type=str, metavar='',
                     help='Force field for molecule file.')
 parser.add_argument('--runs', '-r', default=1, type=int, metavar='',
-                    help='Force field for molecule file.')
+                    help='Number of runs (different seed number is used for each run).')
 
 # Parse arguments
 args = parser.parse_args()
