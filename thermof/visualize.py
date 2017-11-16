@@ -105,13 +105,21 @@ def plot_thermo(thermo, parameters):
     Returns:
         - None (shows the plot)
     """
+    if parameters['fix'] is None:
+        parameters['fix'] = list(thermo.keys())
+    if parameters['variable'] is None:
+        parameters['variable'] = list(thermo[parameters['fix'][0]].keys())
+
     n_var = len(parameters['variable'])
-    fig_width = n_var * 4 + 2
-    fig = plt.figure(figsize=(fig_width, parameters['fig_height']), dpi=parameters['dpi'])
+    n_cols = parameters['n_columns']
+    n_rows = int(np.ceil(n_var / n_cols))
+    if parameters['size'] is None:
+        parameters['size'] = [n_cols * 4 + 2, n_rows * 3]
+    fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
     fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
 
     for i, y_axis in enumerate(parameters['variable'], start=1):
-        ax = fig.add_subplot(1, n_var, i)
+        ax = fig.add_subplot(n_rows, n_cols, i)
         for fix in parameters['fix']:
             if fix in parameters['colors']:
                 plt.plot(thermo[fix]['step'], thermo[fix][y_axis], c=parameters['colors'][fix])

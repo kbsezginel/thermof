@@ -1,5 +1,5 @@
 k:
-  limit: [0, 2000]
+  limit: [0, 20000]
   size: [5, 3]
   fontsize: 8
   lw: 1.5
@@ -14,7 +14,7 @@ k:
   xlabel: 'Time'
   ylabel: 'k (W/mK)'
 thermo:
-  size: [20, 10]
+  size: null
   dpi: 200
   save: null
   show: True
@@ -22,9 +22,9 @@ thermo:
   legend: null
   fontsize: 8
   scilimits: [-4, 4]
-  subplots_adjust: [0.3, 0.25]
+  subplots_adjust: [0.4, 0.3]
   xlabel: 'Timesteps'
-  fix: ['NVT', 'NVE1']
+  fix: null
   colors:
     NVT: 'r'
     NVE: 'k'
@@ -32,8 +32,8 @@ thermo:
     NVE2: 'b'
     NPT: 'm'
     MIN: 'c'
-  variable: ['temp', 'epair', 'etotal', 'emol', 'press']
-  fig_height: 3
+  variable: null
+  n_columns: 4
 k_sub:
   limit: [0, 10000]
   size: [20, 6]
