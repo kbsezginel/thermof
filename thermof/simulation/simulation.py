@@ -7,7 +7,7 @@ import os
 import yaml
 import shutil
 import glob
-from thermof.parameters import Parameters
+from thermof.parameters import Parameters, plot_parameters
 from thermof.read import read_run, read_trial, read_trial_set
 from thermof.initialize.lammps import write_lammps_files, write_lammps_input
 from thermof.initialize.job import job_submission_file
@@ -19,19 +19,20 @@ class Simulation:
     """
     Reading and initializing Lammps simulations
     """
-    def __init__(self, read=None, setup=None, parameters=None, mof=None):
+    def __init__(self, read=None, setup=None, parameters=None, mof=None, read_parameters=False):
         """
         Create a Lammps simulation object.
         """
         self.setup = '---'
         if parameters is None:
             self.parameters = Parameters()
+            print('WARNING!: Default simulation parameters are loaded.')
         else:
             self.parameters = parameters
-        if read is not None and setup is not None:
-            self.read(read, setup)
+        if setup is not None:
             self.setup = setup
-            self.simdir = read
+            if read is not None:
+                self.read(read, setup, read_parameters=read_parameters)
         elif mof is not None:
             self.set_mof(mof)
         self.verbose = True
@@ -62,13 +63,15 @@ class Simulation:
                 n_runs += len(self.trial_set['data'][trial]['runs'])
         return n_runs
 
-    def read(self, simdir, setup='run'):
+    def read(self, simdir, setup, read_parameters=False):
         """
         Read Lammps simulation results from given directory.
         """
         self.setup = setup
         self.simdir = simdir
         self.name = os.path.basename(simdir)
+        if read_parameters:
+            self.read_parameters()
         if setup == 'run':
             self.run = read_run(simdir, k_par=self.parameters.thermof['kpar'])
         elif setup == 'trial':
@@ -150,6 +153,8 @@ class Simulation:
         """
         Plot Lammps simulation results.
         """
+        if 'plot' not in vars(self.parameters).keys():
+            self.parameters.plot = plot_parameters.copy()
         plot_simulation(self, selection, data)
 
     def show_parameters(self, par=None):
@@ -166,11 +171,28 @@ class Simulation:
             simdir = self.simdir
         self.parameters.save(parameters=parameters, savedir=simdir, verbose=self.verbose)
 
-    def read_parameters(self):
+    def read_parameters(self, simpar_file=None, setup=None):
         """
         Read simulation parameters.
         """
-        simpar_file = os.path.join(self.simdir, 'simpar.yaml')
+        if simpar_file is None:
+            if self.setup == 'run':
+                run_dir = self.simdir
+            elif self.setup == 'trial':
+                for run in os.listdir(self.simdir):
+                    if os.path.isdir(os.path.join(self.simdir, run)) and 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
+                        run_dir = os.path.join(self.simdir, run)
+                        break
+            elif self.setup == 'trial_set':
+                for trial in os.listdir(self.simdir):
+                    for run in os.listdir(os.path.join(self.simdir, trial)):
+                        if 'simpar.yaml' in os.listdir(os.path.join(self.simdir, run)):
+                            run_dir = os.path.join(self.simdir, run)
+                            break
+            simpar_file = os.path.join(run_dir, 'simpar.yaml')
+        else:
+            run_dir = os.path.dirname(simpar_file)
+        print('Reading simulation parameters from -> %s' % run_dir) if self.verbose else None
         with open(simpar_file, 'r') as sp:
             simpar = yaml.load(sp)
         self.parameters = Parameters(simpar)

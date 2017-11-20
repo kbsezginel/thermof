@@ -129,7 +129,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     Returns:
         - dict: Run data containing thermal conductivity, estimate, timesteps, run name
     """
-    run_data = dict(name=os.path.basename(run_dir), k={}, k_est={}, time=[], directions=[])
+    run_data = dict(name=os.path.basename(run_dir), k={}, k_est={}, time=[], directions=[], hcacf={})
     trial_data = []
     runs_id = []
     if os.path.isdir(run_dir):
@@ -151,6 +151,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         run_message = '%-9s ->' % run_data['name']
         for direction, flux_file in zip(directions, flux_files):
             flux, time = read_thermal_flux(flux_file, k_par=k_par)
+            run_data['hcacf'][direction] = flux
             k = calculate_k(flux, k_par=k_par)
             run_data['k'][direction] = k
             run_data['k_est'][direction] = estimate_k(k, time, t0=k_par['t0'], t1=k_par['t1'])
@@ -167,6 +168,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
         raise RunDirectoryNotFoundError('Run directory not found: %s' % run_dir)
     if k_par['isotropic']:
         run_data['k']['iso'] = average_k([run_data['k'][d] for d in directions])
+        run_data['hcacf']['iso'] = average_k([run_data['hcacf'][d] for d in directions])
         run_data['k_est']['iso'] = estimate_k(run_data['k']['iso'], run_data['time'], t0=k_par['t0'], t1=k_par['t1'])
         print('Isotropic -> k: %.3f W/mK from %i directions' % (run_data['k_est']['iso'], len(directions))) if verbose else None
 

@@ -105,13 +105,21 @@ def plot_thermo(thermo, parameters):
     Returns:
         - None (shows the plot)
     """
+    if parameters['fix'] is None:
+        parameters['fix'] = list(thermo.keys())
+    if parameters['variable'] is None:
+        parameters['variable'] = list(thermo[parameters['fix'][0]].keys())
+
     n_var = len(parameters['variable'])
-    fig_width = n_var * 4 + 2
-    fig = plt.figure(figsize=(fig_width, parameters['fig_height']), dpi=parameters['dpi'])
+    n_cols = parameters['n_columns']
+    n_rows = int(np.ceil(n_var / n_cols))
+    if parameters['size'] is None:
+        parameters['size'] = [n_cols * 4 + 2, n_rows * 3]
+    fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
     fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
 
     for i, y_axis in enumerate(parameters['variable'], start=1):
-        ax = fig.add_subplot(1, n_var, i)
+        ax = fig.add_subplot(n_rows, n_cols, i)
         for fix in parameters['fix']:
             if fix in parameters['colors']:
                 plt.plot(thermo[fix]['step'], thermo[fix][y_axis], c=parameters['colors'][fix])
@@ -141,11 +149,23 @@ def subplot_thermal_conductivity(plot_data, parameters=plot_parameters['k_sub'])
     Returns:
         - None (shows the plot)
     """
+    n_var = len(plot_data['y'])
+    n_cols = parameters['n_columns']
+    n_rows = int(np.ceil(n_var / n_cols))
+    if parameters['size'] is None:
+        parameters['size'] = [n_cols * 4 + 2, n_rows * 3]
     fig = plt.figure(figsize=parameters['size'], dpi=parameters['dpi'])
     fig.subplots_adjust(hspace=parameters['subplots_adjust'][0], wspace=parameters['subplots_adjust'][1])
+    max_k = max([max(k) for k in plot_data['y']])
+    min_k = min([min(k) for k in plot_data['y']])
+    if parameters['ylim'] is None:
+        parameters['ylim'] = [min_k, max_k * 1.1]
+    if parameters['k_est_loc'] is None:
+        parameters['k_est_loc'] = [parameters['k_est_t0'], max_k]
     lim = parameters['limit']
+
     for i, pd in enumerate(plot_data['y'], start=1):
-        ax = fig.add_subplot(parameters['subplot'][0], parameters['subplot'][1], i)
+        ax = fig.add_subplot(n_rows, n_cols, i)
         plt.plot(plot_data['x'][lim[0]:lim[1]], pd[lim[0]:lim[1]], lw=parameters['lw'])
         if parameters['ylim'] is not None:
             plt.ylim(parameters['ylim'])

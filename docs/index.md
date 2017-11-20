@@ -32,6 +32,36 @@ Usage
 -----
 thermof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
 
+### Command-line interface
+
+TherMOF can be used with the command-line interface (CLI) provided in this repository.
+The CLIs are given in `CLI` directory.
+
+#### Initializing LAMMPS simulations
+
+A thermal conductivity calculation input files for LAMMPS can be generated for a `cif` file with the `thermof_write` CLI as follows:
+```
+python thermof_write.py MOF5.cif
+```
+
+Using the `--help` flag more information about the CLI (such as selecting force field, cell size) can be obtained:
+```
+python thermof_write.py --help
+```
+
+#### Analyzing LAMMPS simulations
+
+After running LAMMPS simulations the resuts can be analyzed and plotted with the `thermof_read` CLI as follows:
+```
+python thermof_read.py /path/to/simulation
+```
+Here `/path/to/simulation` is the name of the directory that contains simulation results.
+
+Using the `--help` flag more information about the CLI (such as selecting plots, parameters) can be obtained:
+```
+python thermof_read.py --help
+```
+
 ### Sample
 Sample [Lammps] input files for thermal conductivity calculations can be found in `thermof/sample`
 
