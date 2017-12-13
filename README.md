@@ -14,8 +14,15 @@ Investigating thermal transport in metal-organic frameworks.
 
 Installation
 ------------
+First, install [lammps_interface](https://github.com/kbsezginel/lammps_interface) Python package:
 
-Clone the repository, enter the main repository directory and run setup:
+```bash
+git clone https://github.com/kbsezginel/lammps_interface
+cd lammps_interface
+python setup.py install
+```
+
+Then, clone the repository, enter the main repository directory and run setup:
 
 ```bash
 git clone https://github.com/kbsezginel/thermof.git
@@ -29,32 +36,33 @@ thermof library can be used to initialize, run, and analyze simulation results t
 
 ### Command-line interface
 
-TherMOF can be used with the command-line interface (CLI) provided in this repository.
-The CLIs are given in `CLI` directory.
+TherMOF can be used with the command-line interface (CLI) provided in this repository. The CLIs are installed as console scripts by default. Alternatively, you can find the scripts in `thermof/cli`.
 
 #### Initializing LAMMPS simulations
 
 A thermal conductivity calculation input files for LAMMPS can be generated for a `cif` file with the `thermof_write` CLI as follows:
 ```
-python thermof_write.py MOF5.cif
+thermof_write myMOF.cif
 ```
+This would create a directory (`myMOF`) in the same directory as the cif file containing LAMMPS input files. Currently only `P1` symmetry is accepted. An example cif file can be found in `thermof/sample/MOF5.cif`.
+
 
 Using the `--help` flag more information about the CLI (such as selecting force field, cell size) can be obtained:
 ```
-python thermof_write.py --help
+thermof_write --help
 ```
 
 #### Analyzing LAMMPS simulations
 
 After running LAMMPS simulations the resuts can be analyzed and plotted with the `thermof_read` CLI as follows:
 ```
-python thermof_read.py /path/to/simulation
+thermof_read /path/to/simulation
 ```
 Here `/path/to/simulation` is the name of the directory that contains simulation results.
 
 Using the `--help` flag more information about the CLI (such as selecting plots, parameters) can be obtained:
 ```
-python thermof_read.py --help
+thermof_read --help
 ```
 
 ### Sample
