@@ -37,7 +37,7 @@ A thermal conductivity calculation input files for LAMMPS can be generated for a
 ```
 thermof_write myMOF.cif
 ```
-This would create a directory (`myMOF`) in the same directory as the cif file containing LAMMPS input files. Currently only `P1` symmetry is accepted. An example cif file can be found in `thermof/sample/MOF5.cif`.
+This would create a directory, `myMOF`, containing LAMMPS input files in the same directory as the cif file . Currently only `P1` symmetry is accepted. An example cif file can be found in `thermof/sample/MOF5.cif`.
 
 
 Using the `--help` flag more information about the CLI (such as selecting force field, cell size) can be obtained:
