@@ -1,0 +1,3 @@
+"""
+Thermof command line interface.
+"""

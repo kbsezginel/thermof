@@ -134,7 +134,7 @@ def read_run(run_dir, k_par=k_parameters, t0=5, t1=10, verbose=True):
     runs_id = []
     if os.path.isdir(run_dir):
         if k_par['read_thermo']:
-            print('Reading log file -> %s' % k_par['log_file'])
+            print('Reading log file -> %s' % k_par['log_file']) if verbose else None
             headers = get_thermo_headers(k_par['thermo_style'])
             thermo_data = read_log(os.path.join(run_dir, '%s' % k_par['log_file']), headers=headers)
             fix = k_par['fix']

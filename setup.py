@@ -14,5 +14,11 @@ setup(
                       'pyyaml',
                       'matplotlib',
                       'periodictable',
-                      'ase']
+                      'ase'],
+    entry_points={
+        'console_scripts': [
+            'thermof-read=thermof.cli.thermof_read:main',
+            'thermof-write=thermof.cli.thermof_write:main',
+        ]
+    }
 )
