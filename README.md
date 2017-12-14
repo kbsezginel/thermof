@@ -5,13 +5,6 @@ Thermal transport in MOFs (thermof)
 ===================================
 Investigating thermal transport in metal-organic frameworks.
 
-<p align="center"> <img src="https://raw.githubusercontent.com/kbsezginel/thermof/master/docs/img/Fig1.png"> </p>
-
--   a) Idealized porous crystal (8 × 8 × 8 cubic unit cells), single unit cell highlighted in red
--   b) Bonding arrangement for single unit cell using Morse potential (red bonds are modeled stronger than blue bonds)
--   c) Doubly interpenetrated unit cells with framework depicted as red and blue (initial frameworks in each simulation are 5 Å apart in each dimension
--   d) Interpenetrated idealized porous crystal (8 × 8 × 8 cubic unit cells).
-
 Installation
 ------------
 First, install [lammps_interface](https://github.com/kbsezginel/lammps_interface) Python package:
@@ -22,17 +15,17 @@ cd lammps_interface
 python setup.py install
 ```
 
-Then, clone the repository, enter the main repository directory and run setup:
+Then, clone and install the TherMOF repository:
 
 ```bash
 git clone https://github.com/kbsezginel/thermof.git
 cd thermof
-python setup.py install
+pip install -e .
 ```
 
 Usage
 -----
-thermof library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
+TherMOF library can be used to initialize, run, and analyze simulation results to investigate thermal transport in porous crytals. Here sample files for an idealized cubic MOF along with an interpenetrated version are provided (see Figure 1). Using these files Molecular Dynamics simulations can be run with [Lammps].
 
 ### Command-line interface
 
@@ -84,6 +77,12 @@ Example jupyter notebooks can be found in `/notebooks`
 -   initialize: Initialize Lammps simulation files according to selected simulation parameters
 -   interpenetrate: Create interpenetrated structure
 -   read_simulation: Read and plot thermal conductivity Lammps simulation results
+
+### Publications
+
+1. [Babaei, Hasan, and Christopher E. Wilmer. **"Mechanisms of heat transfer in porous crystals containing adsorbed gases: Applications to metal-organic frameworks."** *Physical review letters* 116.2 (2016): 025902.](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.116.025902)
+2. [Babaei, Hasan, Alan JH McGaughey, and Christopher E. Wilmer. **"Effect of pore size and shape on the thermal conductivity of metal-organic frameworks."** *Chemical Science* 8.1 (2017): 583-589.](http://pubs.rsc.org/-/content/articlehtml/2016/sc/c6sc03704f)
+3. Sezginel, Kutay B., Patrick Asinger, Hasan Babaei, and Christopher E. Wilmer. **"Effect of interpenetration on the thermal conductivity of metal-organic frameworks."** *submitted*
 
 -------------------------------------------------------------------------
 [Lammps]: http://lammps.sandia.gov/ "Lammps home page"
