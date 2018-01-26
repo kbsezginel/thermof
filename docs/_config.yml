@@ -2,3 +2,12 @@ theme: jekyll-theme-minimal
 title: TherMOF
 description: Investigating thermal transport in Metal-Organic Frameworks
 show_downloads: true
+navigation:
+  - title: KBS - Home
+    url: http://kbsezginel.github.io
+  - title: TherMOF
+  - url: /
+  - title: Methods
+  - url: methods
+  - title: Results
+  - url: results

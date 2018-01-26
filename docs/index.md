@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "thermof"
+title:  "TherMOF"
 date:   2017-08-10
 ---
 [![Build Status](https://travis-ci.org/kbsezginel/thermof.svg?branch=master)](https://travis-ci.org/kbsezginel/thermof)
