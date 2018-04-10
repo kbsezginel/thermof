@@ -42,7 +42,7 @@ def main():
     parser.add_argument('--runs', '-r', default=1, type=int, metavar='',
                         help='Number of runs (different seed number is used for each run).')
     parser.add_argument('--forcefield', '-ff', default='UFF', type=str, metavar='',
-                        help='Force field for molecule file.')
+                        help='Force field for molecule file ([UFF] / BTW_FF / Dreiding / UFF4MOF / Dubbeldam).')
     parser.add_argument('--fix', nargs='+', default=['NVT'], type=str,
                         help='Lammps fix types (MIN / NPT / NVT / NVE).')
     parser.add_argument('--scheduler', default='slurm', type=str, metavar='',
