@@ -8,6 +8,12 @@ notebooks/tests
 CLI/MOF5
 CLI/C60*
 
+# GitHub Pages
+_site/
+.sass-cache/
+.jekyll-metadata
+Gemfile.lock
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
