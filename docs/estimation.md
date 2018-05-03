@@ -1,3 +1,7 @@
+---
+layout: default
+date:   2018-05-03
+---
 Automated Estimation of Thermal Conductivity
 ============================================
 
@@ -55,8 +59,11 @@ Displacement Analysis for MOFs with Unphysical Thermal Conductivities
   <details>
     <summary>Click here for more</summary>
     I separated the MOFs that have a k estimation between 0 - 20 W/mK and the MOFs where k is not calculated
-    or k is calculated out of this range. Then I calculated the mean displacement for one of the framework atoms
-    for each MOF. I mainly did this to see whether MOFs with unphysical k values have higher displacement
+    or k is calculated out of this range. Then I calculated the mean displacement (MD) for one of the framework atoms
+    for each MOF using the formula below:
+    <p align="center"> <img src="assets/img/estimation/mean-displacement-formula.png" height="60"> </p>
+
+    I mainly did this to see whether MOFs with unphysical k values have higher displacement
     that MOFs with normal k values. For some of the MOFs we saw that the framework was drifting which was causing
     unphysically high k values.
 
