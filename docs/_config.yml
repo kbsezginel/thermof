@@ -6,8 +6,8 @@ navigation:
   - title: KBS - Home
     url: http://kbsezginel.github.io
   - title: TherMOF
-  - url: /
+    url: /
   - title: Methods
-  - url: methods
+    url: methods
   - title: Results
-  - url: results
+    url: results
