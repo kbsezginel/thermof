@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: full
 date:   2018-05-03
 ---
 Automated Estimation of Thermal Conductivity
@@ -46,9 +46,36 @@ Thermal Conductivity vs MOF Properties
 
 <p>
   <details>
-    <summary>Click here for more</summary>
-    <p align="center"> <img src="assets/img/estimation/kproperties-x.png"> </p>
-    This plot is for thermal conudctivity in x direction. Other directions show the same trends.
+    <summary>k (all directions) vs properties | color: density</summary>
+    Markers are colored according to density and x-axis (k) is limited to 0 - 10 W/mK.
+      <p align="center"> <img src="assets/img/estimation/k-direction-mof-property.png"> </p>
+
+    Markers are colored according to density and x-axis (k) is limited to 0 - 2.5 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-direction-mof-property-zoom.png"> </p>
+  </details><br>
+  <details>
+    <summary>k(x) vs properties | color: pore volume</summary>
+    Markers are colored according to pore volume and x-axis (k) is limited to 0 - 2.5 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-pore-volume-zoom.png"> </p>
+
+    Markers are colored according to pore volume and x-axis (k) is limited to 0 - 10 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-pore-volume.png"> </p>
+  </details><br>
+  <details>
+    <summary>k(x) vs properties | color: surface area</summary>
+    Markers are colored according to surface area and x-axis (k) is limited to 0 - 2.5 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-surface-area-zoom.png"> </p>
+
+    Markers are colored according to surface area and x-axis (k) is limited to 0 - 10 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-surface-area.png"> </p>
+  </details><br>
+  <details>
+    <summary>k(x) vs properties | color: void fraction</summary>
+    Markers are colored according to pore volume and x-axis (k) is limited to 0 - 2.5 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-void-fraction-zoom.png"> </p>
+
+    Markers are colored according to pore volume and x-axis (k) is limited to 0 - 10 W/mK.
+    <p align="center"> <img src="assets/img/estimation/k-mof-property-void-fraction.png"> </p>
   </details>
 </p>
 
