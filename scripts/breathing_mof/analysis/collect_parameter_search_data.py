@@ -16,7 +16,7 @@ P = 100000                       # correlation length
 S = 5                            # sample interval
 DT = 1                           # timestep (fs)
 V_IDEAL = 80 * 80 * 80           # mof ideal volume
-T0, T1 = 25, 45                  # thermal conductivity read interval
+T0, T1 = 15000, 19500            # thermal conductivity read interval
 HIST_DATA = {}
 main = os.path.abspath(sys.argv[1])
 for sim in os.listdir(main):
@@ -30,13 +30,13 @@ for sim in os.listdir(main):
         vol_file = os.path.join(run_dir, 'vol_angles.csv')
         vol_data = read_volume(vol_file)
         v_avg = sum(vol_data['v']) / len(vol_data['v'])
-        v_ratio = v_avg / v_ideal * 100
+        v_ratio = v_avg / V_IDEAL * 100
         sim_data['v'].append(v_ratio)
 
         ## READ THERMAL FLUX -------------------------------
         for trm in TERMS:
             for drx in ['x', 'y', 'z']:
-                flux_file = os.path.join(run_dir, 'J0Jt_t%s%s.dat' % (drx, term))
+                flux_file = os.path.join(run_dir, 'J0Jt_t%s%s.dat' % (drx, trm))
                 flux, time = read_thermal_flux(flux_file)
                 k = calculate_k(flux, v_avg)
                 sim_data['k%s' % trm].append(k)
@@ -44,15 +44,16 @@ for sim in os.listdir(main):
     for trm in TERMS:
         sim_data['k%s' % trm] = np.average(sim_data['k%s' % trm], axis=0)
     sim_data['v'] = sum(sim_data['v']) / len(sim_data['v'])
-    sim_data['k_est'] = estimate_k(sim_data['k'], time, t0=T0, t1=T1)
+    sim_data['kest'] = sum(sim_data['k'][T0:T1]) / len(sim_data['k'][T0:T1])
 
     # Plot thermal conductivity and HCACF
-    plot_kest([sim_data['k%s' % trm] for trm in TERMS], time,
-              title=sim, legend=['k%s' trm for trm in TERMS])
+    kest = {'t': time[T0:T1], 'k': sim_data['k'][T0:T1], 'kest': sim_data['kest']}
+    plot_kest([sim_data['k%s' % trm] for trm in TERMS], time, kest=kest,
+              title=sim, legend=['k%s' % trm for trm in TERMS], save='%s.png' % sim)
 
     # Histogram data
-    HIST_DATA[sim] = {'k': sim_data['k_est'], 'v': sim_data['v']}
-    print('%8s | k: %5.2f | V: %.1f' % (sim, sim_data['k_est'], sim_data['v']))
+    HIST_DATA[sim] = {'k': sim_data['kest'], 'v': sim_data['v']}
+    print('%8s | k: %5.2f | V: %.1f' % (sim, sim_data['kest'], sim_data['v']))
 
 
 with open('parameter_search_data.yaml', 'w') as f:

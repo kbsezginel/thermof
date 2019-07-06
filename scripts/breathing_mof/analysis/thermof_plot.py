@@ -222,7 +222,7 @@ def plot_kest(k_data, time, kest=None, legend=[], title='',
         ax.set_xlim(xlim)
     if kest is not None:
         ax.plot(kest['t'], kest['k'], c='r')
-        ax.text(sum(kest['t']) / len(kest['t']), sum(kest['t']) / len(kest['t']), round(kest['kest'], 2))
+        ax.text(sum(kest['t']) / len(kest['t']), sum(kest['k']) / len(kest['k']), round(kest['kest'], 2))
         legend.append('k_est')
     ax.legend(legend, loc=2, frameon=False)
     if save is not None:
