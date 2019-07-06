@@ -37,8 +37,8 @@ for sim in os.listdir(main):
         for trm in TERMS:
             for drx in ['x', 'y', 'z']:
                 flux_file = os.path.join(run_dir, 'J0Jt_t%s%s.dat' % (drx, trm))
-                flux, time = read_thermal_flux(flux_file)
-                k = calculate_k(flux, v_avg)
+                flux, time = read_thermal_flux(flux_file, p=P, s=S, dt=DT)
+                k = calculate_k(flux, v_avg, s=S, dt=DT)
                 sim_data['k%s' % trm].append(k)
     # Average multiple runs and directions for each term
     for trm in TERMS:
