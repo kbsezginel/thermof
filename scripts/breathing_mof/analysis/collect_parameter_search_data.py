@@ -47,6 +47,8 @@ for sim in os.listdir(main):
     sim_data['k_est'] = estimate_k(sim_data['k'], time, t0=T0, t1=T1)
 
     # Plot thermal conductivity and HCACF
+    plot_kest([sim_data['k%s' % trm] for trm in TERMS], time,
+              title=sim, legend=['k%s' trm for trm in TERMS])
 
     # Histogram data
     HIST_DATA[sim] = {'k': sim_data['k_est'], 'v': sim_data['v']}

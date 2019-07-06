@@ -195,7 +195,7 @@ def plot_thermo(THERMO, variable='temp', xlabel='Time (ps)', ylabel='',
 
 
 def plot_kest(k_data, time, kest=None, legend=[], title='',
-              figsize=(20, 5), dpi=300, hspace=0.45, wspace=0.2,
+              figsize=(5, 3), dpi=300, hspace=0.45, wspace=0.2,
               xlabel='Time (ps)', ylabel='k (W / mK)',
               ylim=(None, None), xlim=(None, None), save=None):
     """
@@ -205,7 +205,7 @@ def plot_kest(k_data, time, kest=None, legend=[], title='',
     time : list
         Time data.
     kest : dict or None
-        {'k': float, 't0': int, 't1': int}
+        {'k': list, 't': list, 'kest': float}
     legend : list
         List of labels for k data.
     terms : k contribution by total, bonds, angles
@@ -220,6 +220,10 @@ def plot_kest(k_data, time, kest=None, legend=[], title='',
         ax.set_ylabel(ylabel)
         ax.set_ylim(ylim)
         ax.set_xlim(xlim)
+    if kest is not None:
+        ax.plot(kest['t'], kest['k'], c='r')
+        ax.text(sum(kest['t']) / len(kest['t']), sum(kest['t']) / len(kest['t']), round(kest['kest'], 2))
+        legend.append('k_est')
     ax.legend(legend, loc=2, frameon=False)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
