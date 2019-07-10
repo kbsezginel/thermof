@@ -2,6 +2,7 @@
 Plot thermal conductivity results for breathing mof.
 """
 import os, sys
+import numpy as np
 from thermof_tools import read_run, read_run_thermo
 from thermof_plot import plot_hcacf, plot_hcacf_avg, plot_thermo
 from thermof_plot import plot_k, plot_k_avg, plot_volume
@@ -12,7 +13,8 @@ sim_name = os.path.basename(sim_dir)
 p = int(input('Enter correlation length (p) in timesteps [20000]: ') or '20000')
 s = int(input('Enter dump interval (s) in timesteps [5]: ') or '5')
 dt = float(input('Enter timestep (dt) [1.0]: ') or '1.0')
-V_IDEAL = int(input('Enter ideal volume in A3 [512000]: ') or '512000')
+angle = float(input('Enter angle (degrees) [90]: ') or '90')
+V_IDEAL = 80 * 80 * 80 * np.sin(np.deg2rad(angle))
 terms = ['', '_bond', '_angle']
 print('Using p: %i | s: %i | dt: %.1f | V: %i with terms -> %s' % (p, s, dt, V_IDEAL, ' | '.join(terms)))
 
