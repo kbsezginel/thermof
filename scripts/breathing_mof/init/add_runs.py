@@ -8,14 +8,16 @@ import shutil
 from lammps_tools import change_job_name
 
 
-simdir = os.path.abspath(sys.argv[1])
-refdir = os.path.join(simdir, '1')
-data_file_name = 'data.breathing_mof'
-in_file_name = 'in.breathing_mof'
-job_file_name = 'job.lammps'
+refno = input('Enter reference (start) sim no [1]: ') or '1'
+start_seed = int(input('Enter starting seed no [123456]: ') or '123456')
 nruns = int(input('Enter number of total runs: '))
 job_name = input('Enter job name: ')
 
+simdir = os.path.abspath(sys.argv[1])
+refdir = os.path.join(simdir, refno)
+data_file_name = 'data.breathing_mof'
+in_file_name = 'in.breathing_mof'
+job_file_name = 'job.lammps'
 
 def change_seed(source_input, dest_input, seed=999999):
     """ Change seed number of Lammps input """
@@ -30,12 +32,12 @@ def change_seed(source_input, dest_input, seed=999999):
     return None
 
 
-for run in range(2, nruns + 1):
+for run in range(int(refno) + 1, int(refno) + nruns):
     rundir = os.path.join(simdir, str(run))
     print('Adding -> %s' % rundir)
     os.makedirs(rundir, exist_ok=True)
     shutil.copy(os.path.join(refdir, data_file_name), os.path.join(rundir, data_file_name))
     # Change seed number
-    change_seed(os.path.join(refdir, in_file_name), os.path.join(rundir, in_file_name), seed=123456 + run)
+    change_seed(os.path.join(refdir, in_file_name), os.path.join(rundir, in_file_name), seed=start_seed + run)
     # Change job name
     change_job_name(os.path.join(refdir, job_file_name), os.path.join(rundir, job_file_name), job_name='%s-%i' % (job_name, run))
