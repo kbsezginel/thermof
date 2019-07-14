@@ -25,7 +25,10 @@ print('Reading data from %s' % sim_dir)
 DATA = {}
 for run in os.listdir(sim_dir):
     run_dir = os.path.join(sim_dir, run)
-    run_data = read_run(run_dir, p=p, s=s, dt=dt, terms=terms)
+    try:
+        run_data = read_run(run_dir, p=p, s=s, dt=dt, terms=terms)
+    except Exception as e:
+        print(f'RUN: {run} | {e}')
     DATA[run] = run_data
 
 print('Plotting to %s' % pltdir)

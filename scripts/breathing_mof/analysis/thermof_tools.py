@@ -5,6 +5,16 @@ import os, csv
 import numpy as np
 
 
+def check_sim_finished(outfile):
+    with open(outfile, 'r') as f:
+        lines = f.readlines()
+    fin, time = False, None
+    if len(lines) > 0:
+        if 'Total wall time' in lines[-1]:
+            fin, time = True, lines[-1].split()[3]
+    return fin, time
+
+
 def read_volume(csv_file, skip_headers=True):
     """Read LAMMPS output volume vs timestep csv file"""
     with open(csv_file, 'r') as f:
