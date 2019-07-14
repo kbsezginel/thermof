@@ -32,11 +32,13 @@ for run in os.listdir(sim_dir):
     DATA[run] = run_data
 
 print('Plotting to %s' % pltdir)
+# Plot individual runs
 for drx in ['x', 'y', 'z']:
     plot_hcacf(DATA, drx=drx, terms=terms,
                save=os.path.join(pltdir, '%s_hcacf_%s.png' % (sim_name, drx)))
     plot_k(DATA, drx=drx, terms=terms,
            save=os.path.join(pltdir, '%s_k_%s.png' % (sim_name, drx)))
+# Plot direction averages
 plot_hcacf_avg(DATA, terms=terms, save=os.path.join(pltdir, '%s_hcacf_avg.png' % sim_name))
 plot_k_avg(DATA, terms=terms, save=os.path.join(pltdir, '%s_k_avg.png' % sim_name))
 plot_volume(DATA, V_IDEAL=V_IDEAL, time_conv=0.001*dt,

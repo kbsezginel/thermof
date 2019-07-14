@@ -97,7 +97,7 @@ def plot_k(DATA, drx='x', terms=['', '_bond', '_angle'],
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
 
 
-def plot_k_avg(DATA, terms=['', '_bond', '_angle'],
+def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
                    figsize=(15, 3), dpi=300, hspace=0.3, wspace=0.2,
                    xlabel='Time (ps)', ylabel='k (W / mK)',
                    ylim=(None, None), xlim=(None, None), save=None):
@@ -118,11 +118,21 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'],
         for trm in AVG_DATA:
             AVG_DATA[trm] = np.average(AVG_DATA[trm], axis=0)
 
+        # Estimate k
+        if kest is not None:
+            t0, t1 = kest['T0'] * len(AVG_DATA[trm]), kest['T1'] * len(AVG_DATA[trm])
+            print(f'Estimating k for {trm} between {t0} - {t1}')
+            kest['t'] = DATA['1']['time'][t0:t1]
+            kest['k'] = [np.average(AVG_DATA[trm][t0:t1])] * len(kest['t'])
+
         ax = fig.add_subplot(1, 3, plt_idx)
         legend = []
         for trm in AVG_DATA:
             ax.plot(DATA['1']['time'], AVG_DATA[trm])
             legend.append(trm)
+            if kest is not None:
+                ax.plot(kest['t'], kest['k'], c='r')
+                ax.text(sum(kest['t']) / len(kest['t']), sum(kest['k']) / len(kest['k']), round(kest['kest'], 2))
         ax.legend(legend, loc=2, frameon=False)
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
