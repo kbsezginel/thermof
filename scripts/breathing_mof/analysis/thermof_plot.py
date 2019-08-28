@@ -32,6 +32,8 @@ def plot_hcacf(DATA, drx='x', terms=['', '_bond', '_angle'],
             ax.legend(['k%s%s' % (drx, t) for t in terms], loc=1, frameon=False)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
+
 
 def plot_hcacf_avg(DATA, terms=['', '_bond', '_angle'],
                    figsize=(15, 3), dpi=300, hspace=0.3, wspace=0.2,
@@ -66,7 +68,7 @@ def plot_hcacf_avg(DATA, terms=['', '_bond', '_angle'],
         ax.set_xlim(xlim)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
-
+        plt.close(fig)
 
 def plot_k(DATA, drx='x', terms=['', '_bond', '_angle'],
            figsize=(20, 5), dpi=300, hspace=0.45, wspace=0.2, ncol=5,
@@ -95,6 +97,7 @@ def plot_k(DATA, drx='x', terms=['', '_bond', '_angle'],
             ax.legend(['k%s%s' % (drx, t) for t in terms], loc=2, frameon=False)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
 
 
 def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
@@ -118,12 +121,12 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
         for trm in AVG_DATA:
             AVG_DATA[trm] = np.average(AVG_DATA[trm], axis=0)
 
-        # Estimate k
-        if kest is not None:
-            t0, t1 = kest['T0'] * len(AVG_DATA[trm]), kest['T1'] * len(AVG_DATA[trm])
-            print(f'Estimating k for {trm} between {t0} - {t1}')
-            kest['t'] = DATA['1']['time'][t0:t1]
-            kest['k'] = [np.average(AVG_DATA[trm][t0:t1])] * len(kest['t'])
+            # Estimate k
+            if kest is not None:
+                t0, t1 = int(kest['T0'] * len(AVG_DATA[trm])), int(kest['T1'] * len(AVG_DATA[trm]))
+                print(f'Estimating k for {trm} between {t0} - {t1}')
+                kest['t'] = DATA['1']['time'][t0:t1]
+                kest[f'k{trm}'] = [np.average(AVG_DATA[trm][t0:t1])] * len(kest['t'])
 
         ax = fig.add_subplot(1, 3, plt_idx)
         legend = []
@@ -131,8 +134,8 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
             ax.plot(DATA['1']['time'], AVG_DATA[trm])
             legend.append(trm)
             if kest is not None:
-                ax.plot(kest['t'], kest['k'], c='r')
-                ax.text(sum(kest['t']) / len(kest['t']), sum(kest['k']) / len(kest['k']), round(kest['kest'], 2))
+                ax.plot(kest['t'], kest[f'k{trm}'], c='r')
+                ax.text(sum(kest['t']) / len(kest['t']), sum(kest[f'k{trm}']) / len(kest[f'k{trm}']), round(kest[f'k{trm}'][0], 2))
         ax.legend(legend, loc=2, frameon=False)
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
@@ -140,6 +143,8 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
         ax.set_xlim(xlim)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
+
 
 def plot_volume(DATA, V_IDEAL=80*80*80, time_conv=1/1000,
                 figsize=(20, 5), dpi=300, hspace=0.42, wspace=0.3, ncol=5,
@@ -171,6 +176,8 @@ def plot_volume(DATA, V_IDEAL=80*80*80, time_conv=1/1000,
         ax.set_title(run)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
+
 
 def plot_thermo(THERMO, variable='temp', xlabel='Time (ps)', ylabel='',
                 figsize=(20, 5), dpi=300, hspace=0.45, wspace=0.2, ncol=5,
@@ -202,6 +209,7 @@ def plot_thermo(THERMO, variable='temp', xlabel='Time (ps)', ylabel='',
             ax.legend(legend, loc=legend_loc, ncol=legend_ncol, frameon=False)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
 
 
 def plot_kest(k_data, time, kest=None, legend=[], title='',
@@ -237,3 +245,4 @@ def plot_kest(k_data, time, kest=None, legend=[], title='',
     ax.legend(legend, loc=2, frameon=False)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=dpi)
+        plt.close(fig)
