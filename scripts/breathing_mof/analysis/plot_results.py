@@ -15,6 +15,7 @@ s = int(input('Enter dump interval (s) in timesteps [5]: ') or '5')
 dt = float(input('Enter timestep (dt) [1.0]: ') or '1.0')
 angle = float(input('Enter angle (degrees) [90]: ') or '90')
 V_IDEAL = 80 * 80 * 80 * np.sin(np.deg2rad(angle))
+kest = (0.7, 1.0) # Estimate k between 70% and 100% of k data
 terms = ['', '_bond', '_angle']
 print('Using p: %i | s: %i | dt: %.1f | V: %i with terms -> %s' % (p, s, dt, V_IDEAL, ' | '.join(terms)))
 
@@ -26,10 +27,16 @@ DATA = {}
 for run in os.listdir(sim_dir):
     run_dir = os.path.join(sim_dir, run)
     try:
-        run_data = read_run(run_dir, p=p, s=s, dt=dt, terms=terms)
+        DATA[run] = read_run(run_dir, p=p, s=s, dt=dt, kest=kest, terms=terms)
     except Exception as e:
         print(f'RUN: {run} | {e}')
-    DATA[run] = run_data
+
+# Print k est average and std
+for drx in ['x', 'y', 'z']:
+    kest_avg = []
+    for trm in ['', '_bond', '_angle']:
+        kest_avg.append(DATA['kest%s%s' % (drx, term)])
+    print(f'{drx} | {trm} | K (avg): {np.average(kest_avg)} (std): {np.std(kest_avg)}')
 
 print('Plotting to %s' % pltdir)
 # Plot individual runs

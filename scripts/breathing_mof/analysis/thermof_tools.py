@@ -69,7 +69,7 @@ def estimate_k(k_data, time, t0=5, t1=10):
     return (sum(k_data[start:end]) / len(k_data[start:end]))
 
 
-def read_run(run_dir, last_npt_step=500, p=20000, s=5, n_timesteps=1000000, dt=1, terms=['', '_bond', '_angle']):
+def read_run(run_dir, last_npt_step=500, p=20000, s=5, n_timesteps=1000000, dt=1, kest=(0.7, 1.0), terms=['', '_bond', '_angle']):
     """Read LAMMPS simulation output (read volume and flux, calculate thermal conductivity)"""
     # READ VOLUME
     vol_file = os.path.join(run_dir, 'vol_angles.csv')
@@ -86,6 +86,9 @@ def read_run(run_dir, last_npt_step=500, p=20000, s=5, n_timesteps=1000000, dt=1
             k = calculate_k(flux, v_avg, dt=dt)
             DATA['k%s%s' % (drx, term)] = k
             DATA['j%s%s' % (drx, term)] = flux
+            # Estimate k
+            t0, t1 = int(kest[0] * len(k)), int(kest[1] * len(k))
+            DATA['kest%s%s' % (drx, term)] = np.average(k[t0:t1])
     DATA['time'] = time
     return DATA
 
