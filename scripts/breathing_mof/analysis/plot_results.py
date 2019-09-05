@@ -10,12 +10,13 @@ from thermof_plot import plot_k, plot_k_avg, plot_volume
 
 sim_dir = os.path.abspath(sys.argv[1])
 sim_name = os.path.basename(sim_dir)
-p = int(input('Enter correlation length (p) in timesteps [20000]: ') or '20000')
+p = int(input('Enter correlation length (p) in timesteps [100000]: ') or '100000')
 s = int(input('Enter dump interval (s) in timesteps [5]: ') or '5')
 dt = float(input('Enter timestep (dt) [1.0]: ') or '1.0')
 angle = float(input('Enter angle (degrees) [90]: ') or '90')
+kest = input('Estimate k between [0.7, 1.0] in fractions: ') or '0.7, 1.0'
+kest = tuple(map(float, kest.split(',')))
 V_IDEAL = 80 * 80 * 80 * np.sin(np.deg2rad(angle))
-kest = (0.7, 1.0) # Estimate k between 70% and 100% of k data
 terms = ['', '_bond', '_angle']
 print('Using p: %i | s: %i | dt: %.1f | V: %i with terms -> %s' % (p, s, dt, V_IDEAL, ' | '.join(terms)))
 
@@ -35,14 +36,16 @@ for run in os.listdir(sim_dir):
 AVG_DATA = {}
 for drx in ['x', 'y', 'z']:
     for trm in ['', '_bond', '_angle']:
-        k_runs = []
+        k_runs, kest_runs = [], []
         for run in DATA:
-            k_runs.append(DATA[run]['k%s%s' % (drx, trm)])
+            kr = DATA[run]['k%s%s' % (drx, trm)]
+            k_runs.append(kr)
+            t0, t1 = int(kest[0] * len(kr)), int(kest[1] * len(kr))
+            kest_runs.append(np.average(kr[t0:t1]))
         k_avg = np.average(k_runs, axis=0)
-        t0, t1 = int(kest[0] * len(k_avg)), int(kest[1] * len(k_avg))
-        AVG_DATA['{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time']}
-
-        print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(k_avg[t0:t1])}')
+        AVG_DATA[f'{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time'],
+                                   'kest_avg': np.average(kest_runs), 'kest_std': np.std(kest_runs)}
+        print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(kest_runs)}')
 
 print('Plotting to %s' % pltdir)
 # Plot individual runs
@@ -54,7 +57,7 @@ for drx in ['x', 'y', 'z']:
 
 # Plot direction averages
 plot_hcacf_avg(DATA, terms=terms, save=os.path.join(pltdir, '%s_hcacf_avg.png' % sim_name))
-plot_k_avg(DATA, terms=terms, kest=kest, save=os.path.join(pltdir, '%s_k_avg.png' % sim_name))
+plot_k_avg(AVG_DATA, terms=terms, kest=kest, save=os.path.join(pltdir, '%s_k_avg.png' % sim_name))
 plot_volume(DATA, V_IDEAL=V_IDEAL, time_conv=0.001*dt,
             save=os.path.join(pltdir, '%s_volume.png' % sim_name))
 print('Done!')

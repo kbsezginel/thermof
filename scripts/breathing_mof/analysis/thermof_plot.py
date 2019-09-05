@@ -112,37 +112,20 @@ def plot_k_avg(AVG_DATA, terms=['', '_bond', '_angle'], kest=(0.7, 1.0),
     """
     fig = plt.figure(figsize=figsize, dpi=dpi)
     fig.subplots_adjust(hspace=hspace, wspace=wspace)
-    # for plt_idx, drx in enumerate(['x', 'y', 'z'], start=1):
-    #     AVG_DATA, KEST = {}, {}
-    #     for t in terms:
-    #         AVG_DATA['k%s%s' % (drx, t)] = []
-    #         kest_runs = [DATA[r]['k%s%s' % (drx, t)] for r in DATA]
-    #         KEST['k%s%s' % (drx, t)] = (np.average(kest_runs), np.std(kest_runs))
-    #     run_list = [str(i) for i in sorted([int(i) for i in DATA])]
-    #     for idx, run in enumerate(run_list, start=1):
-    #         for trm in AVG_DATA:
-    #             AVG_DATA[trm].append(DATA[run][trm])
-    #     for trm in AVG_DATA:
-    #         AVG_DATA[trm] = np.average(AVG_DATA[trm], axis=0)
-    #
-    #         # Estimate k
-    #         if kest is not None:
-    #             t0, t1 = int(kest['T0'] * len(AVG_DATA[trm])), int(kest['T1'] * len(AVG_DATA[trm]))
-    #             print(f'Estimating k for {trm} between {t0} - {t1}')
-    #             kest['t'] = DATA['1']['time'][t0:t1]
-    #             kest[f'k{trm}'] = [np.average(AVG_DATA[trm][t0:t1])] * len(kest['t'])
-
+    for plt_idx, drx in enumerate(['x', 'y', 'z'], start=1):
         ax = fig.add_subplot(1, 3, plt_idx)
         legend = []
-        for trm in AVG_DATA:
+        for t in terms:
+            trm = f'{drx}{t}'
             # Plot k vs t
-            ax.plot(AVG_DATA[trm]['time'], AVG_DATA[trm]['k'])
+            ax.plot(AVG_DATA[trm]['t'], AVG_DATA[trm]['k'])
             legend.append(trm)
             # Plot kest average
             t0, t1 = int(kest[0] * len(AVG_DATA[trm]['k'])), int(kest[1] * len(AVG_DATA[trm]['k']))
-            time = AVG_DATA[trm]['time'][t0:t1]
+            time = AVG_DATA[trm]['t'][t0:t1]
             ax.plot(time, [AVG_DATA[trm]['kest']] * len(time), c='r')
-            ax.text(sum(time) / len(time), AVG_DATA[trm]['kest']), round(AVG_DATA[trm]['kest'], 2))
+            txt = '%.2f ± %.2f' % (AVG_DATA[trm]['kest'], AVG_DATA[trm]['kest_std'])
+            ax.text(sum(time) / len(time), AVG_DATA[trm]['kest'], txt, horizontalalignment='center')
 
             # if kest is not None:
             #     # Add patch for standard deviation of kest
@@ -155,7 +138,7 @@ def plot_k_avg(AVG_DATA, terms=['', '_bond', '_angle'], kest=(0.7, 1.0),
             #     ax.add_patch(rect)
             #     ax.plot(kest['t'], kest[f'k{trm}'], c='r')
             #     ax.text(sum(kest['t']) / len(kest['t']), sum(kest[f'k{trm}']) / len(kest[f'k{trm}']), round(kest[f'k{trm}'][0], 2))
-        ax.legend(legend, loc=2, frameon=False)
+        ax.legend(legend, loc=2, frameon=False, ncol=3, y=1.05)
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
         ax.set_ylim(ylim)
