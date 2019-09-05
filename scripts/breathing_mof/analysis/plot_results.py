@@ -48,7 +48,7 @@ for drx in ['x', 'y', 'z']:
         AVG_DATA[f'{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time'],
                                    'kest_avg': np.average(kest_runs), 'kest_std': np.std(kest_runs)}
         print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(kest_runs)}')
-with open(os.path.join(datadir, f'k_avg_{simname}.yaml'), 'r') as f:
+with open(os.path.join(datadir, f'k_avg_{sim_name}.yaml'), 'w') as f:
     yaml.dump(AVG_DATA, f)
 
 print('Plotting to %s' % pltdir)
