@@ -4,7 +4,9 @@ Date: July 2019
 Author: Kutay B. Sezginel
 """
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import numpy as np
+
 
 def plot_hcacf(DATA, drx='x', terms=['', '_bond', '_angle'],
                figsize=(20, 5), dpi=300, hspace=0.45, wspace=0.2, ncol=5,
@@ -111,9 +113,11 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
     fig = plt.figure(figsize=figsize, dpi=dpi)
     fig.subplots_adjust(hspace=hspace, wspace=wspace)
     for plt_idx, drx in enumerate(['x', 'y', 'z'], start=1):
-        AVG_DATA = {}
+        AVG_DATA, KEST = {}, {}
         for t in terms:
             AVG_DATA['k%s%s' % (drx, t)] = []
+            kest_runs = [DATA[r]['k%s%s' % (drx, t)] for r in DATA]
+            KEST['k%s%s' % (drx, t)] = (np.average(kest_runs), np.std(kest_runs))
         run_list = [str(i) for i in sorted([int(i) for i in DATA])]
         for idx, run in enumerate(run_list, start=1):
             for trm in AVG_DATA:
@@ -134,6 +138,14 @@ def plot_k_avg(DATA, terms=['', '_bond', '_angle'], kest={'T0': 0.7, 'T1': 1.0},
             ax.plot(DATA['1']['time'], AVG_DATA[trm])
             legend.append(trm)
             if kest is not None:
+                # Add patch for standard deviation of kest
+                print('testing', kest[f'k{trm}'][0], KEST[trm][0], KEST[trm][1])
+                patch_xstart = kest['t'][0]
+                patch_ystart = kest[f'k{trm}'][0] - kest[f'k{trm}'][0] * 0.5
+                patch_height = 2 * kest[f'k{trm}'][0]
+                patch_width = kest['t'][-1] - kest['t'][0]
+                rect = patches.Rectangle((patch_xstart, patch_ystart), patch_width, patch_height, linewidth=0, facecolor='r', alpha=0.3)
+                ax.add_patch(rect)
                 ax.plot(kest['t'], kest[f'k{trm}'], c='r')
                 ax.text(sum(kest['t']) / len(kest['t']), sum(kest[f'k{trm}']) / len(kest[f'k{trm}']), round(kest[f'k{trm}'][0], 2))
         ax.legend(legend, loc=2, frameon=False)

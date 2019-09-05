@@ -33,10 +33,11 @@ for run in os.listdir(sim_dir):
 
 # Print k est average and std
 for drx in ['x', 'y', 'z']:
-    kest_avg = []
     for trm in ['', '_bond', '_angle']:
-        kest_avg.append(DATA['kest%s%s' % (drx, term)])
-    print(f'{drx} | {trm} | K (avg): {np.average(kest_avg)} (std): {np.std(kest_avg)}')
+        kest_avg = []
+        for run in DATA:
+            kest_avg.append(DATA[run]['kest%s%s' % (drx, trm)])
+        print(f'{drx} | {trm} | K (avg): {np.average(kest_avg)} (std): {np.std(kest_avg)}')
 
 print('Plotting to %s' % pltdir)
 # Plot individual runs
