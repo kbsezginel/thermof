@@ -22,6 +22,8 @@ print('Using p: %i | s: %i | dt: %.1f | V: %i with terms -> %s' % (p, s, dt, V_I
 
 pltdir = os.path.join('plt', sim_name)
 os.makedirs(pltdir, exist_ok=True)
+datadir = os.path.join('data', sim_name)
+os.makedirs(datadir, exist_ok=True)
 
 print('Reading data from %s' % sim_dir)
 DATA = {}
@@ -46,6 +48,8 @@ for drx in ['x', 'y', 'z']:
         AVG_DATA[f'{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time'],
                                    'kest_avg': np.average(kest_runs), 'kest_std': np.std(kest_runs)}
         print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(kest_runs)}')
+with open(os.path.join(datadir, f'k_avg_{simname}.yaml'), 'r') as f:
+    yaml.dump(AVG_DATA, f)
 
 print('Plotting to %s' % pltdir)
 # Plot individual runs

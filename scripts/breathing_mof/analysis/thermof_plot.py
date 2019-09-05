@@ -126,18 +126,6 @@ def plot_k_avg(AVG_DATA, terms=['', '_bond', '_angle'], kest=(0.7, 1.0),
             ax.plot(time, [AVG_DATA[trm]['kest']] * len(time), c='r')
             txt = '%.2f ± %.2f' % (AVG_DATA[trm]['kest'], AVG_DATA[trm]['kest_std'])
             ax.text(sum(time) / len(time), AVG_DATA[trm]['kest'], txt, horizontalalignment='center')
-
-            # if kest is not None:
-            #     # Add patch for standard deviation of kest
-            #     print('testing', kest[f'k{trm}'][0], KEST[trm][0], KEST[trm][1])
-            #     patch_xstart = kest['t'][0]
-            #     patch_ystart = kest[f'k{trm}'][0] - kest[f'k{trm}'][0] * 0.5
-            #     patch_height = 2 * kest[f'k{trm}'][0]
-            #     patch_width = kest['t'][-1] - kest['t'][0]
-            #     rect = patches.Rectangle((patch_xstart, patch_ystart), patch_width, patch_height, linewidth=0, facecolor='r', alpha=0.3)
-            #     ax.add_patch(rect)
-            #     ax.plot(kest['t'], kest[f'k{trm}'], c='r')
-            #     ax.text(sum(kest['t']) / len(kest['t']), sum(kest[f'k{trm}']) / len(kest[f'k{trm}']), round(kest[f'k{trm}'][0], 2))
         ax.legend(legend, loc=2, frameon=False, ncol=3, y=1.05)
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
