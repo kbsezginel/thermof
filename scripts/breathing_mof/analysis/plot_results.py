@@ -31,13 +31,18 @@ for run in os.listdir(sim_dir):
     except Exception as e:
         print(f'RUN: {run} | {e}')
 
-# Print k est average and std
+# Calculate run averages
+AVG_DATA = {}
 for drx in ['x', 'y', 'z']:
     for trm in ['', '_bond', '_angle']:
-        kest_avg = []
+        k_runs = []
         for run in DATA:
-            kest_avg.append(DATA[run]['kest%s%s' % (drx, trm)])
-        print(f'{drx} | {trm} | K (avg): {np.average(kest_avg)} (std): {np.std(kest_avg)}')
+            k_runs.append(DATA[run]['k%s%s' % (drx, trm)])
+        k_avg = np.average(k_runs, axis=0)
+        t0, t1 = int(kest[0] * len(k_avg)), int(kest[1] * len(k_avg))
+        AVG_DATA['{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time']}
+
+        print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(k_avg[t0:t1])}')
 
 print('Plotting to %s' % pltdir)
 # Plot individual runs
@@ -46,9 +51,10 @@ for drx in ['x', 'y', 'z']:
                save=os.path.join(pltdir, '%s_hcacf_%s.png' % (sim_name, drx)))
     plot_k(DATA, drx=drx, terms=terms,
            save=os.path.join(pltdir, '%s_k_%s.png' % (sim_name, drx)))
+
 # Plot direction averages
 plot_hcacf_avg(DATA, terms=terms, save=os.path.join(pltdir, '%s_hcacf_avg.png' % sim_name))
-plot_k_avg(DATA, terms=terms, save=os.path.join(pltdir, '%s_k_avg.png' % sim_name))
+plot_k_avg(DATA, terms=terms, kest=kest, save=os.path.join(pltdir, '%s_k_avg.png' % sim_name))
 plot_volume(DATA, V_IDEAL=V_IDEAL, time_conv=0.001*dt,
             save=os.path.join(pltdir, '%s_volume.png' % sim_name))
 print('Done!')
