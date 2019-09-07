@@ -2,6 +2,7 @@
 Plot thermal conductivity results for breathing mof.
 """
 import os, sys
+import yaml
 import numpy as np
 from thermof_tools import read_run, read_run_thermo
 from thermof_plot import plot_hcacf, plot_hcacf_avg, plot_thermo
