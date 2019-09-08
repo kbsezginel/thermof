@@ -46,9 +46,10 @@ for drx in ['x', 'y', 'z']:
             t0, t1 = int(kest[0] * len(kr)), int(kest[1] * len(kr))
             kest_runs.append(np.average(kr[t0:t1]))
         k_avg = np.average(k_runs, axis=0)
-        AVG_DATA[f'{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]), 't': DATA[run]['time'],
-                                   'kest_avg': np.average(kest_runs), 'kest_std': np.std(kest_runs)}
+        AVG_DATA[f'{drx}{trm}'] = {'k': k_avg, 'kest': np.average(k_avg[t0:t1]),
+                                   'kest_runs': kest_runs, 'kest_std': np.std(kest_runs)}
         print(f'{drx} | {trm} | K (avg): {np.average(k_avg[t0:t1])} (std): {np.std(kest_runs)}')
+AVG_DATA['time'] = DATA[run]['time']
 with open(os.path.join(datadir, f'k_avg_{sim_name}.yaml'), 'w') as f:
     yaml.dump(AVG_DATA, f)
 
