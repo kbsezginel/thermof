@@ -1,8 +1,9 @@
 """
 Calculate diffusivity using velocity autocorrelation.
 
-1. Read autocorrleation files.
-Figure out number of atoms for the MOF and gas
+1. Read autocorreleation files.
+2. Integrate and calculate diffusion coefficient
+3. Average for all runs and plot
 """
 import os
 import sys
@@ -62,6 +63,8 @@ def main(simdir):
     angle = int(input('Enter the angle [90]: ') or '90')
     n_atoms = n_gas_atoms[angle]
 
+    pltdir = os.path.abspath('plt')
+    pltfile = os.path.join(pltdir, f'{angle}_d.png')
     dt = 1.0            # fs
     conversion = 1e-5   # A2/s -> cm2/s
     trange = (0.05, 0.25)
@@ -86,13 +89,6 @@ def main(simdir):
     DATA['dest_avg'] = np.average(DATA['d'][t0:t1])
     DATA['dest_std'] = np.std(DATA['dest'])
 
-    # for i, v in enumerate(v_avg):
-    #     if i == 0:
-    #         d_t = v / 2
-    #     if i > 0:
-    #         d_t += v
-    #     val = d_t / n_atoms * dt * conversion
-    #     DATA['d'].append(val)
     text = '%.1e ± %.1e $cm^2/s$' % (DATA['dest_avg'], DATA['dest_std'])
     plot_vacf(DATA['t'], DATA['v'], DATA['d'], text=text, save='test.png')
 
