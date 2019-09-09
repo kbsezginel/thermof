@@ -88,6 +88,10 @@ def main(simdir):
     DATA['d'] = integrate_vacf(DATA['v'], n_atoms, dt, conversion)
     DATA['dest_avg'] = np.average(DATA['d'][t0:t1])
     DATA['dest_std'] = np.std(DATA['dest'])
+    datadir = os.path.abspath('data')
+    datafile = os.path.join(datadir, f'{angle}_d.yaml')
+    with open(datafile, 'w') as f:
+        yaml.dump(DATA, f)
 
     text = '%.1e ± %.1e $cm^2/s$' % (DATA['dest_avg'], DATA['dest_std'])
     plot_vacf(DATA['t'], DATA['v'], DATA['d'], text=text, save=pltfile)
