@@ -25,7 +25,7 @@ def plot_vacf(t, v, d, text='', trange=(0.05, 0.2), save=None):
     t0, t1 = int(len(t) * trange[0]), int(len(t) * trange[1])
     ax.plot(t[t0:t1], d[t0:t1], c='r')
     dest = np.average(d[t0:t1])
-    ax.plot([t[t0], t[t1]], [dest, dest], c='k')
+    # ax.plot([t[t0], t[t1]], [dest, dest], c='k')
     ax.text(t[t0], dest * 0.85, text, horizontalalignment='left')
     ax.set_xlabel('Time')
     ax.set_ylabel('Integral')
@@ -90,7 +90,7 @@ def main(simdir):
     DATA['dest_std'] = np.std(DATA['dest'])
 
     text = '%.1e ± %.1e $cm^2/s$' % (DATA['dest_avg'], DATA['dest_std'])
-    plot_vacf(DATA['t'], DATA['v'], DATA['d'], text=text, save='test.png')
+    plot_vacf(DATA['t'], DATA['v'], DATA['d'], text=text, save=pltfile)
 
 
 if __name__ == "__main__":
