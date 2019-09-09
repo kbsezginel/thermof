@@ -66,7 +66,7 @@ def main(simdir):
     pltdir = os.path.abspath('plt')
     pltfile = os.path.join(pltdir, f'{angle}_d.png')
     dt = 1.0            # fs
-    conversion = 1e-5   # A2/s -> cm2/s
+    conversion = 0.1    # A2/fs -> cm2/s
     trange = (0.05, 0.25)
 
     print(f'Found {len(simlist)} directories in {simdir}')
