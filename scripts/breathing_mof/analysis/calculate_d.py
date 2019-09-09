@@ -7,6 +7,7 @@ Calculate diffusivity using velocity autocorrelation.
 """
 import os
 import sys
+import yaml
 import numpy as np
 import matplotlib.pyplot as plt
 
