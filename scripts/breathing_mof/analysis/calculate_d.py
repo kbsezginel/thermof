@@ -12,24 +12,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_vacf(t, v, d, text='', trange=(0.05, 0.2), save=None):
-    fig = plt.figure(figsize=(9, 3), dpi=300)
-    fig.subplots_adjust(wspace=0.2)
-
-    ax = fig.add_subplot(1, 2, 1)
-    ax.plot(t, v)
-    ax.set_xlabel('Time')
-    ax.set_ylabel('ACF')
-
-    ax = fig.add_subplot(1, 2, 2)
-    ax.plot(t, d)
+def plot_d(t, d_drx, trange=(0.05, 0.2), save=None, ylim=(0, 3e-4)):
+    fig = plt.figure(figsize=(12, 3), dpi=300)
+    fig.subplots_adjust(wspace=0.3)
     t0, t1 = int(len(t) * trange[0]), int(len(t) * trange[1])
-    ax.plot(t[t0:t1], d[t0:t1], c='r')
-    dest = np.average(d[t0:t1])
-    # ax.plot([t[t0], t[t1]], [dest, dest], c='k')
-    ax.text(t[t0], dest * 0.85, text, horizontalalignment='left')
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Integral')
+    drx = ['x', 'y', 'z']
+    for i, d in enumerate(d_drx):
+        ax = fig.add_subplot(1, 3, i + 1)
+        ax.plot(t, d)
+        ax.plot(t[t0:t1], d[t0:t1], c='r')
+        dest, dstd = np.average(d[t0:t1]), np.std(d[t0:t1])
+        text = '%.1e ± %.1e $cm^2/s$' % (dest, dstd)
+        ax.text(t[t0], ylim[1] * 0.92, text, horizontalalignment='left')
+        ax.set_title(drx[i])
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+        ax.set_ylim(ylim)
+        ax.set_xlim(-10, 500)
+        ax.set_xlabel('Time (ps)')
+        ax.set_ylabel('Diffusivity ($cm^2/s$)')
     if save is not None:
         plt.savefig(save, bbox_inches='tight', dpi=300)
 
@@ -45,14 +45,14 @@ def read_velocity_autocorrelation(filename, p=100000, s=5, dt=1):
     return v2, t
 
 
-def integrate_vacf(vacf, n_atoms, dt, conversion):
+def integrate_vacf(vacf, n_atoms, dt, s, conversion):
     d = []
     for i, v in enumerate(vacf):
         if i == 0:
             d_t = v / 2
         if i > 0:
             d_t += v
-        val = d_t / n_atoms * dt * conversion
+        val = d_t / n_atoms * dt * s * conversion
         d.append(val)
     return d
 
@@ -65,38 +65,42 @@ def main(simdir):
     n_atoms = n_gas_atoms[angle]
 
     pltdir = os.path.abspath('plt')
-    pltfile = os.path.join(pltdir, f'{angle}_d.png')
     dt = 1.0            # fs
+    s = 5               # sampling interval
+    p = 100000          # correlation length
     conversion = 0.1    # A2/fs -> cm2/s
     trange = (0.05, 0.25)
 
     print(f'Found {len(simlist)} directories in {simdir}')
-    print(f'Angle: {angle} | Num atoms: {n_atoms} | Timestep: {dt} | Conversion {conversion}')
+    print(f'Angle: {angle} | Num atoms: {n_atoms} | Timestep: {dt} | Sampling: {s} | Conversion: {conversion}')
 
-    DATA = {'dest': []}
-    allv = []
-    for simno in simlist:
-        for drx in ['x', 'y', 'z']:
+    DATA = {}
+    d_drx = []
+    for drx in ['x', 'y', 'z']:
+        DATA[drx] = {}
+        v_runs = []
+        for simno in simlist:
             filename = os.path.join(simdir, str(simno), f'V0Vt{drx}o.dat')
-            v, t = read_velocity_autocorrelation(filename)
-            d = integrate_vacf(v, n_atoms, dt, conversion)
+            v, t = read_velocity_autocorrelation(filename, p=p, s=s, dt=dt)
+            d = integrate_vacf(v, n_atoms, dt, s, conversion)
             t0, t1 = int(len(t) * trange[0]), int(len(t) * trange[1])
-            DATA['dest'].append(np.average(d[t0:t1]))
-            allv.append(v)
+            DATA[drx][simno]  = float(np.average(d[t0:t1]))
+            v_runs.append(v)
+        v_avg = np.average(v_runs, axis=0)
+        d_avg = integrate_vacf(v_avg, n_atoms, dt, s, conversion)
+        DATA[drx]['dest'] = float(np.average(d_avg[t0:t1]))
+        DATA[drx]['dest_std'] = float(np.std([DATA[drx][i] for i in simlist]))
+        d_drx.append(d_avg)
 
-    DATA['t'] = t
-    DATA['v'] = np.average(allv, axis=0)
-    DATA['d'] = integrate_vacf(DATA['v'], n_atoms, dt, conversion)
-    DATA['dest_avg'] = np.average(DATA['d'][t0:t1])
-    DATA['dest_std'] = np.std(DATA['dest'])
+        text = '%.1e ± %.1e $cm^2/s$' % (DATA[drx]['dest'], DATA[drx]['dest_std'])
+        print(f'{drx} | {text}')
+
+    pltfile = os.path.join(pltdir, f'{angle}_d.png')
+    plot_d(t, d_drx, save=pltfile)
     datadir = os.path.abspath('data')
     datafile = os.path.join(datadir, f'{angle}_d.yaml')
     with open(datafile, 'w') as f:
         yaml.dump(DATA, f)
-
-    text = '%.1e ± %.1e $cm^2/s$' % (DATA['dest_avg'], DATA['dest_std'])
-    plot_vacf(DATA['t'], DATA['v'], DATA['d'], text=text, save=pltfile)
-
 
 if __name__ == "__main__":
     # Simulation directory
